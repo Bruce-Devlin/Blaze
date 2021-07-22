@@ -1,0 +1,15 @@
+﻿<Window x:Class="Blaze.Preload"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Blaze"
+        mc:Ignorable="d"
+        Title="Loading..." Loaded="Window_Loaded" Height="600" Width="600" ResizeMode="NoResize" WindowStyle="None" WindowStartupLocation="CenterScreen" AllowsTransparency="True">
+    <Window.Background>
+        <ImageBrush ImageSource="Assets/Blaze2.png" Stretch="UniformToFill"/>
+    </Window.Background>
+    <Grid>
+        <TextBlock x:Name="StatusBox" HorizontalAlignment="Left" Height="25" Margin="0,575,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="600" TextAlignment="Center" FontSize="16" Foreground="White" Background="#13000000"/>
+    </Grid>
+</Window>
