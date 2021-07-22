@@ -9,7 +9,7 @@ namespace Blaze
 {
     class Variables
     {
-        public static bool DiscordConnected = false;
+
         public static bool FirstRun = true;
         public static bool Updated = false;
 

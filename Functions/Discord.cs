@@ -1,5 +1,6 @@
 ﻿using DiscordRPC;
 using DiscordRPC.Logging;
+using DiscordRPC.Message;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,11 +16,12 @@ namespace Blaze.Functions
         public DiscordRpcClient client;
 
         public static Timestamps startTime = Timestamps.Now;
-            
+
         public Discord()
         {
+
             client = new DiscordRpcClient("867039623737770053", -1, autoEvents: true, client: new DiscordRPC.IO.ManagedNamedPipeClient());
-            client.SetSubscription(EventType.Join | EventType.Spectate | EventType.JoinRequest);
+            client.SetSubscription(EventType.Join);
             client.RegisterUriScheme();
 
             client.Logger = new ConsoleLogger() { Level = LogLevel.Warning };
@@ -36,10 +38,8 @@ namespace Blaze.Functions
             client.Initialize();
         }
 
-
         public void Deinitialize()
         {
-            Variables.DiscordConnected = false;
             client.ClearPresence();
             client.Dispose();
         }

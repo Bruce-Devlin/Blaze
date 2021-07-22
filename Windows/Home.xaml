@@ -4,24 +4,32 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Blaze.Windows"
-        xmlns:System="clr-namespace:System;assembly=mscorlib" x:Class="Blaze.Windows.Home"
+        xmlns:System="clr-namespace:System;assembly=mscorlib" x:Name="Window" x:Class="Blaze.Windows.Home"
         mc:Ignorable="d"
-        Title="Blaze" Loaded="Window_Loaded" Height="515" Width="915.556" MinWidth="784" MinHeight="441" WindowStartupLocation="CenterScreen" WindowStyle="None" ResizeMode="NoResize" Background="#FF131313">
+        Title="Blaze" Loaded="Window_Loaded" Height="515" Width="915.556" MinWidth="784" MinHeight="441" WindowStartupLocation="CenterScreen" WindowStyle="None" ResizeMode="NoResize" Background="{x:Null}">
     <Grid UseLayoutRounding="False">
-        <Image HorizontalAlignment="Left" Height="515" VerticalAlignment="Top" Width="915.556" Source="/Blaze;component/Assets/Background.png"/>
-        <DataGrid x:Name="GameList" SelectedCellsChanged="GameList_SelectedCellsChanged" Margin="20,65,590.556,240" BorderBrush="#FFEB3225" Background="#FFCC2920" BorderThickness="3" CanUserResizeRows="False" CanUserResizeColumns="False" CanUserReorderColumns="False" ScrollViewer.CanContentScroll="False" IsReadOnly="True" HorizontalScrollBarVisibility="Disabled" SelectionMode="Single">
+        <Image HorizontalAlignment="Left" Height="515" VerticalAlignment="Top" Width="915.556" Source="/Blaze;component/Assets/Sprites/background.png"/>
+        <DataGrid x:Name="GameList" SelectedCellsChanged="GameList_SelectedCellsChanged" Margin="20,65,590.556,240" BorderBrush="#FFEB3225" Background="#B5DB4123" BorderThickness="3" CanUserResizeRows="False" CanUserResizeColumns="False" CanUserReorderColumns="False" ScrollViewer.CanContentScroll="False" IsReadOnly="True" HorizontalScrollBarVisibility="Disabled" SelectionMode="Single">
             <DataGrid.Columns>
                 <DataGridTextColumn Binding="{Binding GameImg}" ClipboardContentBinding="{x:Null}"/>
                 <DataGridTextColumn Binding="{Binding GameTitle}" ClipboardContentBinding="{x:Null}"/>
                 <DataGridTextColumn Binding="{Binding GameImg}" Visibility="Hidden" ClipboardContentBinding="{x:Null}"/>
             </DataGrid.Columns>
         </DataGrid>
-        <DataGrid x:Name="ServerList" SelectedCellsChanged="ServerList_SelectedCellsChanged" Margin="322.041,65,26.5,130" BorderBrush="#FFEB3225" Background="#FFCC2920" BorderThickness="3" CanUserResizeRows="False" CanUserResizeColumns="False" CanUserReorderColumns="False" IsReadOnly="True" HorizontalScrollBarVisibility="Disabled" ScrollViewer.CanContentScroll="False" SelectionMode="Single"/>
-        <Button x:Name="PlayBtn" Click="PlayBtn_Click" Content="PLAY" HorizontalAlignment="Left" Height="90" Margin="584.056,405,0,0" VerticalAlignment="Top" Width="305" FontSize="36" Background="#FFCC2920" BorderBrush="#FFEB3225" Foreground="White"/>
-        <Button x:Name="CloseBtn" Click="CloseBtn_Click" Content="X" HorizontalAlignment="Left" Height="30.556" Margin="885,-2.666,0,0" VerticalAlignment="Top" Width="26.056" FontSize="22" FontWeight="Thin" Background="{x:Null}" BorderBrush="{x:Null}" Foreground="White"/>
+        <DataGrid x:Name="ServerList" SelectedCellsChanged="ServerList_SelectedCellsChanged" Margin="322.041,65,26.5,130" BorderBrush="#FFEB3225" Background="#B5DB4123" BorderThickness="3" CanUserResizeRows="False" CanUserResizeColumns="False" CanUserReorderColumns="False" IsReadOnly="True" HorizontalScrollBarVisibility="Disabled" ScrollViewer.CanContentScroll="False" SelectionMode="Single"/>
+        <Button x:Name="PlayBtn" Click="PlayBtn_Click" Content="PLAY" HorizontalAlignment="Left" Height="90" Margin="584.056,405,0,0" VerticalAlignment="Top" Width="305" FontSize="36" BorderBrush="#FFEB3225" Foreground="White" FontFamily="/Blaze;component/Assets/#Berlin Sans FB Demi" Style="{DynamicResource BtnSyle}" Cursor="Hand">
+            <Button.Background>
+                <ImageBrush ImageSource="/Blaze;component/Assets/Sprites/PlayBtn.png"/>
+            </Button.Background>
+        </Button>
+        <Button x:Name="CloseBtn" Click="CloseBtn_Click" Content="X" HorizontalAlignment="Left" Height="25.389" Margin="889.875,0,0,0" VerticalAlignment="Top" Width="22.181" FontSize="22" Background="{x:Null}" BorderBrush="{x:Null}" Foreground="White" Style="{DynamicResource BtnSyle}" FontFamily="/Blaze;component/Assets/#Berlin Sans FB Demi" Cursor="Hand"/>
         <TextBlock x:Name="SearchingServersTXT" HorizontalAlignment="Left" Height="25" Margin="745,360,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="140" Foreground="White" FontSize="14" Visibility="Hidden"><Run Text="Seaching for servers"/><Run Text="..."/></TextBlock>
         <Canvas x:Name="GameRunning" HorizontalAlignment="Left" Height="515" VerticalAlignment="Top" Width="915.556" Background="#B7000000" Visibility="Hidden">
             <TextBlock Height="65" Canvas.Left="220" TextWrapping="Wrap" Text="Game is currently running..." Canvas.Top="222.666" Width="455" Foreground="White" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="36"/>
         </Canvas>
-    </Grid>
+        <Button x:Name="MinBtn" Click="MinBtn_Click" Content="_" HorizontalAlignment="Left" Height="28.806" Margin="867.694,-3.417,0,0" VerticalAlignment="Top" Width="22.181" FontSize="22" FontWeight="Thin" Background="{x:Null}" BorderBrush="{x:Null}" Foreground="White" Style="{DynamicResource BtnSyle}" FontFamily="/Blaze;component/Assets/#Berlin Sans FB Demi" Cursor="Hand"/>
+        <TextBlock HorizontalAlignment="Left" Height="25" Margin="5,2.389,0,0" TextWrapping="Wrap" Text="BLAZE" VerticalAlignment="Top" Width="115" Foreground="White" FontFamily="/Blaze;component/Assets/#Berlin Sans FB Demi" FontSize="22" FontWeight="Bold"/>
+        <TextBlock HorizontalAlignment="Left" Height="115" Margin="22,320,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="280" FontFamily="Berlin Sans FB" Foreground="White" FontSize="16"><Run Text="You can easily view and join servers for some of your favorite Blazing Griffin titles!"/><Run Text=" "/><LineBreak/><Run/><LineBreak/><Run Text="Just select the game you want, then the server and just press "/><Run Text="P"/><Run Text="lay"/><Run Text=". You can even join and invite people through Discord!"/></TextBlock>
+        <TextBlock HorizontalAlignment="Left" Height="30" Margin="22,290,0,0" TextWrapping="Wrap" Text="Welcome to Blaze!" VerticalAlignment="Top" Width="280" FontFamily="/Blaze;component/Assets/#Berlin Sans FB Demi" FontSize="24" Foreground="White" FontWeight="Bold"/>
+      </Grid>
 </Window>

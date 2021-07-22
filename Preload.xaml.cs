@@ -36,16 +36,18 @@ namespace Blaze
             this.MouseLeftButtonDown += delegate { DragMove(); };
             StatusBox.Text = "Blaze is starting...";
 
+            /*
             AppDomain.CurrentDomain.FirstChanceException += (sender, eventArgs) =>
             {
-                MessageBox.Show(eventArgs.Exception.Message);
+                MessageBox.Show(eventArgs.Exception.ToString());
                 Shutdown();
             };
+            */
         }
 
         public void Shutdown()
         {
-            if (Variables.DiscordConnected) Functions.Discord.discord.client.Dispose();
+             Functions.Discord.discord.client.Dispose();
             Environment.Exit(0);
         }
 
@@ -56,10 +58,18 @@ namespace Blaze
 
         public async void PreloadManager()
         {
-            StatusBox.Text = "Checking Discord connection...";
-            await InitDiscord();
-            if (Variables.DiscordConnected) StatusBox.Text = "Discord connected!";
-            else StatusBox.Text = "Discord not connected.";
+            //Set status on Discord.
+            Functions.Discord.discord.client.SetPresence(new RichPresence()
+            {
+                Details = "Starting Blaze...",
+                State = "",
+                Timestamps = Functions.Discord.startTime,
+                Assets = new Assets()
+                {
+                    LargeImageKey = "blaze2",
+                    LargeImageText = "Devlin.gg/Blaze",
+                }
+            });
 
             StatusBox.Text = "Checking configs...";
             if (Functions.Config.getVariable("version") == "") Functions.Config.storeVariable("version", Assembly.GetExecutingAssembly().GetName().Version.ToString());
@@ -96,34 +106,6 @@ namespace Blaze
             Windows.Home home = new Windows.Home();
             home.Show();
             this.Close();
-        }
-
-        public async Task InitDiscord()
-        {
-            //Setup Discord RPC if availaible.
-            try
-            {
-                //Set status on Discord.
-                Functions.Discord.discord.client.SetPresence(new RichPresence()
-                {
-                    Details = "Blaze is running...",
-                    State = "",
-                    Timestamps = Functions.Discord.startTime,
-                    Assets = new Assets()
-                    {
-                        LargeImageKey = "blaze2",
-                        LargeImageText = "Devlin.gg/Blaze",
-                    }
-                });
-
-                //Discord is connected.
-                Variables.DiscordConnected = true;
-            }
-            catch (Exception Ex)
-            {
-                //Could not connect to Discord.
-                Variables.DiscordConnected = false;
-            }
         }
     }
 }

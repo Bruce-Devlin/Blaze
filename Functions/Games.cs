@@ -13,9 +13,10 @@ namespace Blaze.Functions
 {
     public class Game
     {
-        public ImageBrush Img { get; set; }
+        public ImageBrush Banner { get; set; }
         public string Title { get; set; }
         public uint AppID { get; set; }
+        public ImageBrush Background { get; set; }
         public string LinkURL { get; set; }
         public string Filename { get; set; }
     }
@@ -36,24 +37,37 @@ namespace Blaze.Functions
                     Game newGame = new Game();
                     List<string> GameInfo = gameslist.Split(',').ToList<string>();
 
-                    newGame.Title = GameInfo[0];
-                    newGame.AppID = uint.Parse(GameInfo[1]);
-                    // Get the stream for the image
-                    WebRequest request = WebRequest.Create(GameInfo[2]);
-                    WebResponse response = request.GetResponse();
-                    Stream s = response.GetResponseStream();
+                    WebRequest bannerRequest = WebRequest.Create(GameInfo[0]);
+                    WebResponse bannerResponse = bannerRequest.GetResponse();
 
-                    // Load the stream into the image
-                    BitmapImage image = new BitmapImage();
-                    image.StreamSource = s;
+                    WebRequest backgroundRequest = WebRequest.Create(GameInfo[3]);
+                    WebResponse backgroundResponse = backgroundRequest.GetResponse();
 
-                    // Apply image as source
-                    ImageBrush imgBrush = new ImageBrush();
-                    imgBrush.ImageSource = image;
+                    Stream banS = bannerResponse.GetResponseStream();
+                    Stream bgS = backgroundResponse.GetResponseStream();
 
-                    newGame.Img = imgBrush;
-                    newGame.LinkURL = GameInfo[3];
-                    newGame.Filename = GameInfo[4];
+                    BitmapImage bannerImage = new BitmapImage();
+                    bannerImage.BeginInit();
+                    bannerImage.StreamSource = banS;
+                    bannerImage.EndInit();
+
+                    BitmapImage backgroundImage = new BitmapImage();
+                    backgroundImage.BeginInit();
+                    backgroundImage.StreamSource = bgS;
+                    backgroundImage.EndInit();
+
+                    ImageBrush bannerImgBrush = new ImageBrush();
+                    bannerImgBrush.ImageSource = bannerImage;
+
+                    ImageBrush backgroundImgBrush = new ImageBrush();
+                    backgroundImgBrush.ImageSource = backgroundImage;
+
+                    newGame.Banner = bannerImgBrush;
+                    newGame.Title = GameInfo[1];
+                    newGame.AppID = uint.Parse(GameInfo[2]);
+                    newGame.Background = backgroundImgBrush;
+                    newGame.LinkURL = GameInfo[4];
+                    newGame.Filename = GameInfo[5];
 
                     Variables.GameList.Add(newGame);
                 }
