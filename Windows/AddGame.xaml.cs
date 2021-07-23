@@ -39,7 +39,7 @@ namespace Blaze.Windows
             fileDialog.Title = "Find Game Executable";
             fileDialog.Filter = "EXE files|*.exe";
             fileDialog.InitialDirectory = @"C:\";
-            if (fileDialog.ShowDialog() == DialogResult.OK)
+            if (fileDialog.ShowDialog() == DialogResult.HasValue)
             {
                 FileInfo exe = new FileInfo(fileDialog.FileName);
                 newGame.Filename = exe.Name;
