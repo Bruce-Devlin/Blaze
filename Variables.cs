@@ -1,6 +1,7 @@
 ﻿using Blaze.Functions;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -9,7 +10,8 @@ namespace Blaze
 {
     class Variables
     {
-
+        public static Process RunningGame = new Process();
+        public static bool DiscordConnected = false;
         public static bool FirstRun = true;
         public static bool Updated = false;
 

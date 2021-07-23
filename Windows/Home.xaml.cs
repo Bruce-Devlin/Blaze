@@ -32,11 +32,13 @@ namespace Blaze.Windows
             this.MouseLeftButtonDown += delegate { DragMove(); };
 
             ServerList.ItemsSource = Variables.ServerList;
+
             GameList.ItemsSource = Variables.GameList;
 
             Window.Background = Variables.GameList[0].Background;
 
             //Set status on Discord.
+            Functions.Discord.discord.client.ClearPresence();
             Functions.Discord.discord.client.SetPresence(new RichPresence()
             {
                 Details = "Browsing Servers...",
@@ -90,71 +92,68 @@ namespace Blaze.Windows
             JoinServer(Variables.ServerList[ServerList.SelectedIndex]);
         }
 
-        public void JoinServer(Server currServer)
+        public async void JoinServer(Server currServer)
         {
             if (serverSelected && !searching)
             {
-                GameRunning.Visibility = Visibility.Visible;
-
-
-                //Set status on Discord.
-                Functions.Discord.discord.client.SetPresence(new RichPresence()
+                if (await Games.IsGameRunning()) MessageBox.Show("Game already running, try closing it and trying again.");
+                else
                 {
-                    Details = currServer.ServerName,
-                    State = "Map: " + currServer.Map + " | Players: " + currServer.CurrPlayers + "/" + currServer.MaxPlayers,
-                    Timestamps = Functions.Discord.startTime,
-                    Party = new Party()
-                    {
-                        ID = currServer.ServerName,
-                        Size = currServer.CurrPlayers,
-                        Max = currServer.MaxPlayers,
-                        Privacy = Party.PrivacySetting.Public
-                    },
-                    Secrets = new Secrets()
-                    {
-                        JoinSecret = currServer.ServerName
-                    },
-                    Assets = new Assets()
-                    {
-                        LargeImageKey = Variables.CurrGame.AppID.ToString(),
-                        LargeImageText = Variables.CurrGame.Title,
-                    }
-                });
+                    //Set status on Discord.
+                    Functions.Discord.discord.client.ClearPresence();
 
-                SteamClient.Init(Variables.CurrGame.AppID);
-
-                Process game = new Process();
-                game.StartInfo.FileName = SteamApps.AppInstallDir(currServer.Game.AppID) + "\\" + Variables.CurrGame.Filename;
-                game.StartInfo.Arguments = "-connect=" + currServer.IPandPort;
-
-                SteamClient.Shutdown();
-                game.Start();
-                game.WaitForExit();
-                //Set status on Discord.
-                Functions.Discord.discord.client.SetPresence(new RichPresence()
-                {
-                    Details = "Browsing Servers...",
-                    State = "",
-                    Timestamps = Functions.Discord.startTime,
-                    Assets = new Assets()
+                    Functions.Discord.discord.client.SetPresence(new RichPresence()
                     {
-                        LargeImageKey = "blaze2",
-                        LargeImageText = "Devlin.gg/Blaze",
-                    }
-                });
-                GameRunning.Visibility = Visibility.Hidden;
+                        Details = currServer.ServerName,
+                        State = "Map: " + currServer.Map + " | Players: " + (currServer.CurrentPlayers + 1) + "/" + currServer.MaxPlayers,
+                        Timestamps = Functions.Discord.startTime,
+                        Party = new Party()
+                        {
+                            ID = currServer.ServerName,
+                            Size = currServer.CurrentPlayers + 1,
+                            Max = currServer.MaxPlayers,
+                            Privacy = Party.PrivacySetting.Public
+                        },
+                        Secrets = new Secrets()
+                        {
+                            JoinSecret = currServer.IPandPort
+                        },
+                        Assets = new Assets()
+                        {
+                            LargeImageKey = Variables.CurrGame.AppID.ToString(),
+                            LargeImageText = Variables.CurrGame.Title,
+                        }
+                    });
+
+                    SteamClient.Init(Variables.CurrGame.AppID);
+
+                    Process game = new Process();
+                    game.StartInfo.FileName = SteamApps.AppInstallDir(currServer.Game.AppID) + "\\" + Variables.CurrGame.Filename;
+                    game.StartInfo.Arguments = "-connect=" + currServer.IPandPort;
+
+                    SteamClient.Shutdown();
+                    game.Start();
+                }
             }
         }
 
         private void CloseBtn_Click(object sender, RoutedEventArgs e)
         {
-            Functions.Discord.discord.client.Deinitialize();
+            Functions.Discord.discord.Deinitialize();
             Environment.Exit(0);
         }
 
         private void MinBtn_Click(object sender, RoutedEventArgs e)
         {
             WindowState = WindowState.Minimized;
+        }
+
+        private void AddGameBtn_Click(object sender, RoutedEventArgs e)
+        {
+            Windows.AddGame addGameWin = new Windows.AddGame();
+            addGameWin.Owner = this;
+            addGameWin.ShowDialog();
+            GameList.ItemsSource = Variables.GameList;
         }
     }
 }

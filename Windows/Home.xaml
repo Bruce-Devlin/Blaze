@@ -9,27 +9,150 @@
         Title="Blaze" Loaded="Window_Loaded" Height="515" Width="915.556" MinWidth="784" MinHeight="441" WindowStartupLocation="CenterScreen" WindowStyle="None" ResizeMode="NoResize" Background="{x:Null}">
     <Grid UseLayoutRounding="False">
         <Image HorizontalAlignment="Left" Height="515" VerticalAlignment="Top" Width="915.556" Source="/Blaze;component/Assets/Sprites/background.png"/>
-        <DataGrid x:Name="GameList" SelectedCellsChanged="GameList_SelectedCellsChanged" Margin="20,65,590.556,240" BorderBrush="#FFEB3225" Background="#B5DB4123" BorderThickness="3" CanUserResizeRows="False" CanUserResizeColumns="False" CanUserReorderColumns="False" ScrollViewer.CanContentScroll="False" IsReadOnly="True" HorizontalScrollBarVisibility="Disabled" SelectionMode="Single">
-            <DataGrid.Columns>
-                <DataGridTextColumn Binding="{Binding GameImg}" ClipboardContentBinding="{x:Null}"/>
-                <DataGridTextColumn Binding="{Binding GameTitle}" ClipboardContentBinding="{x:Null}"/>
-                <DataGridTextColumn Binding="{Binding GameImg}" Visibility="Hidden" ClipboardContentBinding="{x:Null}"/>
-            </DataGrid.Columns>
-        </DataGrid>
-        <DataGrid x:Name="ServerList" SelectedCellsChanged="ServerList_SelectedCellsChanged" Margin="322.041,65,26.5,130" BorderBrush="#FFEB3225" Background="#B5DB4123" BorderThickness="3" CanUserResizeRows="False" CanUserResizeColumns="False" CanUserReorderColumns="False" IsReadOnly="True" HorizontalScrollBarVisibility="Disabled" ScrollViewer.CanContentScroll="False" SelectionMode="Single"/>
-        <Button x:Name="PlayBtn" Click="PlayBtn_Click" Content="PLAY" HorizontalAlignment="Left" Height="90" Margin="584.056,405,0,0" VerticalAlignment="Top" Width="305" FontSize="36" BorderBrush="#FFEB3225" Foreground="White" FontFamily="/Blaze;component/Assets/#Berlin Sans FB Demi" Style="{DynamicResource BtnSyle}" Cursor="Hand">
+        <Button x:Name="PlayBtn" Click="PlayBtn_Click" Content="PLAY" HorizontalAlignment="Left" Height="90" Margin="584.056,400,0,0" VerticalAlignment="Top" Width="305" FontSize="36" BorderBrush="#FFEB3225" Foreground="White" FontFamily="/Blaze;component/Assets/#Berlin Sans FB Demi" Style="{DynamicResource BtnSyle}" Cursor="Hand">
             <Button.Background>
                 <ImageBrush ImageSource="/Blaze;component/Assets/Sprites/PlayBtn.png"/>
             </Button.Background>
         </Button>
         <Button x:Name="CloseBtn" Click="CloseBtn_Click" Content="X" HorizontalAlignment="Left" Height="25.389" Margin="889.875,0,0,0" VerticalAlignment="Top" Width="22.181" FontSize="22" Background="{x:Null}" BorderBrush="{x:Null}" Foreground="White" Style="{DynamicResource BtnSyle}" FontFamily="/Blaze;component/Assets/#Berlin Sans FB Demi" Cursor="Hand"/>
-        <TextBlock x:Name="SearchingServersTXT" HorizontalAlignment="Left" Height="25" Margin="745,360,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="140" Foreground="White" FontSize="14" Visibility="Hidden"><Run Text="Seaching for servers"/><Run Text="..."/></TextBlock>
-        <Canvas x:Name="GameRunning" HorizontalAlignment="Left" Height="515" VerticalAlignment="Top" Width="915.556" Background="#B7000000" Visibility="Hidden">
-            <TextBlock Height="65" Canvas.Left="220" TextWrapping="Wrap" Text="Game is currently running..." Canvas.Top="222.666" Width="455" Foreground="White" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="36"/>
-        </Canvas>
         <Button x:Name="MinBtn" Click="MinBtn_Click" Content="_" HorizontalAlignment="Left" Height="28.806" Margin="867.694,-3.417,0,0" VerticalAlignment="Top" Width="22.181" FontSize="22" FontWeight="Thin" Background="{x:Null}" BorderBrush="{x:Null}" Foreground="White" Style="{DynamicResource BtnSyle}" FontFamily="/Blaze;component/Assets/#Berlin Sans FB Demi" Cursor="Hand"/>
         <TextBlock HorizontalAlignment="Left" Height="25" Margin="5,2.389,0,0" TextWrapping="Wrap" Text="BLAZE" VerticalAlignment="Top" Width="115" Foreground="White" FontFamily="/Blaze;component/Assets/#Berlin Sans FB Demi" FontSize="22" FontWeight="Bold"/>
-        <TextBlock HorizontalAlignment="Left" Height="115" Margin="22,320,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="280" FontFamily="Berlin Sans FB" Foreground="White" FontSize="16"><Run Text="You can easily view and join servers for some of your favorite Blazing Griffin titles!"/><Run Text=" "/><LineBreak/><Run/><LineBreak/><Run Text="Just select the game you want, then the server and just press "/><Run Text="P"/><Run Text="lay"/><Run Text=". You can even join and invite people through Discord!"/></TextBlock>
-        <TextBlock HorizontalAlignment="Left" Height="30" Margin="22,290,0,0" TextWrapping="Wrap" Text="Welcome to Blaze!" VerticalAlignment="Top" Width="280" FontFamily="/Blaze;component/Assets/#Berlin Sans FB Demi" FontSize="24" Foreground="White" FontWeight="Bold"/>
-      </Grid>
+        <TextBlock HorizontalAlignment="Left" Height="115" Margin="21.334,345.697,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="280" FontFamily="Berlin Sans FB" Foreground="White" FontSize="16"><Run Text="You can easily view and join servers for some of your favorite Blazing Griffin titles!"/><Run Text=" "/><LineBreak/><Run/><LineBreak/><Run Text="Just select the game you want, then the server and just press "/><Run Text="P"/><Run Text="lay"/><Run Text=". You can even join and invite people through Discord!"/></TextBlock>
+        <TextBlock HorizontalAlignment="Left" Height="30" Margin="21.334,315.697,0,0" TextWrapping="Wrap" Text="Welcome to Blaze!" VerticalAlignment="Top" Width="280" FontFamily="/Blaze;component/Assets/#Berlin Sans FB Demi" FontSize="24" Foreground="White" FontWeight="Bold"/>
+        <DataGrid x:Name="ServerList" SelectedCellsChanged="ServerList_SelectedCellsChanged" FontFamily="/Blaze;component/Assets/#Berlin Sans FB" BorderThickness="3" Margin="322.041,65,0,0" BorderBrush="#FFEB3225" Foreground="White" HorizontalAlignment="Left" Height="320" VerticalAlignment="Top" Width="567.015" CanUserReorderColumns="False" CanUserResizeColumns="False" CanUserSortColumns="True" ScrollViewer.CanContentScroll="True" RowHeight="30" ColumnHeaderHeight="30" Background="#B5DB4123" AutoGenerateColumns="False" IsReadOnly="True" GridLinesVisibility="None" CanUserResizeRows="False" EnableRowVirtualization="False" HorizontalGridLinesBrush="{x:Null}" VerticalGridLinesBrush="{x:Null}" SelectionMode="Single" RowDetailsVisibilityMode="Collapsed" FontSize="20">
+            <DataGrid.Resources>
+                <Style TargetType="{x:Type DataGridColumnHeader}">
+                    <Setter Property="Background" Value="Transparent"/>
+                </Style>
+                <Style TargetType="{x:Type DataGridRowHeader}">
+                    <Setter Property="Background" Value="Transparent"/>
+                </Style>
+                <SolidColorBrush x:Key="{x:Static SystemColors.HighlightBrushKey}" Color="#C80E0E0F"/>
+                <SolidColorBrush x:Key="{x:Static SystemColors.InactiveSelectionHighlightBrushKey}" Color="#C80E0E0F"/>
+                <SolidColorBrush x:Key="{x:Static SystemColors.InactiveSelectionHighlightTextBrushKey}" Color="#FFFFFFFF"/>
+            </DataGrid.Resources>
+            <DataGrid.Columns>
+                <DataGridTextColumn Binding="{Binding ServerName}" ClipboardContentBinding="{x:Null}" Header="Server Name" Width="300" FontSize="14"  FontFamily="/Blaze;component/Assets/#Berlin Sans FB">
+                    <DataGridTextColumn.HeaderStyle>
+                        <Style TargetType="{x:Type DataGridColumnHeader}">
+                            <Setter Property="Padding" Value="4"/>
+                            <Setter Property="Margin" Value="2"/>
+                            <Setter Property="Background" Value="Transparent"/>
+                            <Setter Property="FontSize" Value="14"/>
+                            <Setter Property="FontWeight" Value="Bold"/>
+                        </Style>
+                    </DataGridTextColumn.HeaderStyle>
+                </DataGridTextColumn>
+                <DataGridTextColumn Binding="{Binding Map}" ClipboardContentBinding="{x:Null}" Header="Map" Width="170" FontSize="14" FontFamily="/Blaze;component/Assets/#Berlin Sans FB">
+                    <DataGridTextColumn.HeaderStyle>
+                        <Style TargetType="{x:Type DataGridColumnHeader}">
+                            <Setter Property="Padding" Value="4"/>
+                            <Setter Property="Margin" Value="1"/>
+                            <Setter Property="Background" Value="Transparent"/>
+                            <Setter Property="FontSize" Value="14"/>
+                            <Setter Property="FontWeight" Value="Bold"/>
+                        </Style>
+                    </DataGridTextColumn.HeaderStyle>
+                </DataGridTextColumn>
+                <DataGridTextColumn Binding="{Binding TotalPlayers}" ClipboardContentBinding="{x:Null}" Header="Players" Width="3*" FontSize="14" FontFamily="/Blaze;component/Assets/#Berlin Sans FB">
+                    <DataGridTextColumn.HeaderStyle>
+                        <Style TargetType="{x:Type DataGridColumnHeader}">
+                            <Setter Property="Padding" Value="3"/>
+                            <Setter Property="Margin" Value="1"/>
+                            <Setter Property="Background" Value="Transparent"/>
+                            <Setter Property="FontSize" Value="14"/>
+                            <Setter Property="FontWeight" Value="Bold"/>
+                        </Style>
+                    </DataGridTextColumn.HeaderStyle>
+                </DataGridTextColumn>
+                <DataGridTextColumn Binding="{Binding CurrentPlayers}" ClipboardContentBinding="{x:Null}" Header="CurrentPlayers" Visibility="Collapsed"/>
+                <DataGridTextColumn Binding="{Binding MaxPlayers}" ClipboardContentBinding="{x:Null}" Header="MaxPlayers" Visibility="Collapsed"/>
+                <DataGridTextColumn Binding="{Binding IPandPort}" ClipboardContentBinding="{x:Null}" Header="IPandPort" Visibility="Collapsed"/>
+                <DataGridTextColumn Binding="{Binding Game}" ClipboardContentBinding="{x:Null}" Header="Game" Visibility="Collapsed"/>
+            </DataGrid.Columns>
+            <DataGrid.CellStyle>
+                <Style TargetType="{x:Type DataGridCell}">
+                    <Setter Property="Padding" Value="4"/>
+                    <Setter Property="BorderThickness" Value="0"/>
+                    <Setter Property="Template">
+                        <Setter.Value>
+                            <ControlTemplate TargetType="{x:Type DataGridCell}">
+                                <Border Padding="{TemplateBinding Padding}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Background="{TemplateBinding Background}" SnapsToDevicePixels="True">
+                                    <ContentPresenter SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"/>
+                                </Border>
+                            </ControlTemplate>
+                        </Setter.Value>
+                    </Setter>
+                </Style>
+            </DataGrid.CellStyle>
+            <DataGrid.RowStyle>
+                <Style TargetType="{x:Type DataGridRow}">
+                    <Setter Property="Foreground" Value="White"/>
+                    <Setter Property="Background" Value="Transparent"/>
+                </Style>
+            </DataGrid.RowStyle>
+        </DataGrid>
+        <TextBlock x:Name="SearchingServersTXT" HorizontalAlignment="Left" Height="25" Margin="745,360,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="140" Foreground="#88FFFFFF" FontSize="14" Visibility="Hidden"><Run Text="Seaching for servers"/><Run Text="..."/></TextBlock>
+
+        <DataGrid x:Name="GameList" SelectedCellsChanged="GameList_SelectedCellsChanged" FontFamily="/Blaze;component/Assets/#Berlin Sans FB" BorderThickness="3" Margin="20,65,0,0" BorderBrush="#FFEB3225" Foreground="White" HorizontalAlignment="Left" Height="210" VerticalAlignment="Top" Width="305" CanUserReorderColumns="False" CanUserResizeColumns="False" CanUserSortColumns="False" ScrollViewer.CanContentScroll="False" RowHeight="60" ColumnHeaderHeight="0" Background="#B5DB4123" AutoGenerateColumns="False" IsReadOnly="True" GridLinesVisibility="None" CanUserResizeRows="False" EnableRowVirtualization="False" HorizontalGridLinesBrush="{x:Null}" VerticalGridLinesBrush="{x:Null}" SelectionMode="Single" RowDetailsVisibilityMode="Collapsed" FontSize="6">
+            <DataGrid.Resources>
+                <Style TargetType="{x:Type DataGridColumnHeader}">
+                    <Setter Property="Background" Value="Transparent"/>
+                </Style>
+                <Style TargetType="{x:Type DataGridRowHeader}">
+                    <Setter Property="Background" Value="Transparent"/>
+                </Style>
+                <SolidColorBrush x:Key="{x:Static SystemColors.HighlightBrushKey}" Color="#C80E0E0F"/>
+                <SolidColorBrush x:Key="{x:Static SystemColors.InactiveSelectionHighlightBrushKey}" Color="#C80E0E0F"/>
+                <SolidColorBrush x:Key="{x:Static SystemColors.InactiveSelectionHighlightTextBrushKey}" Color="#FFFFFFFF"/>
+            </DataGrid.Resources>
+            <DataGrid.Columns>
+                <DataGridTemplateColumn Header="BannerImage" Width="60" IsReadOnly="True">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <Image Source="{Binding GameIcon}"/>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+                <DataGridTextColumn Binding="{Binding Title}" ClipboardContentBinding="{x:Null}"  Width="3*" FontSize="24" FontFamily="/Blaze;component/Assets/#Berlin Sans FB">
+                    <DataGridTextColumn.HeaderStyle>
+                        <Style TargetType="{x:Type DataGridColumnHeader}">
+                            <Setter Property="Padding" Value="4"/>
+                            <Setter Property="Margin" Value="2"/>
+                            <Setter Property="Background" Value="Transparent"/>
+                            <Setter Property="FontSize" Value="16"/>
+                        </Style>
+                    </DataGridTextColumn.HeaderStyle>
+                </DataGridTextColumn>
+                <DataGridTextColumn Binding="{Binding AppID}" ClipboardContentBinding="{x:Null}" Header="AppID" Visibility="Collapsed"/>
+                <DataGridTextColumn Binding="{Binding Background}" ClipboardContentBinding="{x:Null}" Header="Background" Visibility="Collapsed"/>
+                <DataGridTextColumn Binding="{Binding LinkURL}" ClipboardContentBinding="{x:Null}" Header="LinkURL" Visibility="Collapsed"/>
+                <DataGridTextColumn Binding="{Binding Filename}" ClipboardContentBinding="{x:Null}" Header="Filename" Visibility="Collapsed"/>
+                <DataGridTextColumn Binding="{Binding Plainname}" ClipboardContentBinding="{x:Null}" Header="Plainname" Visibility="Collapsed"/>
+
+            </DataGrid.Columns>
+            <DataGrid.CellStyle>
+                <Style TargetType="{x:Type DataGridCell}">
+                    <Setter Property="Padding" Value="4"/>
+                    <Setter Property="BorderThickness" Value="0"/>
+                    <Setter Property="Template">
+                        <Setter.Value>
+                            <ControlTemplate TargetType="{x:Type DataGridCell}">
+                                <Border Padding="{TemplateBinding Padding}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Background="{TemplateBinding Background}" SnapsToDevicePixels="True">
+                                    <ContentPresenter SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"/>
+                                </Border>
+                            </ControlTemplate>
+                        </Setter.Value>
+                    </Setter>
+                </Style>
+            </DataGrid.CellStyle>
+            <DataGrid.RowStyle>
+                <Style TargetType="{x:Type DataGridRow}">
+                    <Setter Property="Foreground" Value="White"/>
+                    <Setter Property="Background" Value="Transparent"/>
+                </Style>
+            </DataGrid.RowStyle>
+        </DataGrid>
+        <Button x:Name="AddGameBtn" Click="AddGameBtn_Click" Content="ADD GAME" HorizontalAlignment="Left" Height="25" Margin="236.833,272.671,0,0" VerticalAlignment="Top" Width="87.5" BorderThickness="3" BorderBrush="#FFEB3225" Foreground="White" Background="#B5DB4123" FontFamily="/Blaze;component/Assets/#Berlin Sans FB"/>
+    </Grid>
 </Window>

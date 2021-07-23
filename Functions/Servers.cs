@@ -5,6 +5,8 @@ using System.Linq;
 using System.Net;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
+using Newtonsoft.Json.Linq;
 using Steamworks;
 
 namespace Blaze.Functions
@@ -13,7 +15,8 @@ namespace Blaze.Functions
     {
         public string ServerName { get; set; }
         public string Map { get; set; }
-        public int CurrPlayers { get; set; }
+        public string TotalPlayers { get; set; }
+        public int CurrentPlayers { get; set; }
         public int MaxPlayers { get; set; }
         public string IPandPort { get; set; }
         public Game Game { get; set; }
@@ -25,11 +28,29 @@ namespace Blaze.Functions
 
         public static async Task GetServers()
         {
-            SteamClient.Init(Variables.CurrGame.AppID);
-            await GetServerList();
+            Variables.ServerList.Clear();
+            try
+            {
+                JObject result;
+                HttpWebRequest request = (HttpWebRequest)WebRequest.Create("http://devlin.gg/blaze/api/ServerList?appID=" + Variables.CurrGame.AppID);
+                request.AutomaticDecompression = DecompressionMethods.GZip | DecompressionMethods.Deflate;
+
+                using (HttpWebResponse response = (HttpWebResponse)await request.GetResponseAsync())
+                using (Stream stream = response.GetResponseStream())
+                using (StreamReader reader = new StreamReader(stream))
+                {
+                    result = JObject.Parse(await reader.ReadToEndAsync());
+
+                }
+                foreach (JObject server in result["data"]) { Server newServer = server.ToObject<Server>(); Variables.ServerList.Add(newServer); };
+            }
+            catch (Exception Ex)
+            {
+                MessageBox.Show(Ex.ToString());
+            }
         }
 
-        public static async Task<bool> GetServerList()
+        public static async Task GetServerList()
         {
             Variables.ServerList = new List<Server>();
             using (var list = new Steamworks.ServerList.Internet())
@@ -37,25 +58,9 @@ namespace Blaze.Functions
                 list.AppId = Variables.CurrGame.AppID;
                 await list.RunQueryAsync();
 
-                foreach (var server in list.Responsive)
-                {
-                    Server newServer = new Server();
-                    newServer.IPandPort = server.Address.ToString() + ":" + server.ConnectionPort;
-                    newServer.ServerName = server.Name;
-                    newServer.Map = server.Map; 
-                    newServer.CurrPlayers = server.Players;
-                    newServer.MaxPlayers = server.MaxPlayers;
-                    newServer.Game = Variables.CurrGame;
-
-                    Variables.ServerList.Add(newServer);
-                }
+                
             }
-            await Shutdown();
-            return true;
-        }
 
-        public static async Task Shutdown()
-        {
             SteamClient.Shutdown();
         }
     }

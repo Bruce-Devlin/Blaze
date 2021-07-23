@@ -19,9 +19,8 @@ namespace Blaze.Functions
 
         public Discord()
         {
-
             client = new DiscordRpcClient("867039623737770053", -1, autoEvents: true, client: new DiscordRPC.IO.ManagedNamedPipeClient());
-            client.SetSubscription(EventType.Join);
+            client.SetSubscription(EventType.Join | EventType.JoinRequest);
             client.RegisterUriScheme();
 
             client.Logger = new ConsoleLogger() { Level = LogLevel.Warning };

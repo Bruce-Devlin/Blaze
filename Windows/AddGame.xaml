@@ -1,0 +1,23 @@
+﻿<Window x:Class="Blaze.Windows.AddGame"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Blaze.Windows"
+        mc:Ignorable="d"
+        Title="Add Game" Height="310" Width="580" ResizeMode="NoResize" WindowStartupLocation="CenterOwner" WindowStyle="None">
+    <Window.Background>
+        <ImageBrush ImageSource="/Blaze;component/Assets/Sprites/ToolWindow.png"/>
+    </Window.Background>
+    <Grid>
+        <Button x:Name="CloseBtn" Click="CloseBtn_Click" HorizontalAlignment="Left" Height="27.876" Margin="550,0,0,0" VerticalAlignment="Top" Width="27.181" FontSize="22" Background="{x:Null}" BorderBrush="{x:Null}" Foreground="White" Style="{DynamicResource BtnSyle}" FontFamily="/Blaze;component/Assets/#Berlin Sans FB Demi" Cursor="Hand" Content="X"/>
+        <TextBlock HorizontalAlignment="Left" Height="25" TextWrapping="Wrap" Text="ADD GAME" VerticalAlignment="Top" Width="115" Foreground="White" FontFamily="/Blaze;component/Assets/#Berlin Sans FB Demi" FontSize="22" FontWeight="Bold" Margin="3.75,1.69,0,0"/>
+        <TextBox x:Name="GameTitleBox" HorizontalAlignment="Left" Height="30" Margin="65,125,0,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="245"/>
+        <Button x:Name="SelectFileBtn" Click="SelectFileBtn_Click" Content="Select (.exe) File" HorizontalAlignment="Left" Height="25" Margin="65,175,0,0" VerticalAlignment="Top" Width="125"/>
+        <TextBlock HorizontalAlignment="Left" Height="25" Margin="65,100,0,0" TextWrapping="Wrap" Text="Title" VerticalAlignment="Top" Width="125" Foreground="White"/>
+        <TextBox x:Name="AppIDBox" HorizontalAlignment="Left" Height="30" Margin="335,125,0,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="130"/>
+        <TextBlock HorizontalAlignment="Left" Height="25" Margin="335,100,0,0" TextWrapping="Wrap" Text="App ID" VerticalAlignment="Top" Width="66.327" Foreground="White"/>
+        <Button x:Name="AddGameBtn" Click="AddGameBtn_Click" Content="Add Game" HorizontalAlignment="Left" Height="50" Margin="385,240,0,0" VerticalAlignment="Top" Width="165"/>
+
+    </Grid>
+</Window>

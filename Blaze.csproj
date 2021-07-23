@@ -95,6 +95,9 @@
     <Compile Include="Functions\Games.cs" />
     <Compile Include="Functions\Servers.cs" />
     <Compile Include="Variables.cs" />
+    <Compile Include="Windows\AddGame.xaml.cs">
+      <DependentUpon>AddGame.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Windows\Home.xaml.cs">
       <DependentUpon>Home.xaml</DependentUpon>
     </Compile>
@@ -141,6 +144,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Windows\AddGame.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Windows\Home.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -168,6 +175,15 @@
   <ItemGroup>
     <Resource Include="Assets\Sprites\DiscordConnected.png" />
     <Resource Include="Assets\Sprites\DiscordDisconnected.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Assets\Sprites\ToolWindow.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Assets\Sprites\GI.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Assets\Sprites\BG.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

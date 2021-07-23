@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Net;
@@ -13,16 +14,26 @@ namespace Blaze.Functions
 {
     public class Game
     {
-        public ImageBrush Banner { get; set; }
+        public ImageSource GameIcon { get; set; }
         public string Title { get; set; }
         public uint AppID { get; set; }
         public ImageBrush Background { get; set; }
         public string LinkURL { get; set; }
         public string Filename { get; set; }
+        public string PlainName { get; set; }
     }
 
     class Games
     {
+        public static async Task<bool> IsGameRunning() { if (Process.GetProcessesByName(Variables.CurrGame.PlainName).Length > 0) return true; else return false; }
+
+        public static async Task AddGame()
+        {
+            //"{GameIcon},{GameTitle},{AppID},{ImgURL},{LinkURL},{filename.exe},{PlainName}"
+
+
+        }
+
         public static async Task GetGames()
         {
             WebClient client = new WebClient();
@@ -62,12 +73,13 @@ namespace Blaze.Functions
                     ImageBrush backgroundImgBrush = new ImageBrush();
                     backgroundImgBrush.ImageSource = backgroundImage;
 
-                    newGame.Banner = bannerImgBrush;
+                    newGame.GameIcon = bannerImgBrush.ImageSource;
                     newGame.Title = GameInfo[1];
                     newGame.AppID = uint.Parse(GameInfo[2]);
                     newGame.Background = backgroundImgBrush;
                     newGame.LinkURL = GameInfo[4];
                     newGame.Filename = GameInfo[5];
+                    newGame.PlainName = GameInfo[6];
 
                     Variables.GameList.Add(newGame);
                 }

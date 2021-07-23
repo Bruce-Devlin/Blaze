@@ -11,6 +11,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Runtime.ExceptionServices;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -35,19 +36,22 @@ namespace Blaze
             InitializeComponent();
             this.MouseLeftButtonDown += delegate { DragMove(); };
             StatusBox.Text = "Blaze is starting...";
+            var domain = AppDomain.CurrentDomain;
 
-            /*
-            AppDomain.CurrentDomain.FirstChanceException += (sender, eventArgs) =>
-            {
-                MessageBox.Show(eventArgs.Exception.ToString());
-                Shutdown();
-            };
-            */
+            AppDomain.CurrentDomain.ProcessExit += new EventHandler(Shutdown);
+            domain.UnhandledException += new UnhandledExceptionEventHandler(UnhandledEx);
         }
 
-        public void Shutdown()
+        static void UnhandledEx(object sender, UnhandledExceptionEventArgs args)
         {
-             Functions.Discord.discord.client.Dispose();
+            Exception e = (Exception)args.ExceptionObject;
+            MessageBox.Show(e.ToString());
+        }
+
+        static void Shutdown(object sender, EventArgs e)
+        {
+            Functions.Discord.discord.Deinitialize();
+            MessageBox.Show("Shutting down.");
             Environment.Exit(0);
         }
 
@@ -90,13 +94,12 @@ namespace Blaze
             { 
                 await Functions.Servers.GetServers();
                 StatusBox.Text = "Got servers!";
-
-                PreloadDone();
             }
             catch 
             {
                 StatusBox.Text = "Steam not running!";
             }
+            PreloadDone();
         }
 
         public void PreloadDone()
