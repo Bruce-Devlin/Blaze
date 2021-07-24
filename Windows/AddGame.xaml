@@ -12,12 +12,12 @@
     <Grid>
         <Button x:Name="CloseBtn" Click="CloseBtn_Click" HorizontalAlignment="Left" Height="27.876" Margin="550,0,0,0" VerticalAlignment="Top" Width="27.181" FontSize="22" Background="{x:Null}" BorderBrush="{x:Null}" Foreground="White" Style="{DynamicResource BtnSyle}" FontFamily="/Blaze;component/Assets/#Berlin Sans FB Demi" Cursor="Hand" Content="X"/>
         <TextBlock HorizontalAlignment="Left" Height="25" TextWrapping="Wrap" Text="ADD GAME" VerticalAlignment="Top" Width="115" Foreground="White" FontFamily="/Blaze;component/Assets/#Berlin Sans FB Demi" FontSize="22" FontWeight="Bold" Margin="3.75,1.69,0,0"/>
-        <TextBox x:Name="GameTitleBox" HorizontalAlignment="Left" Height="30" Margin="65,125,0,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="245"/>
-        <Button x:Name="SelectFileBtn" Click="SelectFileBtn_Click" Content="Select (.exe) File" HorizontalAlignment="Left" Height="25" Margin="65,175,0,0" VerticalAlignment="Top" Width="125"/>
-        <TextBlock HorizontalAlignment="Left" Height="25" Margin="65,100,0,0" TextWrapping="Wrap" Text="Title" VerticalAlignment="Top" Width="125" Foreground="White"/>
-        <TextBox x:Name="AppIDBox" HorizontalAlignment="Left" Height="30" Margin="335,125,0,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="130"/>
-        <TextBlock HorizontalAlignment="Left" Height="25" Margin="335,100,0,0" TextWrapping="Wrap" Text="App ID" VerticalAlignment="Top" Width="66.327" Foreground="White"/>
-        <Button x:Name="AddGameBtn" Click="AddGameBtn_Click" Content="Add Game" HorizontalAlignment="Left" Height="50" Margin="385,240,0,0" VerticalAlignment="Top" Width="165"/>
+        <TextBox x:Name="GameTitleBox" HorizontalAlignment="Left" Height="30" Margin="65,125,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="245" FontFamily="/Blaze;component/Assets/#Berlin Sans FB"/>
+        <Button x:Name="SelectFileBtn" Click="SelectFileBtn_Click" Content="Select (.exe) File" HorizontalAlignment="Left" Height="25" Margin="65,175,0,0" VerticalAlignment="Top" Width="125" FontFamily="/Blaze;component/Assets/#Berlin Sans FB"/>
+        <TextBlock HorizontalAlignment="Left" Height="25" Margin="65,100,0,0" TextWrapping="Wrap" Text="Title" VerticalAlignment="Top" Width="125" Foreground="White" FontFamily="/Blaze;component/Assets/#Berlin Sans FB"/>
+        <TextBox x:Name="AppIDBox" HorizontalAlignment="Left" Height="30" Margin="335,125,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="130" FontFamily="/Blaze;component/Assets/#Berlin Sans FB"/>
+        <TextBlock HorizontalAlignment="Left" Height="25" Margin="335,100,0,0" TextWrapping="Wrap" Text="App ID" VerticalAlignment="Top" Width="66.327" Foreground="White" FontFamily="/Blaze;component/Assets/#Berlin Sans FB"/>
+        <Button x:Name="AddGameBtn" Click="AddGameBtn_Click" Content="Add Game" HorizontalAlignment="Left" Height="50" Margin="385,240,0,0" VerticalAlignment="Top" Width="165" FontFamily="Berlin Sans FB"/>
 
     </Grid>
 </Window>

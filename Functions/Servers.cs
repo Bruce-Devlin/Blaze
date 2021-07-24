@@ -26,6 +26,7 @@ namespace Blaze.Functions
     {
         static List<string> servers = new List<string>();
 
+
         public static async Task GetServers()
         {
             Variables.ServerList.Clear();
@@ -42,7 +43,14 @@ namespace Blaze.Functions
                     result = JObject.Parse(await reader.ReadToEndAsync());
 
                 }
-                foreach (JObject server in result["data"]) { Server newServer = server.ToObject<Server>(); Variables.ServerList.Add(newServer); };
+                foreach (JObject server in result["data"]) 
+                { 
+                    Server newServer = server.ToObject<Server>();
+                    newServer.TotalPlayers = server.ToObject<Server>().CurrentPlayers + "/" + server.ToObject<Server>().MaxPlayers;
+                    newServer.Game = Variables.CurrGame;
+                    Variables.ServerList.Add(newServer); 
+                };
+
             }
             catch (Exception Ex)
             {

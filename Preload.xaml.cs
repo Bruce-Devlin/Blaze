@@ -36,23 +36,6 @@ namespace Blaze
             InitializeComponent();
             this.MouseLeftButtonDown += delegate { DragMove(); };
             StatusBox.Text = "Blaze is starting...";
-            var domain = AppDomain.CurrentDomain;
-
-            AppDomain.CurrentDomain.ProcessExit += new EventHandler(Shutdown);
-            domain.UnhandledException += new UnhandledExceptionEventHandler(UnhandledEx);
-        }
-
-        static void UnhandledEx(object sender, UnhandledExceptionEventArgs args)
-        {
-            Exception e = (Exception)args.ExceptionObject;
-            MessageBox.Show(e.ToString());
-        }
-
-        static void Shutdown(object sender, EventArgs e)
-        {
-            Functions.Discord.discord.Deinitialize();
-            MessageBox.Show("Shutting down.");
-            Environment.Exit(0);
         }
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
@@ -75,19 +58,10 @@ namespace Blaze
                 }
             });
 
-            StatusBox.Text = "Checking configs...";
-            if (Functions.Config.getVariable("version") == "") Functions.Config.storeVariable("version", Assembly.GetExecutingAssembly().GetName().Version.ToString());
-            else if (Functions.Config.getVariable("version") != Assembly.GetExecutingAssembly().GetName().Version.ToString())
-            {
-                Variables.Updated = true;
-                Functions.Config.storeVariable("version", Assembly.GetExecutingAssembly().GetName().Version.ToString());
-            }
-            StatusBox.Text = "Config located!s {version: " + Variables.AppVersion + "}";
-
             StatusBox.Text = "Checking games...";
             await Functions.Games.GetGames();
-            Variables.CurrGame = Variables.GameList[0];
             StatusBox.Text = "Got games!";
+            Variables.CurrGame = Variables.GameList[0];
 
             StatusBox.Text = "Checking servers...";
             try 

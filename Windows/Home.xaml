@@ -92,8 +92,6 @@
                 </Style>
             </DataGrid.RowStyle>
         </DataGrid>
-        <TextBlock x:Name="SearchingServersTXT" HorizontalAlignment="Left" Height="25" Margin="745,360,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="140" Foreground="#88FFFFFF" FontSize="14" Visibility="Hidden"><Run Text="Seaching for servers"/><Run Text="..."/></TextBlock>
-
         <DataGrid x:Name="GameList" SelectedCellsChanged="GameList_SelectedCellsChanged" FontFamily="/Blaze;component/Assets/#Berlin Sans FB" BorderThickness="3" Margin="20,65,0,0" BorderBrush="#FFEB3225" Foreground="White" HorizontalAlignment="Left" Height="210" VerticalAlignment="Top" Width="305" CanUserReorderColumns="False" CanUserResizeColumns="False" CanUserSortColumns="False" ScrollViewer.CanContentScroll="False" RowHeight="60" ColumnHeaderHeight="0" Background="#B5DB4123" AutoGenerateColumns="False" IsReadOnly="True" GridLinesVisibility="None" CanUserResizeRows="False" EnableRowVirtualization="False" HorizontalGridLinesBrush="{x:Null}" VerticalGridLinesBrush="{x:Null}" SelectionMode="Single" RowDetailsVisibilityMode="Collapsed" FontSize="6">
             <DataGrid.Resources>
                 <Style TargetType="{x:Type DataGridColumnHeader}">
@@ -153,6 +151,7 @@
                 </Style>
             </DataGrid.RowStyle>
         </DataGrid>
-        <Button x:Name="AddGameBtn" Click="AddGameBtn_Click" Content="ADD GAME" HorizontalAlignment="Left" Height="25" Margin="236.833,272.671,0,0" VerticalAlignment="Top" Width="87.5" BorderThickness="3" BorderBrush="#FFEB3225" Foreground="White" Background="#B5DB4123" FontFamily="/Blaze;component/Assets/#Berlin Sans FB"/>
+        <Button x:Name="AddGameBtn" Click="AddGameBtn_Click" Content="ADD GAME" HorizontalAlignment="Left" Height="25" Margin="236.833,272.671,0,0" VerticalAlignment="Top" Width="87.5" BorderThickness="3" BorderBrush="#FFEB3225" Foreground="White" Background="#B5DB4123" FontFamily="/Blaze;component/Assets/#Berlin Sans FB" Style="{DynamicResource BtnSyle}"/>
+        <TextBlock x:Name="StatusBox" HorizontalAlignment="Left" Height="15.39" Margin="552.694,7.333,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="310" FontFamily="/Blaze;component/Assets/#Berlin Sans FB" Foreground="#3EFFFFFF" TextAlignment="Right" FontSize="14"/>
     </Grid>
 </Window>

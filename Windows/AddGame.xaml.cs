@@ -28,25 +28,37 @@ namespace Blaze.Windows
 
         public Game newGame = new Game();
 
-        public AddGame()
+        public AddGame(Home home)
         {
             InitializeComponent();
         }
 
         private void SelectFileBtn_Click(object sender, RoutedEventArgs e)
         {
-            OpenFileDialog fileDialog = new OpenFileDialog();
-            fileDialog.Title = "Find Game Executable";
-            fileDialog.Filter = "EXE files|*.exe";
-            fileDialog.InitialDirectory = @"C:\";
-            if (fileDialog.ShowDialog() == DialogResult.HasValue)
+            OpenFileDialog fileDialog = new OpenFileDialog
             {
-                FileInfo exe = new FileInfo(fileDialog.FileName);
-                newGame.Filename = exe.Name;
+                InitialDirectory = @"D:\",
+                Title = "Find Game Executable",
+
+                CheckFileExists = true,
+                CheckPathExists = true,
+
+                DefaultExt = "exe",
+                Filter = "EXE files|*.exe",
+                FilterIndex = 2,
+                RestoreDirectory = true,
+
+                ReadOnlyChecked = true,
+                ShowReadOnly = true
+            };
+
+            if ((bool) fileDialog.ShowDialog())
+            {
+                newGame.Filename = fileDialog.FileName;
             }
         }
 
-        private void AddGameBtn_Click(object sender, RoutedEventArgs e)
+        private async void AddGameBtn_Click(object sender, RoutedEventArgs e)
         {
             if (GameTitleBox.Text != "" && AppIDBox.Text != "")
             {
@@ -56,25 +68,24 @@ namespace Blaze.Windows
                     uint appID = uint.Parse(AppIDBox.Text);
                     newGame.AppID = appID;
 
-                    SteamClient.Init(newGame.AppID);
-
                     Process game = new Process();
-                    game.StartInfo.FileName = SteamApps.AppInstallDir(newGame.AppID) + "\\" + newGame.Filename;
+                    game.StartInfo.FileName = newGame.Filename;
                     game.Start();
                     newGame.PlainName = game.ProcessName;
-                    game.Close();
+                    game.Kill();
 
 
-                    if (!File.Exists(Directory.GetCurrentDirectory() + "\\games.txt")) File.Create(Directory.GetCurrentDirectory() + "\\games.txt");
+                    if (!File.Exists(Directory.GetCurrentDirectory() + "\\games.txt")) File.Create(Directory.GetCurrentDirectory() + "\\games.txt").Close();
                     TextWriter gamesTXT = new StreamWriter(Directory.GetCurrentDirectory() + "\\games.txt", true);
 
-                    gamesTXT.WriteLine(Environment.NewLine + "https://devlin.gg/blaze/GI.png," + newGame.Title + "," + newGame.AppID + ",https://devlin.gg/blaze/GI.png," + newGame.Filename + "," + newGame.PlainName);
+                    gamesTXT.WriteLine("https://devlin.gg/blaze/GI.png," + newGame.Title + "," + newGame.AppID + ",https://devlin.gg/blaze/BG.png,https://devlin.gg/blaze," + newGame.Filename + "," + newGame.PlainName);
                     gamesTXT.Close();
 
+                    await Functions.Games.GetGames();
                 }
-                catch
+                catch (Exception Ex)
                 {
-                    //not an id
+                    MessageBox.Show(Ex.ToString());
                 }
             }
             else if (GameTitleBox.Text != "")
