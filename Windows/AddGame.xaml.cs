@@ -31,6 +31,7 @@ namespace Blaze.Windows
         public AddGame(Home home)
         {
             InitializeComponent();
+            this.MouseLeftButtonDown += delegate { DragMove(); };
         }
 
         private void SelectFileBtn_Click(object sender, RoutedEventArgs e)
@@ -55,6 +56,8 @@ namespace Blaze.Windows
             if ((bool) fileDialog.ShowDialog())
             {
                 newGame.Filename = fileDialog.FileName;
+
+                SelectFileBtn.Content = System.IO.Path.GetFileName(newGame.Filename);
             }
         }
 

@@ -107,8 +107,6 @@ namespace Blaze.Windows
                     Window.Background = Variables.CurrGame.Background;
 
                     StatusBox.Text = "Searching for servers...";
-                    searching = true;
-                    ServerList.ItemsSource = null;
                     UpdateServers();
                 }
                 else
@@ -126,7 +124,9 @@ namespace Blaze.Windows
 
         private async Task UpdateServers()
         {
-            
+            ServerList.ItemsSource = null;
+            searching = true;
+            StatusBox.Text = "Searching for servers...";
             await Functions.Servers.GetServers();
             
             ServerList.ItemsSource = Variables.ServerList;
@@ -234,5 +234,14 @@ namespace Blaze.Windows
             await UpdateGames();
         }
 
+        private async void RefreshBtn_Click(object sender, RoutedEventArgs e)
+        {
+            UpdateServers();
+        }
+
+        private void SearchBtn_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
     }
 }

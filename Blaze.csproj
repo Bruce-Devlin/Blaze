@@ -144,6 +144,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="TextBoxDictionary.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Windows\AddGame.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -167,7 +171,7 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Assets\Sprites\GameRunning.png" />
-    <Resource Include="Assets\Sprites\PlayBtn.png" />
+    <Resource Include="Assets\Sprites\Btn.png" />
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Assets\Sprites\background.png" />
@@ -177,13 +181,22 @@
     <Resource Include="Assets\Sprites\DiscordDisconnected.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Assets\Sprites\ToolWindow.png" />
-  </ItemGroup>
-  <ItemGroup>
     <Resource Include="Assets\Sprites\GI.png" />
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Assets\Sprites\BG.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Assets\Sprites\Refresh.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Assets\Sprites\Search.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="refresh.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Assets\Sprites\ToolWindow.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
