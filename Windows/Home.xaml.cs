@@ -24,6 +24,7 @@ namespace Blaze.Windows
     public partial class Home : Window
     {
         public bool serverSelected = false;
+        public bool searchingForServers = false;
         public bool searching = false;
 
         Preload preloader;
@@ -83,7 +84,7 @@ namespace Blaze.Windows
 
         private void GameList_SelectedCellsChanged(object sender, SelectedCellsChangedEventArgs e)
         {
-            if (!searching)
+            if (!searchingForServers)
             {
                 if (!Variables.CurrGame.Running)
                 {
@@ -125,12 +126,12 @@ namespace Blaze.Windows
         private async Task UpdateServers()
         {
             ServerList.ItemsSource = null;
-            searching = true;
+            searchingForServers = true;
             StatusBox.Text = "Searching for servers...";
             await Functions.Servers.GetServers();
             
             ServerList.ItemsSource = Variables.ServerList;
-            searching = false;
+            searchingForServers = false;
             StatusBox.Text = "";
         }
 
@@ -142,7 +143,7 @@ namespace Blaze.Windows
 
         public async void JoinServer(Server currServer)
         {
-            if (serverSelected && !searching)
+            if (serverSelected && !searchingForServers)
             {
                 if (await Games.IsGameRunning()) MessageBox.Show("Game already running, try closing it and trying again.");
                 else
@@ -236,12 +237,24 @@ namespace Blaze.Windows
 
         private async void RefreshBtn_Click(object sender, RoutedEventArgs e)
         {
+            searching = false;
             UpdateServers();
         }
 
         private void SearchBtn_Click(object sender, RoutedEventArgs e)
         {
+            if (!searching && SearchBox.Text != "")
+            {
+                searching = true;
+                var filtered = Variables.ServerList.Where(server => server.ServerName.ToLower().Contains(SearchBox.Text.ToLower()));
+                ServerList.ItemsSource = filtered;
+            }
+            else
+            {
 
+            }
         }
+
+        private void SearchBox_GotKeyboardFocus(object sender, KeyboardFocusChangedEventArgs e) { SearchBox.Text = ""; }
     }
 }

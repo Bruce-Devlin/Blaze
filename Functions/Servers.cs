@@ -26,7 +26,6 @@ namespace Blaze.Functions
     {
         static List<string> servers = new List<string>();
 
-
         public static async Task GetServers()
         {
             Variables.ServerList.Clear();

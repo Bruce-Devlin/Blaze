@@ -198,5 +198,8 @@
   <ItemGroup>
     <Resource Include="Assets\Sprites\ToolWindow.png" />
   </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Assets\Sprites\ClearSearch.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

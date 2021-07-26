@@ -163,5 +163,6 @@
                 <ImageBrush ImageSource="/Blaze;component/Assets/Sprites/Search.png"/>
             </Button.Background>
         </Button>
+        <TextBox x:Name="SearchBox" GotKeyboardFocus="SearchBox_GotKeyboardFocus" HorizontalAlignment="Left" Height="23.999" Margin="584.056,357.001,0,0" TextWrapping="Wrap" Text="Search" VerticalAlignment="Top" Width="252.638" Background="#B5DB4123" BorderBrush="#FFEB3225" Foreground="White" BorderThickness="3" Style="{DynamicResource TextBoxStyle}"/>
     </Grid>
 </Window>
