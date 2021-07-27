@@ -2,12 +2,12 @@ Blaze
 =======
 This is Blaze, a launcher made for Blazing Griffin's Murderous Pursuits.
 
-[![made-with-csharp](https://img.shields.io/badge/Made%20with-C#-1f425f.svg)](https://docs.microsoft.com/en-us/dotnet/csharp/)
+[![made-with-csharp](https://img.shields.io/badge/Made%20with-CSharp-1f425f.svg)](https://docs.microsoft.com/en-us/dotnet/csharp/)
 
-## Back End:
+## Back End: [![made-with-node](https://img.shields.io/badge/Made%20with-NodeJS-1f425f.svg)](https://nodejs.org/en/)
 Backend made in Node JS and can be found at:
 https://github.com/Jack-Hartman/Blaze-API
-[![made-with-node](https://img.shields.io/badge/Made%20with-NodeJS-1f425f.svg)](https://nodejs.org/en/)
+
 
 
 
