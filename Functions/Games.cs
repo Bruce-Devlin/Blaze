@@ -42,12 +42,6 @@ namespace Blaze.Functions
         public static async Task GetGames()
         {
             Variables.GameList = new List<Game>();
-            await GetGameWeb();
-            await GetGameLocal();
-        }
-
-        private static async Task GetGameWeb()
-        {
             WebClient client = new WebClient();
             Stream stream = client.OpenRead("https://devlin.gg/blaze/games.txt");
             StreamReader reader = new StreamReader(stream);
@@ -98,59 +92,59 @@ namespace Blaze.Functions
                 }
             }
             reader.Close();
-        }
 
-        private static async Task GetGameLocal()
-        {
             if (File.Exists(Directory.GetCurrentDirectory() + "\\games.txt"))
             {
-                string[] localgameslist = File.ReadAllLines(Directory.GetCurrentDirectory() + "\\games.txt");
-
-                foreach (string game in localgameslist)
+                StreamReader localReader = new StreamReader(Directory.GetCurrentDirectory() + "\\games.txt");
+                string localgameslist;
+                while ((localgameslist = localReader.ReadLine()) != null && !localReader.ReadLine().StartsWith("//") && localReader.ReadLine() != "")
                 {
-                    if (!game.StartsWith("//") && game != (""))
-                    {
-                        Game newGame = new Game();
-                        List<string> GameInfo = game.Split(',').ToList<string>();
+                    Game newGame = new Game();
+                    List<string> GameInfo = localgameslist.Split(',').ToList<string>();
 
-                        WebRequest gameIconRequest = WebRequest.Create(GameInfo[0]);
-                        WebResponse gameIconResponse = gameIconRequest.GetResponse();
+                    WebRequest gameIconRequest = WebRequest.Create(GameInfo[0]);
+                    WebResponse gameIconResponse = gameIconRequest.GetResponse();
 
-                        WebRequest backgroundRequest = WebRequest.Create(GameInfo[3]);
-                        WebResponse backgroundResponse = backgroundRequest.GetResponse();
+                    WebRequest backgroundRequest = WebRequest.Create(GameInfo[3]);
+                    WebResponse backgroundResponse = backgroundRequest.GetResponse();
 
-                        Stream giS = gameIconResponse.GetResponseStream();
-                        Stream bgS = backgroundResponse.GetResponseStream();
+                    Stream giS = gameIconResponse.GetResponseStream();
+                    Stream bgS = backgroundResponse.GetResponseStream();
 
-                        BitmapImage gameIconImage = new BitmapImage();
-                        gameIconImage.BeginInit();
-                        gameIconImage.StreamSource = giS;
-                        gameIconImage.EndInit();
+                    BitmapImage gameIconImage = new BitmapImage();
+                    gameIconImage.BeginInit();
+                    gameIconImage.StreamSource = giS;
+                    gameIconImage.EndInit();
 
-                        BitmapImage backgroundImage = new BitmapImage();
-                        backgroundImage.BeginInit();
-                        backgroundImage.StreamSource = bgS;
-                        backgroundImage.EndInit();
+                    BitmapImage backgroundImage = new BitmapImage();
+                    backgroundImage.BeginInit();
+                    backgroundImage.StreamSource = bgS;
+                    backgroundImage.EndInit();
 
-                        ImageBrush gameIconImgBrush = new ImageBrush();
-                        gameIconImgBrush.ImageSource = gameIconImage;
+                    ImageBrush gameIconImgBrush = new ImageBrush();
+                    gameIconImgBrush.ImageSource = gameIconImage;
 
-                        ImageBrush backgroundImgBrush = new ImageBrush();
-                        backgroundImgBrush.ImageSource = backgroundImage;
+                    ImageBrush backgroundImgBrush = new ImageBrush();
+                    backgroundImgBrush.ImageSource = backgroundImage;
 
-                        newGame.GameIcon = gameIconImgBrush.ImageSource;
-                        newGame.Title = GameInfo[1];
-                        newGame.AppID = uint.Parse(GameInfo[2]);
-                        newGame.Background = backgroundImgBrush;
-                        newGame.LinkURL = GameInfo[4];
-                        newGame.Filename = GameInfo[5];
-                        newGame.PlainName = GameInfo[6];
-                        newGame.Running = false;
+                    newGame.GameIcon = gameIconImgBrush.ImageSource;
+                    newGame.Title = GameInfo[1];
+                    newGame.AppID = uint.Parse(GameInfo[2]);
+                    newGame.Background = backgroundImgBrush;
+                    newGame.LinkURL = GameInfo[4];
+                    newGame.Filename = GameInfo[5];
+                    newGame.PlainName = GameInfo[6];
+                    newGame.Running = false;
 
-                        Variables.GameList.Add(newGame);
-                    }
+                    Variables.GameList.Add(newGame);
                 }
+                localReader.Close();
             }
+        }
+
+        private static async Task GetGameWeb()
+        {
+            
         }
     }
 }

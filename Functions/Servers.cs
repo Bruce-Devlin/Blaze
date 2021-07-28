@@ -20,6 +20,7 @@ namespace Blaze.Functions
         public int MaxPlayers { get; set; }
         public string IPandPort { get; set; }
         public Game Game { get; set; }
+        public string SteamID { get; set; }
     }
 
     class Servers
@@ -64,8 +65,6 @@ namespace Blaze.Functions
             {   
                 list.AppId = Variables.CurrGame.AppID;
                 await list.RunQueryAsync();
-
-                
             }
 
             SteamClient.Shutdown();

@@ -15,6 +15,8 @@ namespace Blaze.Functions
 
         public DiscordRpcClient client;
 
+        public static Windows.Home home;
+
         public static Timestamps startTime = Timestamps.Now;
 
         public Discord()
@@ -22,6 +24,7 @@ namespace Blaze.Functions
             client = new DiscordRpcClient("867039623737770053", -1, autoEvents: true, client: new DiscordRPC.IO.ManagedNamedPipeClient());
             client.SetSubscription(EventType.Join | EventType.JoinRequest);
             client.RegisterUriScheme();
+            client.OnJoin += OnJoin;
 
             client.Logger = new ConsoleLogger() { Level = LogLevel.Warning };
 
@@ -36,6 +39,31 @@ namespace Blaze.Functions
 
             client.Initialize();
         }
+
+        public static void JoinServer()
+        {
+            string tmpsecret = "Murderous Pursuits,90149646132336641";
+            //string[] secret = args.Secret.Split(',');
+            string[] secret = tmpsecret.Split(',');
+            var filteredGames = Variables.GameList.Where(game => game.Title == secret[0]).ToList();
+            if (filteredGames.Any())
+            {
+                var filteredServer = Variables.ServerList.Where(server => server.SteamID == secret[1]).ToList();
+                home.JoinServer(filteredServer.First(), true);
+            }
+        }
+
+        private static void OnJoin(object sender, JoinMessage args)
+        {
+            string[] secret = args.Secret.Split(',');
+            var filteredGames = Variables.GameList.Where(game => game.Title == secret[0]).ToList();
+            if (filteredGames.Any())
+            {
+                var filteredServer = Variables.ServerList.Where(server => server.SteamID == secret[1]).ToList();
+                home.JoinServer(filteredServer.First(), true);
+            }
+        }
+
 
         public void Deinitialize()
         {

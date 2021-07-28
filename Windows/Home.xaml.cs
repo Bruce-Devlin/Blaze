@@ -27,12 +27,11 @@ namespace Blaze.Windows
         public bool searchingForServers = false;
         public bool searching = false;
 
-        Preload preloader;
-
         public Home()
         {
             InitializeComponent();
             this.MouseLeftButtonDown += delegate { DragMove(); };
+            Discord.home = this;
 
             var domain = AppDomain.CurrentDomain;
 
@@ -141,20 +140,19 @@ namespace Blaze.Windows
             else MessageBox.Show("You have to select a server first.");
         }
 
-        public async void JoinServer(Server currServer)
+        public async void JoinServer(Server currServer, bool joining = false)
         {
-            if (serverSelected && !searchingForServers)
+            if (joining || serverSelected && !searchingForServers)
             {
                 if (await Games.IsGameRunning()) MessageBox.Show("Game already running, try closing it and trying again.");
                 else
                 {
                     //Set status on Discord.
                     Functions.Discord.discord.client.ClearPresence();
-
                     Functions.Discord.discord.client.SetPresence(new RichPresence()
                     {
                         Details = currServer.ServerName,
-                        State = "Map: " + currServer.Map + " | Players: " + (currServer.CurrentPlayers + 1) + "/" + currServer.MaxPlayers,
+                        State = "Map: " + currServer.Map + " | Players: ",
                         Timestamps = Functions.Discord.startTime,
                         Party = new Party()
                         {
@@ -165,7 +163,7 @@ namespace Blaze.Windows
                         },
                         Secrets = new Secrets()
                         {
-                            JoinSecret = currServer.IPandPort
+                            JoinSecret = currServer.Game.Title + "," + currServer.SteamID
                         },
                         Assets = new Assets()
                         {
@@ -173,7 +171,6 @@ namespace Blaze.Windows
                             LargeImageText = Variables.CurrGame.Title,
                         }
                     });
-
                     try
                     {
                         SteamClient.Init(Variables.CurrGame.AppID);
@@ -182,7 +179,7 @@ namespace Blaze.Windows
                         SteamClient.Shutdown();
 
                         string[] newIPandPort = currServer.IPandPort.Split(':');
-                        game.StartInfo.Arguments = "-connect=" + newIPandPort[0] + ":" + (int.Parse(newIPandPort[1]) - 1);
+                        game.StartInfo.Arguments = "-connect=" + newIPandPort[0] + ":" + newIPandPort[1];
                         game.Exited += Game_Exited;
                         game.Start();
                         game.WaitForExit();

@@ -84,7 +84,7 @@ namespace Blaze.Windows
                     gamesTXT.WriteLine("https://devlin.gg/blaze/GI.png," + newGame.Title + "," + newGame.AppID + ",https://devlin.gg/blaze/BG.png,https://devlin.gg/blaze," + newGame.Filename + "," + newGame.PlainName);
                     gamesTXT.Close();
 
-                    await Functions.Games.GetGames();
+                    await home.UpdateGames();
                 }
                 catch (Exception Ex)
                 {
@@ -105,5 +105,9 @@ namespace Blaze.Windows
         {
             this.Close();
         }
+
+        private void GameTitleBox_GotKeyboardFocus(object sender, KeyboardFocusChangedEventArgs e) { GameTitleBox.Text = ""; }
+
+        private void AppIDBox_GotKeyboardFocus(object sender, KeyboardFocusChangedEventArgs e) { AppIDBox.Text = ""; }
     }
 }
