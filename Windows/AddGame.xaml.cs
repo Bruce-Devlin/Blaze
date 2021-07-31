@@ -24,7 +24,7 @@ namespace Blaze.Windows
     /// </summary>
     public partial class AddGame : Window
     {
-        public Home home;
+        public static Home home;
 
         public Game newGame = new Game();
 
@@ -85,6 +85,7 @@ namespace Blaze.Windows
                     gamesTXT.Close();
 
                     await home.UpdateGames();
+                    this.Close();
                 }
                 catch (Exception Ex)
                 {

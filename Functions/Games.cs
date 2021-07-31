@@ -23,6 +23,7 @@ namespace Blaze.Functions
         public string Filename { get; set; }
         public string PlainName { get; set; }
         public bool Running { get; set; }
+        public bool BlazingGriffin { get; set; }
     }
 
     class Games
@@ -87,6 +88,7 @@ namespace Blaze.Functions
                     newGame.Filename = GameInfo[5];
                     newGame.PlainName = GameInfo[6];
                     newGame.Running = false;
+                    newGame.BlazingGriffin = true;
 
                     Variables.GameList.Add(newGame);
                 }
@@ -97,7 +99,7 @@ namespace Blaze.Functions
             {
                 StreamReader localReader = new StreamReader(Directory.GetCurrentDirectory() + "\\games.txt");
                 string localgameslist;
-                while ((localgameslist = localReader.ReadLine()) != null && !localReader.ReadLine().StartsWith("//") && localReader.ReadLine() != "")
+                while ((localgameslist = localReader.ReadLine()) != null && !localgameslist.StartsWith("//") && localgameslist != "")
                 {
                     Game newGame = new Game();
                     List<string> GameInfo = localgameslist.Split(',').ToList<string>();
@@ -135,16 +137,25 @@ namespace Blaze.Functions
                     newGame.Filename = GameInfo[5];
                     newGame.PlainName = GameInfo[6];
                     newGame.Running = false;
+                    newGame.BlazingGriffin = false;
 
                     Variables.GameList.Add(newGame);
+                    return;
                 }
                 localReader.Close();
             }
         }
 
-        private static async Task GetGameWeb()
+        private IEnumerable<string> ReadFileLines(string logPath)
         {
-            
+            using (StreamReader reader = File.OpenText(logPath))
+            {
+                string newline = "";
+                while ((newline = reader.ReadLine()) != null)
+                {
+                    yield return newline;
+                }
+            }
         }
     }
 }

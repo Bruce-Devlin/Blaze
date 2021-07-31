@@ -127,7 +127,6 @@
                 <DataGridTextColumn Binding="{Binding LinkURL}" ClipboardContentBinding="{x:Null}" Header="LinkURL" Visibility="Collapsed"/>
                 <DataGridTextColumn Binding="{Binding Filename}" ClipboardContentBinding="{x:Null}" Header="Filename" Visibility="Collapsed"/>
                 <DataGridTextColumn Binding="{Binding Plainname}" ClipboardContentBinding="{x:Null}" Header="Plainname" Visibility="Collapsed"/>
-
             </DataGrid.Columns>
             <DataGrid.CellStyle>
                 <Style TargetType="{x:Type DataGridCell}">
@@ -151,7 +150,7 @@
                 </Style>
             </DataGrid.RowStyle>
         </DataGrid>
-        <Button x:Name="AddGameBtn" Click="AddGameBtn_Click" Content="ADD GAME" HorizontalAlignment="Left" Height="25" Margin="236.833,272.671,0,0" VerticalAlignment="Top" Width="87.5" BorderThickness="3" BorderBrush="#FFEB3225" Foreground="White" Background="#B5DB4123" FontFamily="/Blaze;component/Assets/#Berlin Sans FB" Style="{DynamicResource BtnSyle}"/>
+        <Button x:Name="AddGameBtn" Click="AddGameBtn_Click" Content="ADD" HorizontalAlignment="Left" Height="25" Margin="236.833,272.671,0,0" VerticalAlignment="Top" Width="87.5" BorderThickness="3" BorderBrush="#FFEB3225" Foreground="White" Background="#B5DB4123" FontFamily="/Blaze;component/Assets/#Berlin Sans FB" Style="{DynamicResource BtnSyle}" Cursor="Hand"/>
         <TextBlock x:Name="StatusBox" HorizontalAlignment="Left" Height="15.39" Margin="552.694,7.333,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="310" FontFamily="/Blaze;component/Assets/#Berlin Sans FB" Foreground="#3EFFFFFF" TextAlignment="Right" FontSize="14"/>
         <Button x:Name="RefreshBtn" Click="RefreshBtn_Click" Content="" HorizontalAlignment="Left" Height="21" Margin="867.694,360,0,0" VerticalAlignment="Top" Width="21" BorderThickness="0" BorderBrush="{x:Null}" Style="{DynamicResource BtnSyle}" Cursor="Hand">
             <Button.Background>
@@ -164,5 +163,6 @@
             </Button.Background>
         </Button>
         <TextBox x:Name="SearchBox" GotKeyboardFocus="SearchBox_GotKeyboardFocus" HorizontalAlignment="Left" Height="23.999" Margin="584.056,357.001,0,0" TextWrapping="Wrap" Text="Search" VerticalAlignment="Top" Width="252.638" Background="#B5DB4123" BorderBrush="#FFEB3225" Foreground="White" BorderThickness="3" Style="{DynamicResource TextBoxStyle}"/>
+        <Button x:Name="RemoveGameBtn" Click="RemoveGameBtn_Click" Content="REMOVE" HorizontalAlignment="Left" Height="25" Margin="149.333,272.671,0,0" VerticalAlignment="Top" Width="87.5" BorderThickness="3" BorderBrush="#FFEB3225" Foreground="White" Background="#B5DB4123" FontFamily="/Blaze;component/Assets/#Berlin Sans FB" Style="{DynamicResource BtnSyle}" Cursor="Hand"/>
     </Grid>
 </Window>

@@ -32,6 +32,7 @@ namespace Blaze.Windows
             InitializeComponent();
             this.MouseLeftButtonDown += delegate { DragMove(); };
             Discord.home = this;
+            Windows.AddGame.home = this;
 
             var domain = AppDomain.CurrentDomain;
 
@@ -163,7 +164,7 @@ namespace Blaze.Windows
                         },
                         Secrets = new Secrets()
                         {
-                            JoinSecret = currServer.Game.Title + "," + currServer.SteamID
+                            JoinSecret = currServer.Game.AppID + "," + currServer.SteamID
                         },
                         Assets = new Assets()
                         {
@@ -232,6 +233,16 @@ namespace Blaze.Windows
             await UpdateGames();
         }
 
+        private async void RemoveGameBtn_Click(object sender, RoutedEventArgs e)
+        {
+            /*
+            if (!Variables.GameList[GameList.SelectedIndex].BlazingGriffin)
+            {
+                Variables.GameList.RemoveAt(GameList.SelectedIndex);
+            }
+            */
+        }
+
         private async void RefreshBtn_Click(object sender, RoutedEventArgs e)
         {
             searching = false;
@@ -253,5 +264,7 @@ namespace Blaze.Windows
         }
 
         private void SearchBox_GotKeyboardFocus(object sender, KeyboardFocusChangedEventArgs e) { SearchBox.Text = ""; }
+
+
     }
 }

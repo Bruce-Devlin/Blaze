@@ -5,23 +5,13 @@
 // This app is completely free and you can even use any of my code if you would like.
 
 
-using DiscordRPC;
 using System;
-using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
-using System.Linq;
-using System.Reflection;
-using System.Runtime.ExceptionServices;
-using System.Text;
-using System.Threading.Tasks;
+using System.Security.Principal;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
+using System.Windows.Forms;
+
 
 
 namespace Blaze
@@ -43,37 +33,73 @@ namespace Blaze
             PreloadManager();
         }
 
-        public async void PreloadManager()
+        internal static void RestartElevated()
         {
-            //Set status on Discord.
-            Functions.Discord.discord.client.SetPresence(new RichPresence()
+            ProcessStartInfo startInfo = new ProcessStartInfo();
+            startInfo.UseShellExecute = true;
+            startInfo.WorkingDirectory = Environment.CurrentDirectory;
+            startInfo.FileName = System.Windows.Forms.Application.ExecutablePath;
+            startInfo.Verb = "runas";
+            try
             {
-                Details = "Starting Blaze...",
-                State = "",
-                Timestamps = Functions.Discord.startTime,
-                Assets = new Assets()
+                Process p = Process.Start(startInfo);
+            }
+            catch (System.ComponentModel.Win32Exception ex)
+            {
+                return;
+            }
+            Environment.Exit(0);
+        }
+
+        public bool IsElevated
+        {
+            get { return new WindowsPrincipal(WindowsIdentity.GetCurrent()).IsInRole(WindowsBuiltInRole.Administrator); }
+        }
+
+        public async void PreloadManager()
+        {   
+            StatusBox.Text = "Checking installation...";
+            try
+            {
+                if (!await Functions.Install.CheckInstallation())
                 {
-                    LargeImageKey = "blaze2",
-                    LargeImageText = "Devlin.gg/Blaze",
+                    StatusBox.Text = "Installing Blaze... (this might take a second)";
+                    if (!IsElevated)
+                    {
+                        System.Windows.MessageBox.Show("Blaze requires administrative elevation to install correctly. (After instalation Blaze does not need to be run as a Administrator.)");
+                        RestartElevated();
+                    }
+                    else
+                    {
+                        Functions.Install.preload = this;
+                        await Functions.Install.StartInstall();
+                    }
                 }
-            });
+                else
+                {
+                    if (File.Exists(Directory.GetCurrentDirectory() + "\\dll.zip")) File.Delete(Directory.GetCurrentDirectory() + "\\dll.zip");
+                    StatusBox.Text = "Checking games...";
+                    await Functions.Games.GetGames();
+                    StatusBox.Text = "Got games!";
+                    Variables.CurrGame = Variables.GameList[0];
 
-            StatusBox.Text = "Checking games...";
-            await Functions.Games.GetGames();
-            StatusBox.Text = "Got games!";
-            Variables.CurrGame = Variables.GameList[0];
-
-            StatusBox.Text = "Checking servers...";
-            try 
-            { 
-                await Functions.Servers.GetServers();
-                StatusBox.Text = "Got servers!";
+                    StatusBox.Text = "Checking servers...";
+                    try
+                    {
+                        await Functions.Servers.GetServers();
+                        StatusBox.Text = "Got servers!";
+                    }
+                    catch
+                    {
+                        StatusBox.Text = "Steam not running!";
+                    }
+                    PreloadDone();
+                }
             }
-            catch 
+            catch (Exception Ex)
             {
-                StatusBox.Text = "Steam not running!";
+                System.Windows.MessageBox.Show(Ex.ToString());
             }
-            PreloadDone();
         }
 
         public void PreloadDone()

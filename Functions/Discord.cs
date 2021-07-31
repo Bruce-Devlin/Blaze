@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 
 namespace Blaze.Functions
 {
@@ -56,12 +57,15 @@ namespace Blaze.Functions
         private static void OnJoin(object sender, JoinMessage args)
         {
             string[] secret = args.Secret.Split(',');
-            var filteredGames = Variables.GameList.Where(game => game.Title == secret[0]).ToList();
+            var filteredGames = Variables.GameList.Where(game => game.AppID.ToString() == secret[0]).ToList();
             if (filteredGames.Any())
             {
                 var filteredServer = Variables.ServerList.Where(server => server.SteamID == secret[1]).ToList();
-                home.JoinServer(filteredServer.First(), true);
-            }
+                if (filteredServer.Any()) home.JoinServer(filteredServer.First(), true);
+                else MessageBox.Show("Cant find server.");
+
+
+            } else MessageBox.Show("It looks like you dont have that game :/");
         }
 
 
