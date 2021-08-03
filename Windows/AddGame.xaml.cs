@@ -84,7 +84,7 @@ namespace Blaze.Windows
                     gamesTXT.WriteLine("https://devlin.gg/blaze/GI.png," + newGame.Title + "," + newGame.AppID + ",https://devlin.gg/blaze/BG.png,https://devlin.gg/blaze," + newGame.Filename + "," + newGame.PlainName);
                     gamesTXT.Close();
 
-                    await home.UpdateGames();
+                    home.UpdateGames();
                     this.Close();
                 }
                 catch (Exception Ex)

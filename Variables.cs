@@ -22,5 +22,7 @@ namespace Blaze
         public static List<Server> ServerList = new List<Server>();
 
         public static List<Game> GameList = new List<Game>();
+
+        public static string HomeDir = Environment.ExpandEnvironmentVariables("%ProgramW6432%") + @"\Blaze";
     }
 }

@@ -40,6 +40,11 @@ namespace Blaze.Functions
             //"{GameIcon},{GameTitle},{AppID},{ImgURL},{LinkURL},{filename.exe},{PlainName}"
         }
 
+        public static async Task RemoveGames_TMP()
+        {
+            File.Delete(Directory.GetCurrentDirectory() + @"\games.txt");
+        }
+
         public static async Task GetGames()
         {
             Variables.GameList = new List<Game>();

@@ -5,9 +5,11 @@
 // This app is completely free and you can even use any of my code if you would like.
 
 
+using IWshRuntimeLibrary;
 using System;
 using System.Diagnostics;
 using System.IO;
+using System.Net;
 using System.Security.Principal;
 using System.Windows;
 using System.Windows.Forms;
@@ -57,7 +59,15 @@ namespace Blaze
         }
 
         public async void PreloadManager()
-        {   
+        {
+
+            StatusBox.Text = "Making sure you are connected...";
+            try { WebRequest testConnection = WebRequest.Create("https://devlin.gg/"); }
+            catch
+            {
+                System.Windows.MessageBox.Show("Uh Oh... It looks like you arnt connected to the internet, check your network and then restart the app");
+                Environment.Exit(0);
+            }
             StatusBox.Text = "Checking installation...";
             try
             {
@@ -77,7 +87,7 @@ namespace Blaze
                 }
                 else
                 {
-                    if (File.Exists(Directory.GetCurrentDirectory() + "\\dll.zip")) File.Delete(Directory.GetCurrentDirectory() + "\\dll.zip");
+                    
                     StatusBox.Text = "Checking games...";
                     await Functions.Games.GetGames();
                     StatusBox.Text = "Got games!";

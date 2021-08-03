@@ -19,7 +19,7 @@
         <TextBlock HorizontalAlignment="Left" Height="25" Margin="5,2.389,0,0" TextWrapping="Wrap" Text="BLAZE" VerticalAlignment="Top" Width="115" Foreground="White" FontFamily="/Blaze;component/Assets/#Berlin Sans FB Demi" FontSize="22" FontWeight="Bold"/>
         <TextBlock HorizontalAlignment="Left" Height="115" Margin="21.334,345.697,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="280" FontFamily="Berlin Sans FB" Foreground="White" FontSize="16"><Run Text="You can easily view and join servers for some of your favorite Blazing Griffin titles!"/><Run Text=" "/><LineBreak/><Run/><LineBreak/><Run Text="Just select the game you want, then the server and just press "/><Run Text="P"/><Run Text="lay"/><Run Text=". You can even join and invite people through Discord!"/></TextBlock>
         <TextBlock HorizontalAlignment="Left" Height="30" Margin="21.334,315.697,0,0" TextWrapping="Wrap" Text="Welcome to Blaze!" VerticalAlignment="Top" Width="280" FontFamily="/Blaze;component/Assets/#Berlin Sans FB Demi" FontSize="24" Foreground="White" FontWeight="Bold"/>
-        <DataGrid x:Name="ServerList" SelectedCellsChanged="ServerList_SelectedCellsChanged" FontFamily="/Blaze;component/Assets/#Berlin Sans FB" BorderThickness="3" Margin="322.041,65,0,0" BorderBrush="#FFEB3225" Foreground="White" HorizontalAlignment="Left" Height="295" VerticalAlignment="Top" Width="567.015" CanUserReorderColumns="False" CanUserResizeColumns="False" CanUserSortColumns="True" ScrollViewer.CanContentScroll="True" RowHeight="30" ColumnHeaderHeight="30" Background="#B5DB4123" AutoGenerateColumns="False" IsReadOnly="True" GridLinesVisibility="None" CanUserResizeRows="False" EnableRowVirtualization="False" HorizontalGridLinesBrush="{x:Null}" VerticalGridLinesBrush="{x:Null}" SelectionMode="Single" RowDetailsVisibilityMode="Collapsed" FontSize="20">
+        <DataGrid x:Name="ServerList" SelectedCellsChanged="ServerList_SelectedCellsChanged" FontFamily="/Blaze;component/Assets/#Berlin Sans FB" BorderThickness="3" Margin="322.041,65,0,0" BorderBrush="#FFEB3225" Foreground="White" HorizontalAlignment="Left" Height="295" VerticalAlignment="Top" Width="567.015" CanUserReorderColumns="False" CanUserSortColumns="True" ScrollViewer.CanContentScroll="True" RowHeight="30" ColumnHeaderHeight="30" Background="#B5DB4123" AutoGenerateColumns="False" IsReadOnly="True" GridLinesVisibility="None" CanUserResizeRows="False" EnableRowVirtualization="False" HorizontalGridLinesBrush="{x:Null}" VerticalGridLinesBrush="{x:Null}" SelectionMode="Single" RowDetailsVisibilityMode="Collapsed" FontSize="20" MinColumnWidth="148">
             <DataGrid.Resources>
                 <Style TargetType="{x:Type DataGridColumnHeader}">
                     <Setter Property="Background" Value="Transparent"/>
@@ -29,10 +29,10 @@
                 </Style>
                 <SolidColorBrush x:Key="{x:Static SystemColors.HighlightBrushKey}" Color="#C80E0E0F"/>
                 <SolidColorBrush x:Key="{x:Static SystemColors.InactiveSelectionHighlightBrushKey}" Color="#C80E0E0F"/>
-                <SolidColorBrush x:Key="{x:Static SystemColors.InactiveSelectionHighlightTextBrushKey}" Color="#FFFFFFFF"/>
+                <SolidColorBrush x:Key="{x:Static SystemColors.InactiveSelectionHighlightTextBrushKey}" Color="#FFFFFFFF"/> 
             </DataGrid.Resources>
             <DataGrid.Columns>
-                <DataGridTextColumn Binding="{Binding ServerName}" ClipboardContentBinding="{x:Null}" Header="Server Name" Width="300" FontSize="14"  FontFamily="/Blaze;component/Assets/#Berlin Sans FB">
+                <DataGridTextColumn Binding="{Binding ServerName}" ClipboardContentBinding="{x:Null}" Header="Server Name" Width="330" FontSize="14"  FontFamily="/Blaze;component/Assets/#Berlin Sans FB" MinWidth="330">
                     <DataGridTextColumn.HeaderStyle>
                         <Style TargetType="{x:Type DataGridColumnHeader}">
                             <Setter Property="Padding" Value="4"/>
@@ -43,7 +43,7 @@
                         </Style>
                     </DataGridTextColumn.HeaderStyle>
                 </DataGridTextColumn>
-                <DataGridTextColumn Binding="{Binding Map}" ClipboardContentBinding="{x:Null}" Header="Map" Width="170" FontSize="14" FontFamily="/Blaze;component/Assets/#Berlin Sans FB">
+                <DataGridTextColumn Binding="{Binding Map}" ClipboardContentBinding="{x:Null}" Header="Map" Width="150" FontSize="14" FontFamily="/Blaze;component/Assets/#Berlin Sans FB" MinWidth="20">
                     <DataGridTextColumn.HeaderStyle>
                         <Style TargetType="{x:Type DataGridColumnHeader}">
                             <Setter Property="Padding" Value="4"/>
@@ -54,7 +54,7 @@
                         </Style>
                     </DataGridTextColumn.HeaderStyle>
                 </DataGridTextColumn>
-                <DataGridTextColumn Binding="{Binding TotalPlayers}" ClipboardContentBinding="{x:Null}" Header="Players" Width="3*" FontSize="14" FontFamily="/Blaze;component/Assets/#Berlin Sans FB">
+                <DataGridTextColumn Binding="{Binding TotalPlayers}" ClipboardContentBinding="{x:Null}" Header="Players" FontSize="14" FontFamily="/Blaze;component/Assets/#Berlin Sans F0" MinWidth="20" Width="85*" MaxWidth="85">
                     <DataGridTextColumn.HeaderStyle>
                         <Style TargetType="{x:Type DataGridColumnHeader}">
                             <Setter Property="Padding" Value="3"/>

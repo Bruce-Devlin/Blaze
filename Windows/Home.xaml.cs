@@ -235,12 +235,12 @@ namespace Blaze.Windows
 
         private async void RemoveGameBtn_Click(object sender, RoutedEventArgs e)
         {
-            /*
             if (!Variables.GameList[GameList.SelectedIndex].BlazingGriffin)
             {
                 Variables.GameList.RemoveAt(GameList.SelectedIndex);
+                await Functions.Games.RemoveGames_TMP();
+                UpdateGames();
             }
-            */
         }
 
         private async void RefreshBtn_Click(object sender, RoutedEventArgs e)

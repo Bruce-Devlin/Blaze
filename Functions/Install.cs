@@ -22,11 +22,10 @@ namespace Blaze.Functions
 
     class Install
     {
-        public static string HomeDir = Directory.GetCurrentDirectory() + @"\Blaze";
 
         public static Preload preload;
 
-        public static async Task<bool> CheckInstallation() { if (Directory.GetCurrentDirectory().EndsWith("Blaze") || Directory.GetCurrentDirectory().EndsWith("Debug")) { return true; } else return false; }
+        public static async Task<bool> CheckInstallation() { if (Directory.Exists(Variables.HomeDir) || Directory.GetCurrentDirectory().EndsWith("Debug")) { return true; } else return false; }
         
         public static async Task<bool> CheckUpdates(VersionNumber currVersion)
         {
@@ -53,7 +52,7 @@ namespace Blaze.Functions
         public static async Task StartInstall()
         {
             preload.StatusBox.Text = "Creating home directory...";
-            if (!Directory.Exists(HomeDir))Directory.CreateDirectory(HomeDir);
+            if (!Directory.Exists(Variables.HomeDir))Directory.CreateDirectory(Variables.HomeDir);
             await DownloadDLL();
         }
 
@@ -64,22 +63,22 @@ namespace Blaze.Functions
             var uri = new Uri("https://devlin.gg/blaze/install/dll.zip");
 
             client.DownloadFileCompleted += (sender, e) => FinishInstall().Wait();
-            client.DownloadFileAsync(uri, HomeDir + @"\dll.zip");
+            client.DownloadFileAsync(uri, Variables.HomeDir + @"\dll.zip");
         }
 
         static async Task FinishInstall()
         {
             preload.StatusBox.Text = "Finishing up...";
-            string dllZipFile = HomeDir + @"\dll.zip";
+            string dllZipFile = Variables.HomeDir + @"\dll.zip";
 
             using (var fileStream = new FileStream(dllZipFile, FileMode.Open))
             {
                 ZipArchive zipFile = new ZipArchive(fileStream);
                 foreach (ZipArchiveEntry file in zipFile.Entries)
                 {
-                    string completeFileName = Path.GetFullPath(Path.Combine(HomeDir, file.FullName));
+                    string completeFileName = Path.GetFullPath(Path.Combine(Variables.HomeDir, file.FullName));
 
-                    if (!completeFileName.StartsWith(HomeDir, StringComparison.OrdinalIgnoreCase))
+                    if (!completeFileName.StartsWith(Variables.HomeDir, StringComparison.OrdinalIgnoreCase))
                     {
                         throw new IOException("Trying to extract file outside of destination directory. See this link for more info: https://snyk.io/research/zip-slip-vulnerability");
                     }
@@ -93,16 +92,34 @@ namespace Blaze.Functions
                 }
                 zipFile.Dispose();
             } 
-            
-            System.IO.File.Copy(System.Windows.Forms.Application.ExecutablePath, HomeDir + @"\Blaze.exe");
 
-            WshShell shell = new WshShell();
-            string shortcutAddress = Environment.GetFolderPath(Environment.SpecialFolder.Programs) + @"\Blaze.lnk";
 
-            IWshShortcut shortcut = (IWshShortcut)shell.CreateShortcut(shortcutAddress);
-            shortcut.Description = "Launch game using Blaze!";
-            shortcut.TargetPath = HomeDir + @"\Blaze.exe";
-            shortcut.Save();
+            preload.StatusBox.Text = "All done! Restarting Blaze...";
+            System.IO.File.Delete(Variables.HomeDir + @"\dll.zip");
+
+            if (System.IO.File.Exists(Variables.HomeDir + @"\Blaze.exe")) System.IO.File.Delete(Variables.HomeDir + @"\Blaze.exe");
+            System.IO.File.Copy(System.Windows.Forms.Application.ExecutablePath, Variables.HomeDir + @"\Blaze.exe");
+
+            if (!System.IO.File.Exists(Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory) + @"\Blaze.lnk"))
+            {
+                WshShell shell = new WshShell();
+                string shortcutAddress = Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory) + @"\Blaze.lnk";
+
+                IWshShortcut desktopShortcut = (IWshShortcut)shell.CreateShortcut(shortcutAddress);
+                desktopShortcut.Description = "Launch game using Blaze!";
+                desktopShortcut.TargetPath = Variables.HomeDir + @"\Blaze.exe";
+                desktopShortcut.Save();
+            }
+            if (!System.IO.File.Exists(Environment.GetFolderPath(Environment.SpecialFolder.Programs) + @"\Blaze.lnk"))
+            {
+                WshShell shell = new WshShell();
+                string shortcutAddress = Environment.GetFolderPath(Environment.SpecialFolder.Programs) + @"\Blaze.lnk";
+
+                IWshShortcut addToWindows = (IWshShortcut)shell.CreateShortcut(shortcutAddress);
+                addToWindows.Description = "Launch game using Blaze!";
+                addToWindows.TargetPath = Variables.HomeDir + @"\Blaze.exe";
+                addToWindows.Save();
+            }
 
             ProcessStartInfo Info = new ProcessStartInfo();
             Info.Arguments = "/C choice /C Y /N /D Y /T 3 & Del " + System.Windows.Forms.Application.ExecutablePath;
@@ -111,14 +128,11 @@ namespace Blaze.Functions
             Info.FileName = "cmd.exe";
             Process.Start(Info);
 
-            Process app = new Process();
-            app.StartInfo.FileName = HomeDir + @"\Blaze.exe";
+            Process secondProc = new Process();
+            secondProc.StartInfo.FileName = Variables.HomeDir + @"\Blaze.exe";
+            secondProc.Start();
 
-            preload.Visibility = Visibility.Hidden;
-            app.Start();
             Environment.Exit(0);
-
-            preload.StatusBox.Text = "All done!";
         }
 
         public static async Task StartUpdate()
