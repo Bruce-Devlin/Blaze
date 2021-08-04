@@ -36,7 +36,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup>
-    <ApplicationIcon>Assets\blaze_icon.ico</ApplicationIcon>
+    <ApplicationIcon>Assets\Blaze\Blaze.ico</ApplicationIcon>
   </PropertyGroup>
   <PropertyGroup />
   <PropertyGroup />
@@ -132,11 +132,17 @@
     <Compile Include="Functions\Install.cs" />
     <Compile Include="Functions\Servers.cs" />
     <Compile Include="Variables.cs" />
+    <Compile Include="Welcome\HostWindow.xaml.cs">
+      <DependentUpon>HostWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Windows\AddGame.xaml.cs">
       <DependentUpon>AddGame.xaml</DependentUpon>
     </Compile>
     <Compile Include="Windows\Home.xaml.cs">
       <DependentUpon>Home.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Windows\Settings.xaml.cs">
+      <DependentUpon>Settings.xaml</DependentUpon>
     </Compile>
   </ItemGroup>
   <ItemGroup>
@@ -185,11 +191,19 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Welcome\HostWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Windows\AddGame.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Windows\Home.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Windows\Settings.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -268,6 +282,26 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Assets\Blaze\TalkingBack.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Assets\Blaze\Blaze.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Assets\Sprites\Settings.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Assets\Blaze\Happy.png" />
+    <Resource Include="Assets\Blaze\Sleepy.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Assets\Blaze\Small\Happy-small.png" />
+    <Resource Include="Assets\Blaze\Small\Sleepy-small.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Assets\Blaze\Small\Really-small.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Assets\Blaze\Really.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -52,7 +52,7 @@ namespace Blaze.Windows
                 Timestamps = Functions.Discord.startTime,
                 Assets = new Assets()
                 {
-                    LargeImageKey = "blaze2",
+                    LargeImageKey = "nutural",
                     LargeImageText = "Devlin.gg/Blaze",
                 }
             });
@@ -100,7 +100,7 @@ namespace Blaze.Windows
                         Timestamps = Functions.Discord.startTime,
                         Assets = new Assets()
                         {
-                            LargeImageKey = "blaze2",
+                            LargeImageKey = "nutural",
                             LargeImageText = "Devlin.gg/Blaze",
                         }
                     });
@@ -196,7 +196,7 @@ namespace Blaze.Windows
                             Timestamps = Functions.Discord.startTime,
                             Assets = new Assets()
                             {
-                                LargeImageKey = "blaze2",
+                                LargeImageKey = "nutural",
                                 LargeImageText = "Devlin.gg/Blaze",
                             }
                         });
@@ -225,22 +225,58 @@ namespace Blaze.Windows
             WindowState = WindowState.Minimized;
         }
 
+        private void SettingBtn_Click(object sender, RoutedEventArgs e)
+        {
+            Windows.Settings settingsWin = new Windows.Settings(this);
+            settingsWin.Owner = this;
+            settingsWin.ShowDialog();
+            Functions.Discord.discord.client.ClearPresence();
+            Functions.Discord.discord.client.SetPresence(new RichPresence()
+            {
+                Details = "Browsing Servers...",
+                State = "(" + Variables.CurrGame.Title + ")",
+                Timestamps = Functions.Discord.startTime,
+                Assets = new Assets()
+                {
+                    LargeImageKey = "nutural",
+                    LargeImageText = "Devlin.gg/Blaze",
+                }
+            });
+        }
+
         private async void AddGameBtn_Click(object sender, RoutedEventArgs e)
         {
+            MessageBox.Show("Woah there, this bit is still being worked on and is closed for now. Keep your eyes out for new updates as I should release this soon!");
+            /*
             Windows.AddGame addGameWin = new Windows.AddGame(this);
             addGameWin.Owner = this;
             addGameWin.ShowDialog();
             await UpdateGames();
+            Functions.Discord.discord.client.ClearPresence();
+            Functions.Discord.discord.client.SetPresence(new RichPresence()
+            {
+                Details = "Browsing Servers...",
+                State = "(" + Variables.CurrGame.Title + ")",
+                Timestamps = Functions.Discord.startTime,
+                Assets = new Assets()
+                {
+                    LargeImageKey = "nutural",
+                    LargeImageText = "Devlin.gg/Blaze",
+                }
+            });
+            */
         }
 
         private async void RemoveGameBtn_Click(object sender, RoutedEventArgs e)
         {
+            /*
             if (!Variables.GameList[GameList.SelectedIndex].BlazingGriffin)
             {
                 Variables.GameList.RemoveAt(GameList.SelectedIndex);
                 await Functions.Games.RemoveGames_TMP();
                 UpdateGames();
             }
+            */
         }
 
         private async void RefreshBtn_Click(object sender, RoutedEventArgs e)

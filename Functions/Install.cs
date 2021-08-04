@@ -27,7 +27,7 @@ namespace Blaze.Functions
 
         public static async Task<bool> CheckInstallation() { if (Directory.Exists(Variables.HomeDir) || Directory.GetCurrentDirectory().EndsWith("Debug")) { return true; } else return false; }
         
-        public static async Task<bool> CheckUpdates(VersionNumber currVersion)
+        public static async Task<bool> CheckForUpdates(VersionNumber currVersion)
         {
             WebClient client = new WebClient();
             Stream stream = client.OpenRead("https://devlin.gg/blaze/version.txt");
@@ -51,7 +51,6 @@ namespace Blaze.Functions
 
         public static async Task Replace()
         {
-            
             if (System.IO.File.Exists(Variables.HomeDir + @"\Blaze.exe")) System.IO.File.Delete(Variables.HomeDir + @"\Blaze.exe");
             System.IO.File.Copy(System.Windows.Forms.Application.ExecutablePath, Variables.HomeDir + @"\Blaze.exe");
 
@@ -69,8 +68,9 @@ namespace Blaze.Functions
             Environment.Exit(0);
         }
 
-        public static async Task StartInstall()
+        public static async Task StartInstall(Preload win)
         {
+            preload = win;
             preload.StatusBox.Text = "Creating home directory...";
             if (!Directory.Exists(Variables.HomeDir))Directory.CreateDirectory(Variables.HomeDir);
             await DownloadDLL();
@@ -135,7 +135,7 @@ namespace Blaze.Functions
                 string shortcutAddress = Environment.GetFolderPath(Environment.SpecialFolder.Programs) + @"\Blaze.lnk";
 
                 IWshShortcut addToWindows = (IWshShortcut)shell.CreateShortcut(shortcutAddress);
-                addToWindows.Description = "Launch game using Blaze!";
+                addToWindows.Description = "Launch games using Blaze!";
                 addToWindows.TargetPath = Variables.HomeDir + @"\Blaze.exe";
                 addToWindows.Save();
             }

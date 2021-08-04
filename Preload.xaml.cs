@@ -22,11 +22,9 @@ namespace Blaze
     /// </summary>
     public partial class Preload : Window
     {
-        public Preload(object sender, StartupEventArgs e)
+        public Preload()
         {
             InitializeComponent();
-
-            if (e.Args.ToString().Contains("-installed")) Variables.FirstRun = true;
 
             this.MouseLeftButtonDown += delegate { DragMove(); };
             StatusBox.Text = "Blaze is starting...";
@@ -81,10 +79,11 @@ namespace Blaze
                         System.Windows.MessageBox.Show("Blaze requires administrative elevation to install correctly. (After instalation Blaze does not need to be run as a Administrator.)");
                         RestartElevated();
                     }
-                    else await Functions.Install.StartInstall();
+                    else await Functions.Install.StartInstall(this);
                 }
                 else
                 {
+                    /*
                     if (!Directory.GetCurrentDirectory().EndsWith("Blaze") && !Directory.GetCurrentDirectory().EndsWith("Debug"))
                     {
                         if (!IsElevated)
@@ -99,7 +98,7 @@ namespace Blaze
                         }
                     }
                     else
-                    {
+                    {*/
                         StatusBox.Text = "Checking games...";
                         await Functions.Games.GetGames();
                         StatusBox.Text = "Got games!";
@@ -116,7 +115,7 @@ namespace Blaze
                             StatusBox.Text = "Steam not running!";
                         }
                         PreloadDone();
-                    }
+                    //}
                 }
             }
             catch (Exception Ex)

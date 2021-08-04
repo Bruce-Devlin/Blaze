@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Blaze.Windows"
         mc:Ignorable="d"
-        Title="Add Game" Height="245" Width="290" ResizeMode="NoResize" WindowStartupLocation="CenterOwner" WindowStyle="None" HorizontalAlignment="Right" VerticalAlignment="Top" AllowsTransparency="True" Icon="/Blaze;component/Assets/blaze_icon.ico">
+        Title="Add Game" Height="245" Width="290" ResizeMode="NoResize" WindowStartupLocation="CenterOwner" WindowStyle="None" HorizontalAlignment="Right" VerticalAlignment="Top" AllowsTransparency="True">
     <Window.Background>
         <ImageBrush ImageSource="/Blaze;component/Assets/Sprites/ToolWindow.png"/>
     </Window.Background>

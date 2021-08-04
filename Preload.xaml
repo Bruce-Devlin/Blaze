@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Blaze"
         mc:Ignorable="d"
-        Title="Loading..." Loaded="Window_Loaded" Height="600" Width="600" ResizeMode="NoResize" WindowStyle="None" WindowStartupLocation="CenterScreen" AllowsTransparency="True" Icon="Assets/blaze_icon.ico">
+        Title="Loading..." Loaded="Window_Loaded" Height="600" Width="600" ResizeMode="NoResize" WindowStyle="None" WindowStartupLocation="CenterScreen" AllowsTransparency="True">
     <Window.Background>
         <ImageBrush ImageSource="Assets/Blaze/Loading.png" Stretch="UniformToFill"/>
     </Window.Background>

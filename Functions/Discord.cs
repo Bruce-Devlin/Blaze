@@ -43,29 +43,44 @@ namespace Blaze.Functions
 
         public static void JoinServer()
         {
-            string tmpsecret = "Murderous Pursuits,90149646132336641";
-            //string[] secret = args.Secret.Split(',');
-            string[] secret = tmpsecret.Split(',');
-            var filteredGames = Variables.GameList.Where(game => game.Title == secret[0]).ToList();
-            if (filteredGames.Any())
+            try 
             {
-                var filteredServer = Variables.ServerList.Where(server => server.SteamID == secret[1]).ToList();
-                home.JoinServer(filteredServer.First(), true);
+                string tmpsecret = "Murderous Pursuits,90149646132336641";
+                //string[] secret = args.Secret.Split(',');
+                string[] secret = tmpsecret.Split(',');
+                var filteredGames = Variables.GameList.Where(game => game.Title == secret[0]).ToList();
+                if (filteredGames.Any())
+                {
+                    var filteredServer = Variables.ServerList.Where(server => server.SteamID == secret[1]).ToList();
+                    home.JoinServer(filteredServer.First(), true);
+                }
+            }
+            catch (Exception Ex)
+            {
+                MessageBox.Show(Ex.ToString());
             }
         }
 
         private static void OnJoin(object sender, JoinMessage args)
         {
-            string[] secret = args.Secret.Split(',');
-            var filteredGames = Variables.GameList.Where(game => game.AppID.ToString() == secret[0]).ToList();
-            if (filteredGames.Any())
+            try
             {
-                var filteredServer = Variables.ServerList.Where(server => server.SteamID == secret[1]).ToList();
-                if (filteredServer.Any()) home.JoinServer(filteredServer.First(), true);
-                else MessageBox.Show("Cant find server.");
+                string[] secret = args.Secret.Split(',');
+                var filteredGames = Variables.GameList.Where(game => game.AppID.ToString() == secret[0]).ToList();
+                if (filteredGames.Any())
+                {
+                    var filteredServer = Variables.ServerList.Where(server => server.SteamID == secret[1]).ToList();
+                    if (filteredServer.Any()) home.JoinServer(filteredServer.First(), true);
+                    else MessageBox.Show("Cant find server.");
 
 
-            } else MessageBox.Show("It looks like you dont have that game :/");
+                }
+                else MessageBox.Show("It looks like you dont have that game :/");
+            }
+            catch (Exception Ex)
+            {
+                MessageBox.Show(Ex.ToString());
+            }
         }
 
 

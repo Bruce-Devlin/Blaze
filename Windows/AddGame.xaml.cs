@@ -1,4 +1,5 @@
 ﻿using Blaze.Functions;
+using DiscordRPC;
 using Microsoft.Win32;
 using Steamworks;
 using System;
@@ -32,6 +33,18 @@ namespace Blaze.Windows
         {
             InitializeComponent();
             this.MouseLeftButtonDown += delegate { DragMove(); };
+
+            Functions.Discord.discord.client.ClearPresence();
+            Functions.Discord.discord.client.SetPresence(new RichPresence()
+            {
+                Details = "Adding a game...",
+                Timestamps = Functions.Discord.startTime,
+                Assets = new Assets()
+                {
+                    LargeImageKey = "nutural",
+                    LargeImageText = "Devlin.gg/Blaze",
+                }
+            });
         }
 
         private void SelectFileBtn_Click(object sender, RoutedEventArgs e)
@@ -102,10 +115,7 @@ namespace Blaze.Windows
             }
         }
 
-        private void CloseBtn_Click(object sender, RoutedEventArgs e)
-        {
-            this.Close();
-        }
+        private void CloseBtn_Click(object sender, RoutedEventArgs e) { this.Close(); }
 
         private void GameTitleBox_GotKeyboardFocus(object sender, KeyboardFocusChangedEventArgs e) { GameTitleBox.Text = ""; }
 
