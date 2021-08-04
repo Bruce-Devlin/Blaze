@@ -1,4 +1,4 @@
-﻿// Disclaimer time, this is NOT endorsed, supported or created/published by Blazing Griffin.
+﻿// Disclaimer time, this is NOT endorsed, supported or created/published by Blazing Griffin and is a fan project.
 // This is a little app I built to help join servers on MURDEROUS PURSUITS that looks prettier than the Steam servers <3
 //
 // This app was made by Bruce Devlin, I'm just a fan of BG. You can check me out at https://devlin.gg if you would like.
@@ -12,8 +12,7 @@ using System.IO;
 using System.Net;
 using System.Security.Principal;
 using System.Windows;
-using System.Windows.Forms;
-
+using System.Deployment;
 
 
 namespace Blaze
@@ -23,9 +22,12 @@ namespace Blaze
     /// </summary>
     public partial class Preload : Window
     {
-        public Preload()
+        public Preload(object sender, StartupEventArgs e)
         {
             InitializeComponent();
+
+            if (e.Args.ToString().Contains("-installed")) Variables.FirstRun = true;
+
             this.MouseLeftButtonDown += delegate { DragMove(); };
             StatusBox.Text = "Blaze is starting...";
         }
@@ -68,9 +70,9 @@ namespace Blaze
                 System.Windows.MessageBox.Show("Uh Oh... It looks like you arnt connected to the internet, check your network and then restart the app");
                 Environment.Exit(0);
             }
-            StatusBox.Text = "Checking installation...";
             try
             {
+                StatusBox.Text = "Checking installation...";
                 if (!await Functions.Install.CheckInstallation())
                 {
                     StatusBox.Text = "Installing Blaze... (this might take a second)";
@@ -79,31 +81,42 @@ namespace Blaze
                         System.Windows.MessageBox.Show("Blaze requires administrative elevation to install correctly. (After instalation Blaze does not need to be run as a Administrator.)");
                         RestartElevated();
                     }
-                    else
-                    {
-                        Functions.Install.preload = this;
-                        await Functions.Install.StartInstall();
-                    }
+                    else await Functions.Install.StartInstall();
                 }
                 else
                 {
-                    
-                    StatusBox.Text = "Checking games...";
-                    await Functions.Games.GetGames();
-                    StatusBox.Text = "Got games!";
-                    Variables.CurrGame = Variables.GameList[0];
+                    if (!Directory.GetCurrentDirectory().EndsWith("Blaze") && !Directory.GetCurrentDirectory().EndsWith("Debug"))
+                    {
+                        if (!IsElevated)
+                        {
+                            System.Windows.MessageBox.Show("You are trying to run Blaze outside of it's home directory \"C://ProgramFiles/Blaze\". You already have Blaze installed in that location, if you would like to update Blaze to this version (" + System.Windows.Forms.Application.ProductVersion + ") then grant it administrative privledges, otherwise don't.");
+                            RestartElevated();
+                        }
+                        else
+                        {
+                            StatusBox.Text = "Not in home directory, moving...";
+                            await Functions.Install.Replace();
+                        }
+                    }
+                    else
+                    {
+                        StatusBox.Text = "Checking games...";
+                        await Functions.Games.GetGames();
+                        StatusBox.Text = "Got games!";
+                        Variables.CurrGame = Variables.GameList[0];
 
-                    StatusBox.Text = "Checking servers...";
-                    try
-                    {
-                        await Functions.Servers.GetServers();
-                        StatusBox.Text = "Got servers!";
+                        StatusBox.Text = "Checking servers...";
+                        try
+                        {
+                            await Functions.Servers.GetServers();
+                            StatusBox.Text = "Got servers!";
+                        }
+                        catch
+                        {
+                            StatusBox.Text = "Steam not running!";
+                        }
+                        PreloadDone();
                     }
-                    catch
-                    {
-                        StatusBox.Text = "Steam not running!";
-                    }
-                    PreloadDone();
                 }
             }
             catch (Exception Ex)

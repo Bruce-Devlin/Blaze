@@ -49,6 +49,26 @@ namespace Blaze.Functions
             else return false;
         }
 
+        public static async Task Replace()
+        {
+            
+            if (System.IO.File.Exists(Variables.HomeDir + @"\Blaze.exe")) System.IO.File.Delete(Variables.HomeDir + @"\Blaze.exe");
+            System.IO.File.Copy(System.Windows.Forms.Application.ExecutablePath, Variables.HomeDir + @"\Blaze.exe");
+
+            ProcessStartInfo cmd = new ProcessStartInfo();
+            cmd.Arguments = "/C choice /C Y /N /D Y /T 3 & Del " + System.Windows.Forms.Application.ExecutablePath;
+            cmd.WindowStyle = ProcessWindowStyle.Hidden;
+            cmd.CreateNoWindow = true;
+            cmd.FileName = "cmd.exe";
+            Process.Start(cmd);
+
+            Process secondProc = new Process();
+            secondProc.StartInfo.FileName = Variables.HomeDir + @"\Blaze.exe";
+            secondProc.Start();
+
+            Environment.Exit(0);
+        }
+
         public static async Task StartInstall()
         {
             preload.StatusBox.Text = "Creating home directory...";
@@ -93,7 +113,6 @@ namespace Blaze.Functions
                 zipFile.Dispose();
             } 
 
-
             preload.StatusBox.Text = "All done! Restarting Blaze...";
             System.IO.File.Delete(Variables.HomeDir + @"\dll.zip");
 
@@ -121,15 +140,16 @@ namespace Blaze.Functions
                 addToWindows.Save();
             }
 
-            ProcessStartInfo Info = new ProcessStartInfo();
-            Info.Arguments = "/C choice /C Y /N /D Y /T 3 & Del " + System.Windows.Forms.Application.ExecutablePath;
-            Info.WindowStyle = ProcessWindowStyle.Hidden;
-            Info.CreateNoWindow = true;
-            Info.FileName = "cmd.exe";
-            Process.Start(Info);
+            ProcessStartInfo cmd = new ProcessStartInfo();
+            cmd.Arguments = "/C choice /C Y /N /D Y /T 3 & Del " + System.Windows.Forms.Application.ExecutablePath;
+            cmd.WindowStyle = ProcessWindowStyle.Hidden;
+            cmd.CreateNoWindow = true;
+            cmd.FileName = "cmd.exe";
+            Process.Start(cmd);
 
             Process secondProc = new Process();
             secondProc.StartInfo.FileName = Variables.HomeDir + @"\Blaze.exe";
+            secondProc.StartInfo.Arguments = "-installed";
             secondProc.Start();
 
             Environment.Exit(0);
@@ -139,6 +159,17 @@ namespace Blaze.Functions
         {
             WebClient Client = new WebClient();
             Client.DownloadFile("https://devlin.gg/blaze/install/dll.zip", Directory.GetCurrentDirectory() + @"\Blaze\dll.zip");
+
+        }
+
+        static async Task DownloadUpdate()
+        {
+            preload.StatusBox.Text = "Downloading DLL's...";
+            var client = new WebClient();
+            var uri = new Uri("https://devlin.gg/blaze/install/dll.zip");
+
+            client.DownloadFileCompleted += (sender, e) => FinishInstall().Wait();
+            client.DownloadFileAsync(uri, Variables.HomeDir + @"\dll.zip");
         }
     }
 }

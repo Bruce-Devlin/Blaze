@@ -38,6 +38,30 @@
   <PropertyGroup>
     <ApplicationIcon>Assets\blaze_icon.ico</ApplicationIcon>
   </PropertyGroup>
+  <PropertyGroup />
+  <PropertyGroup />
+  <PropertyGroup />
+  <PropertyGroup>
+    <StartupObject>Blaze.App</StartupObject>
+  </PropertyGroup>
+  <PropertyGroup />
+  <PropertyGroup>
+    <TargetZone>
+    </TargetZone>
+  </PropertyGroup>
+  <PropertyGroup>
+    <GenerateManifests>false</GenerateManifests>
+  </PropertyGroup>
+  <PropertyGroup />
+  <PropertyGroup />
+  <PropertyGroup />
+  <PropertyGroup />
+  <PropertyGroup />
+  <PropertyGroup />
+  <PropertyGroup />
+  <PropertyGroup>
+    <NoWin32Manifest>true</NoWin32Manifest>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="DiscordRPC, Version=1.0.175.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>packages\DiscordRichPresence.1.0.175\lib\net35\DiscordRPC.dll</HintPath>
@@ -224,6 +248,26 @@
       <Isolated>False</Isolated>
       <EmbedInteropTypes>True</EmbedInteropTypes>
     </COMReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Assets\Blaze\Loading.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Assets\Blaze\Angry.png" />
+    <Resource Include="Assets\Blaze\Nutural.png" />
+    <Resource Include="Assets\Blaze\Sad.png" />
+    <Resource Include="Assets\Blaze\Wait.png" />
+    <Resource Include="Assets\Blaze\Wow.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Assets\Blaze\Small\Angry-small.png" />
+    <Resource Include="Assets\Blaze\Small\Nutural-small.png" />
+    <Resource Include="Assets\Blaze\Small\Sad-small.png" />
+    <Resource Include="Assets\Blaze\Small\Wait-small.png" />
+    <Resource Include="Assets\Blaze\Small\Wow-small.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Assets\Blaze\TalkingBack.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

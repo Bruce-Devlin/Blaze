@@ -5,9 +5,9 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Blaze"
         mc:Ignorable="d"
-        Title="Loading..." Loaded="Window_Loaded" Height="600" Width="600" ResizeMode="NoResize" WindowStyle="None" WindowStartupLocation="CenterScreen" AllowsTransparency="True">
+        Title="Loading..." Loaded="Window_Loaded" Height="600" Width="600" ResizeMode="NoResize" WindowStyle="None" WindowStartupLocation="CenterScreen" AllowsTransparency="True" Icon="Assets/blaze_icon.ico">
     <Window.Background>
-        <ImageBrush ImageSource="Assets/Sprites/Blaze2.png" Stretch="UniformToFill"/>
+        <ImageBrush ImageSource="Assets/Blaze/Loading.png" Stretch="UniformToFill"/>
     </Window.Background>
     <Grid>
         <TextBlock x:Name="StatusBox" HorizontalAlignment="Left" Height="25" Margin="0,575,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="600" TextAlignment="Center" FontSize="20" Foreground="White" Background="#13000000" FontFamily="/Blaze;component/Assets/#Berlin Sans FB"/>
