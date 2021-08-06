@@ -22,6 +22,7 @@ namespace Blaze.Functions
         public string LinkURL { get; set; }
         public string Filename { get; set; }
         public string PlainName { get; set; }
+        public uint ServerAppID { get; set; }
         public bool Running { get; set; }
         public bool BlazingGriffin { get; set; }
     }
@@ -92,6 +93,7 @@ namespace Blaze.Functions
                     newGame.LinkURL = GameInfo[4];
                     newGame.Filename = GameInfo[5];
                     newGame.PlainName = GameInfo[6];
+                    newGame.ServerAppID = uint.Parse(GameInfo[7]);
                     newGame.Running = false;
                     newGame.BlazingGriffin = true;
 

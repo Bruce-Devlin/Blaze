@@ -20,6 +20,7 @@ namespace Blaze
 
         public static Game CurrGame = new Game();
         public static List<Server> ServerList = new List<Server>();
+        public static List<Server> MyServers = new List<Server>();
 
         public static List<Game> GameList = new List<Game>();
 

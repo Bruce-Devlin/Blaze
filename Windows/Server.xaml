@@ -1,0 +1,16 @@
+﻿<Window x:Class="Blaze.Windows.Server"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Blaze.Windows"
+        mc:Ignorable="d"
+        Title="Host a server" Height="335" Width="800" WindowStyle="None" ResizeMode="NoResize" WindowStartupLocation="CenterOwner">
+    <Window.Background>
+        <ImageBrush ImageSource="/Blaze;component/Assets/Sprites/ToolWindow.png"/>
+    </Window.Background>
+    <Grid>
+        <Button x:Name="CloseBtn" Click="CloseBtn_Click" Content="X" HorizontalAlignment="Left" Height="25.389" Margin="772.819,2.167,0,0" VerticalAlignment="Top" Width="22.181" FontSize="22" Background="{x:Null}" BorderBrush="{x:Null}" Foreground="White" Style="{DynamicResource BtnSyle}" FontFamily="/Blaze;component/Assets/#Berlin Sans FB Demi" Cursor="Hand"/>
+
+    </Grid>
+</Window>

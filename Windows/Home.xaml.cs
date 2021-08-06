@@ -75,6 +75,8 @@ namespace Blaze.Windows
         private async void Window_Loaded(object sender, RoutedEventArgs e)
         {
             await UpdateGames();
+            List<int> Ports = new List<int>() { 7776, 7777, 7778 };
+            await Functions.Servers.CheckPorts(Ports);
         }
 
         public async Task UpdateGames()
@@ -141,7 +143,7 @@ namespace Blaze.Windows
             else MessageBox.Show("You have to select a server first.");
         }
 
-        public async void JoinServer(Server currServer, bool joining = false)
+        public async void JoinServer(Functions.Server currServer, bool joining = false)
         {
             if (joining || serverSelected && !searchingForServers)
             {
@@ -301,6 +303,23 @@ namespace Blaze.Windows
 
         private void SearchBox_GotKeyboardFocus(object sender, KeyboardFocusChangedEventArgs e) { SearchBox.Text = ""; }
 
-
+        private void AddServerBtn_Click(object sender, RoutedEventArgs e)
+        {
+            Windows.Server server = new Windows.Server();
+            server.Owner = this;
+            server.ShowDialog();
+            Functions.Discord.discord.client.ClearPresence();
+            Functions.Discord.discord.client.SetPresence(new RichPresence()
+            {
+                Details = "Browsing Servers...",
+                State = "(" + Variables.CurrGame.Title + ")",
+                Timestamps = Functions.Discord.startTime,
+                Assets = new Assets()
+                {
+                    LargeImageKey = "nutural",
+                    LargeImageText = "Devlin.gg/Blaze",
+                }
+            });
+        }
     }
 }
