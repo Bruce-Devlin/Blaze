@@ -54,6 +54,10 @@ namespace Blaze.Functions
             if (System.IO.File.Exists(Variables.HomeDir + @"\Blaze.exe")) System.IO.File.Delete(Variables.HomeDir + @"\Blaze.exe");
             System.IO.File.Copy(System.Windows.Forms.Application.ExecutablePath, Variables.HomeDir + @"\Blaze.exe");
 
+            Process secondProc = new Process();
+            secondProc.StartInfo.FileName = Variables.HomeDir + @"\Blaze.exe";
+            secondProc.Start();
+
             ProcessStartInfo cmd = new ProcessStartInfo();
             cmd.Arguments = "/C choice /C Y /N /D Y /T 3 & Del " + System.Windows.Forms.Application.ExecutablePath;
             cmd.WindowStyle = ProcessWindowStyle.Hidden;
@@ -61,11 +65,7 @@ namespace Blaze.Functions
             cmd.FileName = "cmd.exe";
             Process.Start(cmd);
 
-            Process secondProc = new Process();
-            secondProc.StartInfo.FileName = Variables.HomeDir + @"\Blaze.exe";
-            secondProc.Start();
-
-            Environment.Exit(0);
+            Application.Current.Shutdown();
         }
 
         public static async Task StartInstall(Preload win)
@@ -140,6 +140,11 @@ namespace Blaze.Functions
                 addToWindows.Save();
             }
 
+            Process secondProc = new Process();
+            secondProc.StartInfo.FileName = Variables.HomeDir + @"\Blaze.exe";
+            secondProc.StartInfo.Arguments = "-installed";
+            secondProc.Start();
+
             ProcessStartInfo cmd = new ProcessStartInfo();
             cmd.Arguments = "/C choice /C Y /N /D Y /T 3 & Del " + System.Windows.Forms.Application.ExecutablePath;
             cmd.WindowStyle = ProcessWindowStyle.Hidden;
@@ -147,19 +152,13 @@ namespace Blaze.Functions
             cmd.FileName = "cmd.exe";
             Process.Start(cmd);
 
-            Process secondProc = new Process();
-            secondProc.StartInfo.FileName = Variables.HomeDir + @"\Blaze.exe";
-            secondProc.StartInfo.Arguments = "-installed";
-            secondProc.Start();
-
-            Environment.Exit(0);
+            Application.Current.Shutdown();
         }
 
         public static async Task StartUpdate()
         {
             WebClient Client = new WebClient();
             Client.DownloadFile("https://devlin.gg/blaze/install/dll.zip", Directory.GetCurrentDirectory() + @"\Blaze\dll.zip");
-
         }
 
         static async Task DownloadUpdate()

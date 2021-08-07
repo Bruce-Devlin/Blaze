@@ -154,14 +154,14 @@ namespace Blaze.Windows
                     Functions.Discord.discord.client.ClearPresence();
                     Functions.Discord.discord.client.SetPresence(new RichPresence()
                     {
-                        Details = currServer.ServerName,
-                        State = "Map: " + currServer.Map + " | Players: ",
+                        Details = currServer.Info.name,
+                        State = "Map: " + currServer.Info.map + " | Players: ",
                         Timestamps = Functions.Discord.startTime,
                         Party = new Party()
                         {
-                            ID = currServer.ServerName,
-                            Size = currServer.CurrentPlayers + 1,
-                            Max = currServer.MaxPlayers,
+                            ID = currServer.Info.name,
+                            Size = currServer.Info.players + 1,
+                            Max = currServer.Info.max_players,
                             Privacy = Party.PrivacySetting.Public
                         },
                         Secrets = new Secrets()
@@ -180,9 +180,10 @@ namespace Blaze.Windows
                         Process game = new Process();
                         game.StartInfo.FileName = SteamApps.AppInstallDir(currServer.Game.AppID) + "\\" + Variables.CurrGame.Filename;
                         SteamClient.Shutdown();
+                        
+                        MessageBox.Show("-connect=" + currServer.Info.addr + ":" + currServer.Info.gameport);
 
-                        string[] newIPandPort = currServer.IPandPort.Split(':');
-                        game.StartInfo.Arguments = "-connect=" + newIPandPort[0] + ":" + newIPandPort[1];
+                        game.StartInfo.Arguments = "-connect=" + currServer.Info.addr + ":" + currServer.Info.gameport;
                         game.Exited += Game_Exited;
                         WindowFade.Visibility = Visibility.Visible;
                         game.Start();
@@ -298,7 +299,7 @@ namespace Blaze.Windows
             if (!searching && SearchBox.Text != "")
             {
                 searching = true;
-                var filtered = Variables.ServerList.Where(server => server.ServerName.ToLower().Contains(SearchBox.Text.ToLower()));
+                var filtered = Variables.ServerList.Where(server => server.Info.name.ToLower().Contains(SearchBox.Text.ToLower()));
                 ServerList.ItemsSource = filtered;
             }
             else

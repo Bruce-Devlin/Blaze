@@ -32,7 +32,6 @@ namespace Blaze.Functions
     {
         public static async Task<bool> IsGameRunning()
         {
-
             if (Process.GetProcessesByName(Variables.CurrGame.PlainName).Length > 0) return true;
             else return false;
         }

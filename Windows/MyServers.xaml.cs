@@ -40,18 +40,19 @@ namespace Blaze.Windows
                 }
             });
 
-            CurrGameTitle.Text = Variables.CurrGame.Title;
+            
         }
 
         private async void Window_Loaded(object sender, RoutedEventArgs e)
         {
-            await Functions.Servers.UpdateLocalServers();
-            MyServerList.ItemsSource = Variables.LocalServers.Where(server => server.AppID == Variables.CurrGame.ServerAppID);
+            await Functions.Servers.GetLocalServers();
+            CurrGameTitle.Text = Variables.CurrGame.Title;
+            if (Variables.LocalServers.Count > 0) MyServerList.ItemsSource = Variables.LocalServers.Where(server => server.AppID == Variables.CurrGame.ServerAppID);
         }
 
         private void MyServerList_SelectedCellsChanged(object sender, SelectedCellsChangedEventArgs e)
         {
-            ServerNameBox.Text = Variables.LocalServers[MyServerList.SelectedIndex].ServerName;
+
         }
 
         private async void NewServerBtn_Click(object sender, RoutedEventArgs e)
@@ -62,17 +63,34 @@ namespace Blaze.Windows
             newServer.AppID = Variables.CurrGame.ServerAppID;
             newServer.Filename = Variables.CurrGame.ServerFilename;
 
-            await Functions.Servers.CreateServer(newServer, this);
+            await Functions.Servers.CreateServer(ServerNameBox.Text, ServerPortBox.Text, this);
         }
 
-        private void StartServerBtn_Click(object sender, RoutedEventArgs e)
+        private async void StartServerBtn_Click(object sender, RoutedEventArgs e)
         {
+            await Functions.Servers.SetConfig(Variables.LocalServers[MyServerList.SelectedIndex], Variables.LocalServers[MyServerList.SelectedIndex].ServerConfig);
             Functions.Servers.StartServer(Variables.LocalServers[MyServerList.SelectedIndex]);
         }
 
         private void StopServerBtn_Click(object sender, RoutedEventArgs e)
         {
 
+        }
+
+        private async void SaveServerBtn_Click(object sender, RoutedEventArgs e)
+        {
+            Functions.MyServer server = Variables.LocalServers[MyServerList.SelectedIndex];
+
+            server.ServerName = ServerNameBox.Text;
+
+            server.ServerConfig.serverName = ServerNameBox.Text;
+
+            Variables.LocalServers[MyServerList.SelectedIndex] = server;
+
+            await Functions.Servers.SetConfig(Variables.LocalServers[MyServerList.SelectedIndex], Variables.LocalServers[MyServerList.SelectedIndex].ServerConfig);
+
+            MyServerList.ItemsSource = new List<Functions.MyServer>();
+            MyServerList.ItemsSource = Variables.LocalServers;
         }
     }
 }

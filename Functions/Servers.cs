@@ -16,14 +16,32 @@ namespace Blaze.Functions
 {
     public class Server
     {
-        public string ServerName { get; set; }
-        public string Map { get; set; }
         public string TotalPlayers { get; set; }
-        public int CurrentPlayers { get; set; }
-        public int MaxPlayers { get; set; }
-        public string IPandPort { get; set; }
+        public SteamServer Info {get; set;}
+
         public Game Game { get; set; }
         public string SteamID { get; set; }
+    }
+
+    public class SteamServer
+    {
+        public string addr { get; set; }
+        public int gameport { get; set; }
+        public ulong steamid { get; set; }
+        public string name { get; set; }
+        public uint appid { get; set; }
+        public string gamedir { get; set; }
+        public string version { get; set; }
+        public string product { get; set; }
+        public int region { get; set; }
+        public int players { get; set; }
+        public int max_players { get; set; }
+        public int bots { get; set; }
+        public string map { get; set; }
+        public bool secure { get; set; }
+        public bool dedicated { get; set; }
+        public string os { get; set; }
+        public string gametype { get; set; }
     }
 
     public class MyServer
@@ -31,6 +49,9 @@ namespace Blaze.Functions
         public string ServerName { get; set; }
         public uint AppID { get; set; }
         public string Filename { get; set; }
+        public string ServerDir { get; set; }
+        public string Profile { get; set; }
+        public MP_ServerConfig ServerConfig { get; set; }
     }
 
     public class MP_ServerConfig
@@ -66,30 +87,10 @@ namespace Blaze.Functions
 
     class Servers
     {
-        static List<string> servers = new List<string>();
-
         public static async Task GetServers()
         {
-            try
-            {
-                string address = "";
-                WebRequest ipRequest = WebRequest.Create("http://checkip.dyndns.org/");
-                using (WebResponse response = ipRequest.GetResponse())
-                using (StreamReader stream = new StreamReader(response.GetResponseStream()))
-                {
-                    address = stream.ReadToEnd();
-                }
-                int first = address.IndexOf("Address: ") + 9;
-                int last = address.LastIndexOf("</body>");
-                address = address.Substring(first, last - first);
+            Variables.ServerList.Clear();
 
-                Variables.ServerList.Clear();
-            }
-            catch (Exception Ex)
-            {
-                MessageBox.Show("Oh no! I ran into a problem connecting to the mothership? - " + Ex.ToString());
-            }
-            
             try
             {
                 JObject result;
@@ -105,9 +106,15 @@ namespace Blaze.Functions
                 }
                 foreach (JObject server in result["data"]) 
                 { 
-                    Server newServer = server.ToObject<Server>();
-                    newServer.TotalPlayers = server.ToObject<Server>().CurrentPlayers + "/" + server.ToObject<Server>().MaxPlayers;
+                    SteamServer newSteamServer = server.ToObject<SteamServer>();
+                    var ipWithoutPort = newSteamServer.addr.Split(':');
+                    newSteamServer.addr = ipWithoutPort[0];
+
+                    Server newServer = new Server();
+                    newServer.Info = newSteamServer;
                     newServer.Game = Variables.CurrGame;
+                    newServer.TotalPlayers = newServer.Info.players + "/" + newServer.Info.max_players;
+
                     Variables.ServerList.Add(newServer);
                 };
 
@@ -122,7 +129,6 @@ namespace Blaze.Functions
         {
             //if (CheckPorts)
 
-
             SteamClient.Init(server.AppID);
             var serverDir = SteamApps.AppInstallDir(server.AppID);
             SteamClient.Shutdown();
@@ -131,13 +137,13 @@ namespace Blaze.Functions
             game.StartInfo.FileName = serverDir + "\\" + server.Filename;
             
 
-            game.StartInfo.Arguments = "-serverid \"" + server.ServerName + "\"";
+            game.StartInfo.Arguments = "-serverid " + server.Profile;
             game.Start();
-            game.WaitForExit();
         }
 
-        public static async Task UpdateLocalServers()
+        public static async Task GetLocalServers()
         {
+            Variables.LocalServers = new List<MyServer>();
             if (File.Exists(Variables.ConfigDir + @"\myservers.json"))
             {
                 string json = File.ReadAllText(Variables.ConfigDir + @"\myservers.json");
@@ -145,32 +151,66 @@ namespace Blaze.Functions
             }
         }
 
-        public static async Task SaveLocalServers()
+        public static async Task SetLocalServers()
         {
             if (!File.Exists(Variables.ConfigDir + @"\myservers.json")) File.Create(Variables.ConfigDir + @"\myservers.json").Close();
-            File.WriteAllText(Variables.ConfigDir + @"\myservers.json", JsonConvert.SerializeObject(Variables.LocalServers));
+            File.WriteAllText(Variables.ConfigDir + @"\myservers.json", JsonConvert.SerializeObject(Variables.LocalServers, Formatting.Indented));
         }
 
-        public static async Task CreateServer(MyServer server, Windows.MyServers owner)
+        public static async Task<MP_ServerConfig> GetConfig(MyServer server)
+        {
+            MP_ServerConfig config = new MP_ServerConfig();
+            if (server.AppID == 689780 && File.Exists(server.ServerDir + @"\" + server.Profile + @"\DedicatedServerConfig.json"))
+            {
+                string json = File.ReadAllText(server.ServerDir + @"\" + server.Profile + @"\DedicatedServerConfig.json");
+                return JsonConvert.DeserializeObject<MP_ServerConfig>(json);
+            }
+            else return new MP_ServerConfig();
+        }
+
+        public static async Task SetConfig(MyServer server, MP_ServerConfig config)
+        {
+            if (server.AppID == 689780 && File.Exists(server.ServerDir + @"\" + server.Profile + @"\DedicatedServerConfig.json"))
+            {
+                File.WriteAllText(server.ServerDir + @"\" + server.Profile + @"\DedicatedServerConfig.json", JsonConvert.SerializeObject(config));
+            }
+        }
+
+        public static async Task CreateServer(string ServerName, string ServerPort,  Windows.MyServers owner)
         {
             try
             {
+                MyServer server = new MyServer();
+
+                server.ServerName = ServerName;
+                server.AppID = Variables.CurrGame.ServerAppID;
+                server.Filename = Variables.CurrGame.ServerFilename;
+                server.Profile = server.ServerName.Replace(" ", "-").ToLower();
+
                 SteamClient.Init(server.AppID);
-                var serverDir = SteamApps.AppInstallDir(server.AppID);
+                server.ServerDir = SteamApps.AppInstallDir(server.AppID);
                 SteamClient.Shutdown();
 
-                Directory.CreateDirectory(serverDir + @"\" + server.ServerName);
-                if (server.AppID == 689780 && !File.Exists(serverDir + @"\" + server.ServerName + "DedicatedServerConfig.json"))
+                Directory.CreateDirectory(server.ServerDir + @"\" + server.Profile);
+                if (server.AppID == 689780 && !File.Exists(server.ServerDir + @"\" + server.Profile + "DedicatedServerConfig.json"))
                 {
-                    Directory.CreateDirectory(serverDir + @"\" + server.ServerName);
                     WebClient Client = new WebClient();
-                    Client.DownloadFile("https://devlin.gg/blaze/mp-config/DedicatedServerConfig.json", serverDir + @"\" + server.ServerName + @"\DedicatedServerConfig.json");
+                    Client.DownloadFile("https://devlin.gg/blaze/mp-config/DedicatedServerConfig.json", server.ServerDir + @"\" + server.Profile + @"\DedicatedServerConfig.json");
                 }
 
+                server.ServerConfig = await GetConfig(server);
+
+                //Do Config
+                server.ServerConfig.serverName = ServerName;
+
+
+                await SetConfig(server, server.ServerConfig);
+
                 Variables.LocalServers.Add(server);
-                await SaveLocalServers();
+                owner.MyServerList.ItemsSource = new List<MyServer>();
                 owner.MyServerList.ItemsSource = Variables.LocalServers;
 
+                await SetLocalServers();
             }
             catch(Exception Ex)
             {

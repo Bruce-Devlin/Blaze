@@ -13,7 +13,8 @@ using System.Net;
 using System.Security.Principal;
 using System.Windows;
 using System.Deployment;
-
+using System.Reflection;
+using System.Threading.Tasks;
 
 namespace Blaze
 {
@@ -30,9 +31,9 @@ namespace Blaze
             StatusBox.Text = "Blaze is starting...";
         }
 
-        private void Window_Loaded(object sender, RoutedEventArgs e)
+        private async void Window_Loaded(object sender, RoutedEventArgs e)
         {
-            PreloadManager();
+            await PreloadManager();
         }
 
         internal static void RestartElevated()
@@ -58,7 +59,7 @@ namespace Blaze
             get { return new WindowsPrincipal(WindowsIdentity.GetCurrent()).IsInRole(WindowsBuiltInRole.Administrator); }
         }
 
-        public async void PreloadManager()
+        public async Task PreloadManager()
         {
 
             StatusBox.Text = "Making sure you are connected...";
@@ -74,22 +75,13 @@ namespace Blaze
                 if (!await Functions.Install.CheckInstallation()) { await Functions.Install.StartInstall(this); }
                 else
                 {
-                    /*
-                    if (!Directory.GetCurrentDirectory().EndsWith("Blaze") && !Directory.GetCurrentDirectory().EndsWith("Debug"))
+                    if (!Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location).EndsWith(@"Blaze") && !Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location).EndsWith(@"Debug"))
                     {
-                        if (!IsElevated)
-                        {
-                            System.Windows.MessageBox.Show("You are trying to run Blaze outside of it's home directory \"C://ProgramFiles/Blaze\". You already have Blaze installed in that location, if you would like to update Blaze to this version (" + System.Windows.Forms.Application.ProductVersion + ") then grant it administrative privledges, otherwise don't.");
-                            RestartElevated();
-                        }
-                        else
-                        {
-                            StatusBox.Text = "Not in home directory, moving...";
-                            await Functions.Install.Replace();
-                        }
+                        StatusBox.Text = "Not in home directory, moving... ";
+                        await Functions.Install.Replace();
                     }
                     else
-                    {*/
+                    {
                         StatusBox.Text = "Checking games...";
                         await Functions.Games.GetGames();
                         StatusBox.Text = "Got games!";
@@ -106,7 +98,7 @@ namespace Blaze
                             StatusBox.Text = "Steam not running!";
                         }
                         PreloadDone();
-                    //}
+                    }
                 }
             }
             catch (Exception Ex)
