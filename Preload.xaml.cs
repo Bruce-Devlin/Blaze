@@ -71,16 +71,7 @@ namespace Blaze
             try
             {
                 StatusBox.Text = "Checking installation...";
-                if (!await Functions.Install.CheckInstallation())
-                {
-                    StatusBox.Text = "Installing Blaze... (this might take a second)";
-                    if (!IsElevated)
-                    {
-                        System.Windows.MessageBox.Show("Blaze requires administrative elevation to install correctly. (After instalation Blaze does not need to be run as a Administrator.)");
-                        RestartElevated();
-                    }
-                    else await Functions.Install.StartInstall(this);
-                }
+                if (!await Functions.Install.CheckInstallation()) { await Functions.Install.StartInstall(this); }
                 else
                 {
                     /*

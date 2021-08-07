@@ -72,7 +72,7 @@ namespace Blaze.Functions
         {
             preload = win;
             preload.StatusBox.Text = "Creating home directory...";
-            if (!Directory.Exists(Variables.HomeDir))Directory.CreateDirectory(Variables.HomeDir);
+            if (!Directory.Exists(Variables.HomeDir)) Directory.CreateDirectory(Variables.HomeDir);
             await DownloadDLL();
         }
 

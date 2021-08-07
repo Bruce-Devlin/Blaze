@@ -29,6 +29,7 @@ namespace Blaze.Windows
 
         public Game newGame = new Game();
 
+        private void CloseBtn_Click(object sender, RoutedEventArgs e) { this.Close(); }
         public AddGame(Home home)
         {
             InitializeComponent();
@@ -115,7 +116,7 @@ namespace Blaze.Windows
             }
         }
 
-        private void CloseBtn_Click(object sender, RoutedEventArgs e) { this.Close(); }
+        
 
         private void GameTitleBox_GotKeyboardFocus(object sender, KeyboardFocusChangedEventArgs e) { GameTitleBox.Text = ""; }
 

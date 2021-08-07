@@ -184,8 +184,10 @@ namespace Blaze.Windows
                         string[] newIPandPort = currServer.IPandPort.Split(':');
                         game.StartInfo.Arguments = "-connect=" + newIPandPort[0] + ":" + newIPandPort[1];
                         game.Exited += Game_Exited;
+                        WindowFade.Visibility = Visibility.Visible;
                         game.Start();
                         game.WaitForExit();
+                        WindowFade.Visibility = Visibility.Hidden;
 
                         //Variables.CurrGame.Running = true;
                         //Variables.CurrGame.Running = false;
@@ -229,9 +231,11 @@ namespace Blaze.Windows
 
         private void SettingBtn_Click(object sender, RoutedEventArgs e)
         {
+            WindowFade.Visibility = Visibility.Visible;
             Windows.Settings settingsWin = new Windows.Settings(this);
             settingsWin.Owner = this;
             settingsWin.ShowDialog();
+            WindowFade.Visibility = Visibility.Hidden;
             Functions.Discord.discord.client.ClearPresence();
             Functions.Discord.discord.client.SetPresence(new RichPresence()
             {
@@ -250,9 +254,11 @@ namespace Blaze.Windows
         {
             MessageBox.Show("Woah there, this bit is still being worked on and is closed for now. Keep your eyes out for new updates as I should release this soon!");
             /*
+            WindowFade.Visibility = Visibility.Visible;
             Windows.AddGame addGameWin = new Windows.AddGame(this);
             addGameWin.Owner = this;
             addGameWin.ShowDialog();
+            WindowFade.Visibility = Visibility.Hidden;
             await UpdateGames();
             Functions.Discord.discord.client.ClearPresence();
             Functions.Discord.discord.client.SetPresence(new RichPresence()
@@ -303,11 +309,13 @@ namespace Blaze.Windows
 
         private void SearchBox_GotKeyboardFocus(object sender, KeyboardFocusChangedEventArgs e) { SearchBox.Text = ""; }
 
-        private void AddServerBtn_Click(object sender, RoutedEventArgs e)
+        private async void AddServerBtn_Click(object sender, RoutedEventArgs e)
         {
-            Windows.Server server = new Windows.Server();
+            WindowFade.Visibility = Visibility.Visible;
+            Windows.MyServers server = new Windows.MyServers();
             server.Owner = this;
             server.ShowDialog();
+            WindowFade.Visibility = Visibility.Hidden;
             Functions.Discord.discord.client.ClearPresence();
             Functions.Discord.discord.client.SetPresence(new RichPresence()
             {

@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using Steamworks;
+
 
 namespace Blaze.Functions
 {
@@ -21,6 +21,7 @@ namespace Blaze.Functions
         public ImageBrush Background { get; set; }
         public string LinkURL { get; set; }
         public string Filename { get; set; }
+        public string ServerFilename { get; set; }
         public string PlainName { get; set; }
         public uint ServerAppID { get; set; }
         public bool Running { get; set; }
@@ -43,7 +44,7 @@ namespace Blaze.Functions
 
         public static async Task RemoveGames_TMP()
         {
-            File.Delete(Directory.GetCurrentDirectory() + @"\games.txt");
+            File.Delete(Variables.ConfigDir + @"\games.json");
         }
 
         public static async Task GetGames()
@@ -92,8 +93,9 @@ namespace Blaze.Functions
                     newGame.Background = backgroundImgBrush;
                     newGame.LinkURL = GameInfo[4];
                     newGame.Filename = GameInfo[5];
-                    newGame.PlainName = GameInfo[6];
-                    newGame.ServerAppID = uint.Parse(GameInfo[7]);
+                    newGame.ServerFilename = GameInfo[6];
+                    newGame.PlainName = GameInfo[7];
+                    newGame.ServerAppID = uint.Parse(GameInfo[8]);
                     newGame.Running = false;
                     newGame.BlazingGriffin = true;
 
@@ -102,9 +104,12 @@ namespace Blaze.Functions
             }
             reader.Close();
 
-            if (File.Exists(Directory.GetCurrentDirectory() + "\\games.txt"))
+            if (!Directory.Exists(Variables.ConfigDir)) Directory.CreateDirectory(Variables.ConfigDir);
+            string localGames = Variables.ConfigDir + @"\games.txt";
+
+            if (File.Exists(localGames))
             {
-                StreamReader localReader = new StreamReader(Directory.GetCurrentDirectory() + "\\games.txt");
+                StreamReader localReader = new StreamReader(localGames);
                 string localgameslist;
                 while ((localgameslist = localReader.ReadLine()) != null && !localgameslist.StartsWith("//") && localgameslist != "")
                 {

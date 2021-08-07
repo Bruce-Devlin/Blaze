@@ -20,10 +20,11 @@ namespace Blaze
 
         public static Game CurrGame = new Game();
         public static List<Server> ServerList = new List<Server>();
-        public static List<Server> MyServers = new List<Server>();
+        public static List<MyServer> LocalServers = new List<MyServer>();
 
         public static List<Game> GameList = new List<Game>();
 
         public static string HomeDir = Environment.ExpandEnvironmentVariables("%ProgramW6432%") + @"\Blaze";
+        public static string ConfigDir = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\Blaze";
     }
 }

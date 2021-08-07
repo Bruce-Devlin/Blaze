@@ -72,8 +72,6 @@ namespace Blaze.Functions
                     var filteredServer = Variables.ServerList.Where(server => server.SteamID == secret[1]).ToList();
                     if (filteredServer.Any()) home.JoinServer(filteredServer.First(), true);
                     else MessageBox.Show("Cant find server.");
-
-
                 }
                 else MessageBox.Show("It looks like you dont have that game :/");
             }

@@ -1,0 +1,73 @@
+﻿<Window x:Class="Blaze.Windows.MyServers"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Blaze.Windows"
+        mc:Ignorable="d"
+        Title="Host a server" Loaded="Window_Loaded" Height="340" Width="755" WindowStyle="None" ResizeMode="NoResize" WindowStartupLocation="CenterOwner" AllowsTransparency="True">
+    <Window.Background>
+        <ImageBrush ImageSource="/Blaze;component/Assets/Sprites/ToolWindow.png"/>
+    </Window.Background>
+    <Grid>
+        <Button x:Name="CloseBtn" Click="CloseBtn_Click" Content="X" HorizontalAlignment="Left" Height="25.389" Margin="727.819,0,0,0" VerticalAlignment="Top" Width="22.181" FontSize="22" Background="{x:Null}" BorderBrush="{x:Null}" Foreground="White" Style="{DynamicResource BtnSyle}" FontFamily="/Blaze;component/Assets/#Berlin Sans FB Demi" Cursor="Hand"/>
+        <DataGrid x:Name="MyServerList" SelectedCellsChanged="MyServerList_SelectedCellsChanged" FontFamily="/Blaze;component/Assets/#Berlin Sans FB" BorderThickness="3" Margin="20,85,0,0" BorderBrush="#FFEB3225" Foreground="White" HorizontalAlignment="Left" Height="210" VerticalAlignment="Top" Width="220" CanUserReorderColumns="False" CanUserResizeColumns="False" CanUserSortColumns="False" ScrollViewer.CanContentScroll="False" RowHeight="60" ColumnHeaderHeight="0" Background="#B5DB4123" AutoGenerateColumns="False" IsReadOnly="True" GridLinesVisibility="None" CanUserResizeRows="False" EnableRowVirtualization="False" HorizontalGridLinesBrush="{x:Null}" VerticalGridLinesBrush="{x:Null}" SelectionMode="Single" RowDetailsVisibilityMode="Collapsed" FontSize="6">
+            <DataGrid.Resources>
+                <Style TargetType="{x:Type DataGridColumnHeader}">
+                    <Setter Property="Background" Value="Transparent"/>
+                </Style>
+                <Style TargetType="{x:Type DataGridRowHeader}">
+                    <Setter Property="Background" Value="Transparent"/>
+                </Style>
+                <SolidColorBrush x:Key="{x:Static SystemColors.HighlightBrushKey}" Color="#C80E0E0F"/>
+                <SolidColorBrush x:Key="{x:Static SystemColors.InactiveSelectionHighlightBrushKey}" Color="#C80E0E0F"/>
+                <SolidColorBrush x:Key="{x:Static SystemColors.InactiveSelectionHighlightTextBrushKey}" Color="#FFFFFFFF"/>
+            </DataGrid.Resources>
+            <DataGrid.Columns>
+                <DataGridTextColumn Binding="{Binding ServerName}" ClipboardContentBinding="{x:Null}"  Width="3*" FontSize="24" FontFamily="/Blaze;component/Assets/#Berlin Sans FB">
+                    <DataGridTextColumn.HeaderStyle>
+                        <Style TargetType="{x:Type DataGridColumnHeader}">
+                            <Setter Property="Padding" Value="4"/>
+                            <Setter Property="Margin" Value="2"/>
+                            <Setter Property="Background" Value="Transparent"/>
+                            <Setter Property="FontSize" Value="16"/>
+                        </Style>
+                    </DataGridTextColumn.HeaderStyle>
+                </DataGridTextColumn>
+            </DataGrid.Columns>
+            <DataGrid.CellStyle>
+                <Style TargetType="{x:Type DataGridCell}">
+                    <Setter Property="Padding" Value="4"/>
+                    <Setter Property="BorderThickness" Value="0"/>
+                    <Setter Property="Template">
+                        <Setter.Value>
+                            <ControlTemplate TargetType="{x:Type DataGridCell}">
+                                <Border Padding="{TemplateBinding Padding}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Background="{TemplateBinding Background}" SnapsToDevicePixels="True">
+                                    <ContentPresenter SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"/>
+                                </Border>
+                            </ControlTemplate>
+                        </Setter.Value>
+                    </Setter>
+                </Style>
+            </DataGrid.CellStyle>
+            <DataGrid.RowStyle>
+                <Style TargetType="{x:Type DataGridRow}">
+                    <Setter Property="Foreground" Value="White"/>
+                    <Setter Property="Background" Value="Transparent"/>
+                </Style>
+            </DataGrid.RowStyle>
+        </DataGrid>
+        <TextBlock HorizontalAlignment="Left" Height="20" Margin="20,60,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="125" Foreground="White" FontFamily="/Blaze;component/Assets/#Berlin Sans FB" FontSize="18" FontWeight="Bold"><Run Text="Saved "/><Run Text="Servers"/><Run Text=":"/></TextBlock>
+        <Button x:Name="NewServerBtn" Click="NewServerBtn_Click" Content="NEW" HorizontalAlignment="Left" Height="22.586" Margin="20,292.046,0,0" VerticalAlignment="Top" Width="40" Background="#B5DB4123" BorderBrush="#FFEB3225" Foreground="White" BorderThickness="3"/>
+        <TextBlock Height="16.311" TextWrapping="Wrap" Text="MY SERVERS" VerticalAlignment="Top" Foreground="White" FontFamily="/Blaze;component/Assets/#Berlin Sans FB Demi" FontSize="15" FontWeight="Bold" TextAlignment="Center" Margin="0,7.5,27.181,0"/>
+        <Rectangle x:Name="WindowFade" Fill="#91000000" HorizontalAlignment="Left" Height="335" VerticalAlignment="Top" Width="800" Visibility="Hidden"/>
+        <Button x:Name="StartServerBtn" Content="START SERVER" Click="StartServerBtn_Click" HorizontalAlignment="Left" Height="22.586" Margin="140,292.414,0,0" VerticalAlignment="Top" Width="100" Background="#B5DB4123" Foreground="White" FontFamily="/Blaze;component/Assets/#Berlin Sans FB" BorderBrush="#FFEB3225" BorderThickness="3"/>
+        <TextBox x:Name="ServerNameBox" HorizontalAlignment="Left" Height="25" Margin="295,85,0,0" TextWrapping="Wrap" Text="Server name" VerticalAlignment="Top" Width="230" Background="#B5DB4123" BorderBrush="#FFEB3225" Foreground="White" FontFamily="/Blaze;component/Assets/#Berlin Sans FB" SelectionBrush="#BCAA615C" BorderThickness="3" FontSize="16"/>
+        <TextBlock HorizontalAlignment="Left" Height="20" Margin="10,320,0,0" TextWrapping="Wrap" Text="Current Game:" VerticalAlignment="Top" Width="80" FontFamily="/Blaze;component/Assets/#Berlin Sans FB" Foreground="White"/>
+        <TextBlock x:Name="CurrGameTitle" HorizontalAlignment="Left" Height="20" Margin="90,320,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="175" FontFamily="/Blaze;component/Assets/#Berlin Sans FB" Foreground="White"/>
+        <TextBox x:Name="ServerPortBox" Height="25" Margin="540,85,105,0" TextWrapping="Wrap" Text="Server Port" VerticalAlignment="Top" Background="#B5DB4123" BorderBrush="#FFEB3225" Foreground="White" FontFamily="/Blaze;component/Assets/#Berlin Sans FB" SelectionBrush="#BCAA615C" BorderThickness="3" FontSize="16"/>
+        <TextBox x:Name="ServerPasswordBox" Height="25" Margin="295,125,195,0" TextWrapping="Wrap" Text="Password" VerticalAlignment="Top" Background="#B5DB4123" BorderBrush="#FFEB3225" Foreground="White" FontFamily="/Blaze;component/Assets/#Berlin Sans FB" SelectionBrush="#BCAA615C" BorderThickness="3" FontSize="16"/>
+        <Button x:Name="NewServerBtn_Copy" Click="NewServerBtn_Click" Content="SAVE" HorizontalAlignment="Left" Height="22.586" Margin="57,292.046,0,0" VerticalAlignment="Top" Width="40" Background="#B5DB4123" BorderBrush="#FFEB3225" Foreground="White" BorderThickness="3"/>
+
+    </Grid>
+</Window>

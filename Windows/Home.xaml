@@ -8,7 +8,7 @@
         mc:Ignorable="d"
         Title="Blaze" Loaded="Window_Loaded" Height="515" Width="915.556" MinWidth="784" MinHeight="441" WindowStartupLocation="CenterScreen" WindowStyle="None" ResizeMode="NoResize" Background="{x:Null}" AllowsTransparency="True">
     <Grid UseLayoutRounding="False">
-        <Image HorizontalAlignment="Left" Height="515" VerticalAlignment="Top" Width="915.712" Source="/Blaze;component/Assets/Sprites/background.png" Stretch="UniformToFill" Margin="0,0,-0.156,0"/>
+        <Image HorizontalAlignment="Left" Height="515" VerticalAlignment="Top" Width="915.556" Source="/Blaze;component/Assets/Sprites/background.png" Stretch="UniformToFill"/>
         <Button x:Name="PlayBtn" Click="PlayBtn_Click" Content="PLAY" HorizontalAlignment="Left" Height="90" Margin="584.056,400,0,0" VerticalAlignment="Top" Width="305" FontSize="36" BorderBrush="#FFEB3225" Foreground="White" FontFamily="/Blaze;component/Assets/#Berlin Sans FB Demi" Style="{DynamicResource BtnSyle}" Cursor="Hand">
             <Button.Background>
                 <ImageBrush ImageSource="/Blaze;component/Assets/Sprites/Btn.png"/>
@@ -155,24 +155,21 @@
         </DataGrid>
         <Button x:Name="AddGameBtn" Click="AddGameBtn_Click" Content="ADD" HorizontalAlignment="Left" Height="25" Margin="236.833,272.671,0,0" VerticalAlignment="Top" Width="87.5" BorderThickness="3" BorderBrush="#FFEB3225" Foreground="White" Background="#B5DB4123" FontFamily="/Blaze;component/Assets/#Berlin Sans FB" Style="{DynamicResource BtnSyle}" Cursor="Hand"/>
         <TextBlock x:Name="StatusBox" HorizontalAlignment="Left" Height="15.39" Margin="552.694,6.333,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="284" FontFamily="/Blaze;component/Assets/#Berlin Sans FB" Foreground="#3EFFFFFF" TextAlignment="Right" FontSize="14"/>
-        <Button x:Name="RefreshBtn" Click="RefreshBtn_Click" Content="" HorizontalAlignment="Left" Height="21" Margin="842.069,360,0,0" VerticalAlignment="Top" Width="21" BorderThickness="0" BorderBrush="{x:Null}" Style="{DynamicResource BtnSyle}" Cursor="Hand">
+        <Button x:Name="RefreshBtn" Click="RefreshBtn_Click" Content="" HorizontalAlignment="Left" Height="21" Margin="864,335,0,0" VerticalAlignment="Top" Width="21" BorderThickness="0" BorderBrush="{x:Null}" Style="{DynamicResource BtnSyle}" Cursor="Hand">
             <Button.Background>
                 <ImageBrush ImageSource="/Blaze;component/Assets/Sprites/refresh.png"/>
             </Button.Background>
         </Button>
-        <Button x:Name="SearchBtn" Click="SearchBtn_Click" Content="" HorizontalAlignment="Left" Height="21" Margin="816.069,360,0,0" VerticalAlignment="Top" Width="21" BorderThickness="0" BorderBrush="{x:Null}" Style="{DynamicResource BtnSyle}" Cursor="Hand">
+        <Button x:Name="SearchBtn" Click="SearchBtn_Click" Content="" HorizontalAlignment="Left" Height="21" Margin="865,360.166,0,0" VerticalAlignment="Top" Width="21" BorderThickness="0" BorderBrush="{x:Null}" Style="{DynamicResource BtnSyle}" Cursor="Hand">
             <Button.Background>
                 <ImageBrush ImageSource="/Blaze;component/Assets/Sprites/Search.png"/>
             </Button.Background>
         </Button>
-        <TextBox x:Name="SearchBox" GotKeyboardFocus="SearchBox_GotKeyboardFocus" HorizontalAlignment="Left" Height="23.999" Margin="558.431,357.001,0,0" TextWrapping="Wrap" Text="Search" VerticalAlignment="Top" Width="252.638" Background="#B5DB4123" BorderBrush="#FFEB3225" Foreground="White" BorderThickness="3" Style="{DynamicResource TextBoxStyle}"/>
+        <TextBox x:Name="SearchBox" GotKeyboardFocus="SearchBox_GotKeyboardFocus" HorizontalAlignment="Left" Height="23.999" Margin="607.362,357.167,0,0" TextWrapping="Wrap" Text="Search" VerticalAlignment="Top" Width="252.638" Background="#B5DB4123" BorderBrush="#FFEB3225" Foreground="White" BorderThickness="3" Style="{DynamicResource TextBoxStyle}"/>
         <Button x:Name="RemoveGameBtn" Click="RemoveGameBtn_Click" Content="REMOVE" HorizontalAlignment="Left" Height="25" Margin="149.333,272.671,0,0" VerticalAlignment="Top" Width="87.5" BorderThickness="3" BorderBrush="#FFEB3225" Foreground="White" Background="#B5DB4123" FontFamily="/Blaze;component/Assets/#Berlin Sans FB" Style="{DynamicResource BtnSyle}" Cursor="Hand"/>
         <Image x:Name="Blaze" HorizontalAlignment="Left" Height="100" Margin="0,410,0,0" VerticalAlignment="Top" Width="100" Source="/Blaze;component/Assets/Blaze/Small/Nutural-small.png"/>
         <TextBlock Height="20.398" TextWrapping="Wrap" Text="BLAZE" VerticalAlignment="Top" Foreground="White" FontFamily="/Blaze;component/Assets/#Berlin Sans FB Demi" FontSize="20" FontWeight="Bold" Margin="3.792,3.3,830.556,0"/>
-        <Button x:Name="AddServerBtn" Click="AddServerBtn_Click" Content="" HorizontalAlignment="Left" Height="21" Margin="867.625,360,0,0" VerticalAlignment="Top" Width="21" BorderThickness="0" BorderBrush="{x:Null}" Style="{DynamicResource BtnSyle}" Cursor="Hand">
-            <Button.Background>
-                <ImageBrush ImageSource="/Blaze;component/Assets/Sprites/Add.png"/>
-            </Button.Background>
-        </Button>
+        <Button x:Name="AddServerBtn" Click="AddServerBtn_Click" Content="MY SERVERS" HorizontalAlignment="Left" Height="18.955" Margin="816.069,30.389,0,0" VerticalAlignment="Top" Width="75.525" BorderThickness="0" BorderBrush="{x:Null}" Style="{DynamicResource BtnSyle}" Cursor="Hand" Background="{x:Null}" Foreground="White" FontFamily="/Blaze;component/Assets/#Berlin Sans FB"/>
+        <Rectangle x:Name="WindowFade" Fill="#91000000" HorizontalAlignment="Left" Height="518.417" Margin="0,0,0,-3.417" VerticalAlignment="Top" Width="915.556" Visibility="Hidden"/>
     </Grid>
 </Window>
