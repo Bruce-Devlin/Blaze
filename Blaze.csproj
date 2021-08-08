@@ -74,6 +74,7 @@
   </PropertyGroup>
   <PropertyGroup />
   <PropertyGroup />
+  <PropertyGroup />
   <PropertyGroup>
     <ApplicationManifest>Properties\blaze.manifest</ApplicationManifest>
   </PropertyGroup>

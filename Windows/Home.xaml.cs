@@ -77,8 +77,6 @@ namespace Blaze.Windows
             Functions.Blaze.Say(this, "Hello! My name is Blaze, I can help you join and host servers for your favorite Blazing Griffin games. You can even add your own Steam games and I can try working for that game too!", "Happy");
 
             await UpdateGames();
-            List<int> Ports = new List<int>() { 7776, 7777, 7778 };
-            await Functions.Servers.CheckPorts(Ports);
         }
 
         public async Task UpdateGames()
@@ -279,6 +277,15 @@ namespace Blaze.Windows
 
         private async void RemoveGameBtn_Click(object sender, RoutedEventArgs e)
         {
+            if (!Variables.GameList[GameList.SelectedIndex].BlazingGriffin)
+            {
+
+            }
+            else
+            {
+                Functions.Blaze.Say(this, "Blazing Griffin games can't be removed from the launcher.", "Sad");
+
+            }
             /*
             if (!Variables.GameList[GameList.SelectedIndex].BlazingGriffin)
             {
