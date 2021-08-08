@@ -128,17 +128,24 @@ namespace Blaze.Functions
         public static void StartServer(MyServer server)
         {
             //if (CheckPorts)
+            try
+            {
+                SteamClient.Init(server.AppID);
+                var serverDir = SteamApps.AppInstallDir(server.AppID);
+                SteamClient.Shutdown();
 
-            SteamClient.Init(server.AppID);
-            var serverDir = SteamApps.AppInstallDir(server.AppID);
-            SteamClient.Shutdown();
-            
-            Process game = new Process();
-            game.StartInfo.FileName = serverDir + "\\" + server.Filename;
-            
+                Process game = new Process();
+                game.StartInfo.FileName = serverDir + "\\" + server.Filename;
 
-            game.StartInfo.Arguments = "-serverid " + server.Profile;
-            game.Start();
+
+                game.StartInfo.Arguments = "-serverid " + server.Profile;
+                game.Start();
+            }
+            catch (Exception Ex)
+            {
+                MessageBox.Show(Ex.ToString());
+            }
+
         }
 
         public static async Task GetLocalServers()

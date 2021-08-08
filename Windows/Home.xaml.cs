@@ -74,6 +74,8 @@ namespace Blaze.Windows
 
         private async void Window_Loaded(object sender, RoutedEventArgs e)
         {
+            Functions.Blaze.Say(this, "Hello! My name is Blaze, I can help you join and host servers for your favorite Blazing Griffin games. You can even add your own Steam games and I can try working for that game too!", "Happy");
+
             await UpdateGames();
             List<int> Ports = new List<int>() { 7776, 7777, 7778 };
             await Functions.Servers.CheckPorts(Ports);
@@ -114,7 +116,7 @@ namespace Blaze.Windows
                 }
                 else
                 {
-                    MessageBox.Show("It looks like you already have a game open, close it and then try switching game again.");
+                    Functions.Blaze.Say(this, "It looks like you already have a game open, close it and then try switching game again.", "Really");
                 }
                 
             } else { GameList.UnselectAll(); }
@@ -140,14 +142,14 @@ namespace Blaze.Windows
         private void PlayBtn_Click(object sender, RoutedEventArgs e)
         {
             if (ServerList.SelectedItem != null) JoinServer(Variables.ServerList[ServerList.SelectedIndex]);
-            else MessageBox.Show("You have to select a server first.");
+            else Functions.Blaze.Say(this, "You have to select a server first.", "Wait");
         }
 
         public async void JoinServer(Functions.Server currServer, bool joining = false)
         {
             if (joining || serverSelected && !searchingForServers)
             {
-                if (await Games.IsGameRunning()) MessageBox.Show("Game already running, try closing it and trying again.");
+                if (await Games.IsGameRunning()) Functions.Blaze.Say(this, "Game already running, try closing it and trying again.", "Really");
                 else
                 {
                     //Set status on Discord.
@@ -180,8 +182,7 @@ namespace Blaze.Windows
                         Process game = new Process();
                         game.StartInfo.FileName = SteamApps.AppInstallDir(currServer.Game.AppID) + "\\" + Variables.CurrGame.Filename;
                         SteamClient.Shutdown();
-                        
-                        MessageBox.Show("-connect=" + currServer.Info.addr + ":" + currServer.Info.gameport);
+                       
 
                         game.StartInfo.Arguments = "-connect=" + currServer.Info.addr + ":" + currServer.Info.gameport;
                         game.Exited += Game_Exited;
@@ -208,7 +209,7 @@ namespace Blaze.Windows
                     }
                     catch (Exception Ex)
                     {
-                        MessageBox.Show(Ex.ToString());
+                        Functions.Blaze.Say(this, Ex.Message.ToString(), "Sleepy");
                     }
                 }
             }
@@ -253,7 +254,7 @@ namespace Blaze.Windows
 
         private async void AddGameBtn_Click(object sender, RoutedEventArgs e)
         {
-            MessageBox.Show("Woah there, this bit is still being worked on and is closed for now. Keep your eyes out for new updates as I should release this soon!");
+            Functions.Blaze.Say(this, "Woah there, this bit is still being worked on and is closed for now. Keep your eyes out for new updates as I should release this soon!", "Happy");
             /*
             WindowFade.Visibility = Visibility.Visible;
             Windows.AddGame addGameWin = new Windows.AddGame(this);
@@ -290,28 +291,18 @@ namespace Blaze.Windows
 
         private async void RefreshBtn_Click(object sender, RoutedEventArgs e)
         {
-            searching = false;
+            SearchBox.Text = "";
             UpdateServers();
         }
 
-        private void SearchBtn_Click(object sender, RoutedEventArgs e)
-        {
-            if (!searching && SearchBox.Text != "")
-            {
-                searching = true;
-                var filtered = Variables.ServerList.Where(server => server.Info.name.ToLower().Contains(SearchBox.Text.ToLower()));
-                ServerList.ItemsSource = filtered;
-            }
-            else
-            {
-
-            }
-        }
 
         private void SearchBox_GotKeyboardFocus(object sender, KeyboardFocusChangedEventArgs e) { SearchBox.Text = ""; }
 
         private async void AddServerBtn_Click(object sender, RoutedEventArgs e)
         {
+            Functions.Blaze.Say(this, "Woah there, this bit is still being worked on and is closed for now. Keep your eyes out for new updates as I should release this soon!", "Happy");
+
+            /*
             WindowFade.Visibility = Visibility.Visible;
             Windows.MyServers server = new Windows.MyServers();
             server.Owner = this;
@@ -329,6 +320,29 @@ namespace Blaze.Windows
                     LargeImageText = "Devlin.gg/Blaze",
                 }
             });
+            */
         }
+
+        private async void BlazeCloseBtn_Click(object sender, RoutedEventArgs e)
+        {
+            Functions.Blaze.Say(this, "", "Nutural");
+            BlazeCloseBtn.Visibility = Visibility.Hidden;
+            BlazeTxtBox.Visibility = Visibility.Hidden;
+            BlazeTxtBG.Visibility = Visibility.Hidden;
+        }
+
+        private void DiscordBtn_Click(object sender, RoutedEventArgs e) { System.Diagnostics.Process.Start("https://discord.com/invite/blazinggriffin"); }
+        private void Blaze_Click(object sender, RoutedEventArgs e) { System.Diagnostics.Process.Start("https://devlin.gg/blaze"); }
+
+        private void SearchBox_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (SearchBox.Text != "")
+            {
+                var filtered = Variables.ServerList.Where(server => server.Info.name.ToLower().Contains(SearchBox.Text.ToLower()));
+                ServerList.ItemsSource = filtered;
+            }
+            else ServerList.ItemsSource = Variables.ServerList;
+        }
+
     }
 }

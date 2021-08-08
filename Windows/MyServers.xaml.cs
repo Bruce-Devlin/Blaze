@@ -68,8 +68,11 @@ namespace Blaze.Windows
 
         private async void StartServerBtn_Click(object sender, RoutedEventArgs e)
         {
-            await Functions.Servers.SetConfig(Variables.LocalServers[MyServerList.SelectedIndex], Variables.LocalServers[MyServerList.SelectedIndex].ServerConfig);
-            Functions.Servers.StartServer(Variables.LocalServers[MyServerList.SelectedIndex]);
+            if (MyServerList.SelectedIndex != -1)
+            {
+                await Functions.Servers.SetConfig(Variables.LocalServers[MyServerList.SelectedIndex], Variables.LocalServers[MyServerList.SelectedIndex].ServerConfig);
+                Functions.Servers.StartServer(Variables.LocalServers[MyServerList.SelectedIndex]);
+            }
         }
 
         private void StopServerBtn_Click(object sender, RoutedEventArgs e)
