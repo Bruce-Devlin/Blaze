@@ -17,6 +17,7 @@ namespace Blaze.Functions
     public class Server
     {
         public string TotalPlayers { get; set; }
+        public bool Mine { get; set; }
         public SteamServer Info {get; set;}
 
         public Game Game { get; set; }
@@ -97,6 +98,8 @@ namespace Blaze.Functions
                 HttpWebRequest request = (HttpWebRequest)WebRequest.Create("http://devlin.gg/blaze/api/ServerList?appID=" + Variables.CurrGame.AppID);
                 request.AutomaticDecompression = DecompressionMethods.GZip | DecompressionMethods.Deflate;
 
+                string extIP = await GetExtIP();
+
                 using (HttpWebResponse response = (HttpWebResponse)await request.GetResponseAsync())
                 using (Stream stream = response.GetResponseStream())
                 using (StreamReader reader = new StreamReader(stream))
@@ -108,9 +111,24 @@ namespace Blaze.Functions
                 { 
                     SteamServer newSteamServer = server.ToObject<SteamServer>();
                     var ipWithoutPort = newSteamServer.addr.Split(':');
+
+
                     newSteamServer.addr = ipWithoutPort[0];
 
+
                     Server newServer = new Server();
+
+                    if (newSteamServer.addr == extIP)
+                    {
+                        //My server
+                        newSteamServer.name = "🏠 " + newSteamServer.name;
+                        newServer.Mine = true;
+                    }
+                    else
+                    {
+                        newServer.Mine = false;
+                    }
+
                     newServer.Info = newSteamServer;
                     newServer.Game = Variables.CurrGame;
                     newServer.TotalPlayers = newServer.Info.players + "/" + newServer.Info.max_players;
@@ -122,6 +140,21 @@ namespace Blaze.Functions
             catch (Exception Ex)
             {
                 MessageBox.Show(Ex.ToString());
+            }
+        }
+
+        public static async Task<string> GetExtIP()
+        {
+            JObject result;
+            HttpWebRequest request = (HttpWebRequest)WebRequest.Create("http://devlin.gg/blaze/api/ReturnIP");
+            request.AutomaticDecompression = DecompressionMethods.GZip | DecompressionMethods.Deflate;
+
+            using (HttpWebResponse response = (HttpWebResponse)await request.GetResponseAsync())
+            using (Stream stream = response.GetResponseStream())
+            using (StreamReader reader = new StreamReader(stream))
+            {
+                result = JObject.Parse(await reader.ReadToEndAsync());
+                return result["data"].ToString();
             }
         }
 
@@ -179,7 +212,7 @@ namespace Blaze.Functions
         {
             if (server.AppID == 689780 && File.Exists(server.ServerDir + @"\" + server.Profile + @"\DedicatedServerConfig.json"))
             {
-                File.WriteAllText(server.ServerDir + @"\" + server.Profile + @"\DedicatedServerConfig.json", JsonConvert.SerializeObject(config));
+                File.WriteAllText(server.ServerDir + @"\" + server.Profile + @"\DedicatedServerConfig.json", JsonConvert.SerializeObject(config, Formatting.Indented));
             }
         }
 
@@ -198,26 +231,31 @@ namespace Blaze.Functions
                 server.ServerDir = SteamApps.AppInstallDir(server.AppID);
                 SteamClient.Shutdown();
 
-                Directory.CreateDirectory(server.ServerDir + @"\" + server.Profile);
-                if (server.AppID == 689780 && !File.Exists(server.ServerDir + @"\" + server.Profile + "DedicatedServerConfig.json"))
+                if (!Directory.Exists(server.ServerDir + @"\" + server.Profile))
                 {
-                    WebClient Client = new WebClient();
-                    Client.DownloadFile("https://devlin.gg/blaze/mp-config/DedicatedServerConfig.json", server.ServerDir + @"\" + server.Profile + @"\DedicatedServerConfig.json");
+                    Directory.CreateDirectory(server.ServerDir + @"\" + server.Profile);
+                    if (server.AppID == 689780 && !File.Exists(server.ServerDir + @"\" + server.Profile + "DedicatedServerConfig.json"))
+                    {
+                        WebClient Client = new WebClient();
+                        Client.DownloadFile("https://devlin.gg/blaze/mp-config/DedicatedServerConfig.json", server.ServerDir + @"\" + server.Profile + @"\DedicatedServerConfig.json");
+                    }
+
+                    server.ServerConfig = await GetConfig(server);
+
+                    //Do Config
+                    server.ServerConfig.serverName = ServerName;
+
+
+                    await SetConfig(server, server.ServerConfig);
+
+                    Variables.LocalServers.Add(server);
+                    owner.MyServerList.ItemsSource = new List<MyServer>();
+                    owner.MyServerList.ItemsSource = Variables.LocalServers;
+
+                    await SetLocalServers();
                 }
-
-                server.ServerConfig = await GetConfig(server);
-
-                //Do Config
-                server.ServerConfig.serverName = ServerName;
-
-
-                await SetConfig(server, server.ServerConfig);
-
-                Variables.LocalServers.Add(server);
-                owner.MyServerList.ItemsSource = new List<MyServer>();
-                owner.MyServerList.ItemsSource = Variables.LocalServers;
-
-                await SetLocalServers();
+                else MessageBox.Show("You already have a profile with this name, please choose another.");
+                
             }
             catch(Exception Ex)
             {

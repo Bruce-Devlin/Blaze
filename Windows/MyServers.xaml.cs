@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -31,7 +32,7 @@ namespace Blaze.Windows
             Functions.Discord.discord.client.ClearPresence();
             Functions.Discord.discord.client.SetPresence(new RichPresence()
             {
-                Details = "Creating a server...",
+                Details = "Checking their servers...",
                 Timestamps = Functions.Discord.startTime,
                 Assets = new Assets()
                 {
@@ -52,18 +53,37 @@ namespace Blaze.Windows
 
         private void MyServerList_SelectedCellsChanged(object sender, SelectedCellsChangedEventArgs e)
         {
-
+            if (MyServerList.SelectedIndex != -1)
+            {
+                ServerNameBox.Text = Variables.LocalServers[MyServerList.SelectedIndex].ServerName;
+                ServerPortBox.Text = Variables.LocalServers[MyServerList.SelectedIndex].ServerConfig.serverPort.ToString();
+                ServerPasswordBox.Text = Variables.LocalServers[MyServerList.SelectedIndex].ServerConfig.password;
+            }
+            
         }
 
         private async void NewServerBtn_Click(object sender, RoutedEventArgs e)
         {
+            if (ServerNameBox.Text != "")
+            {
+                //if (Directory.Exists(Variables.CurrGame.))
+            }
+
             Functions.MyServer newServer = new Functions.MyServer();
 
             newServer.ServerName = ServerNameBox.Text;
             newServer.AppID = Variables.CurrGame.ServerAppID;
             newServer.Filename = Variables.CurrGame.ServerFilename;
+            newServer.ServerConfig = new Functions.MP_ServerConfig();
+            if (ServerPortBox.Text != "")
+            {
+                newServer.ServerConfig.serverPort = int.Parse(ServerPortBox.Text);
+                newServer.ServerConfig.password = ServerPasswordBox.Text;
 
-            await Functions.Servers.CreateServer(ServerNameBox.Text, ServerPortBox.Text, this);
+                await Functions.Servers.CreateServer(ServerNameBox.Text, ServerPortBox.Text, this);
+            }
+            else MessageBox.Show("Looks like you forgot to enter a port?");
+            
         }
 
         private async void StartServerBtn_Click(object sender, RoutedEventArgs e)
@@ -82,18 +102,21 @@ namespace Blaze.Windows
 
         private async void SaveServerBtn_Click(object sender, RoutedEventArgs e)
         {
-            Functions.MyServer server = Variables.LocalServers[MyServerList.SelectedIndex];
+            if (MyServerList.SelectedIndex != -1)
+            {
+                Variables.LocalServers[MyServerList.SelectedIndex].ServerName = ServerNameBox.Text;
 
-            server.ServerName = ServerNameBox.Text;
+                Variables.LocalServers[MyServerList.SelectedIndex].ServerConfig.serverName = ServerNameBox.Text;
+                Variables.LocalServers[MyServerList.SelectedIndex].ServerConfig.serverPort = int.Parse(ServerPortBox.Text);
+                Variables.LocalServers[MyServerList.SelectedIndex].ServerConfig.password = ServerPasswordBox.Text;
 
-            server.ServerConfig.serverName = ServerNameBox.Text;
+                await Functions.Servers.SetConfig(Variables.LocalServers[MyServerList.SelectedIndex], Variables.LocalServers[MyServerList.SelectedIndex].ServerConfig);
 
-            Variables.LocalServers[MyServerList.SelectedIndex] = server;
-
-            await Functions.Servers.SetConfig(Variables.LocalServers[MyServerList.SelectedIndex], Variables.LocalServers[MyServerList.SelectedIndex].ServerConfig);
-
-            MyServerList.ItemsSource = new List<Functions.MyServer>();
-            MyServerList.ItemsSource = Variables.LocalServers;
+                MyServerList.ItemsSource = new List<Functions.MyServer>();
+                MyServerList.ItemsSource = Variables.LocalServers;
+                await Functions.Servers.SetLocalServers();
+            }
+            
         }
     }
 }

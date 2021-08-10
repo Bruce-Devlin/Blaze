@@ -15,6 +15,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using Steamworks;
+using System.Net;
 
 namespace Blaze.Windows
 {
@@ -50,11 +51,13 @@ namespace Blaze.Windows
                 Details = "Browsing Servers...",
                 State = "(" + Variables.CurrGame.Title + ")",
                 Timestamps = Functions.Discord.startTime,
+                Buttons = new DiscordRPC.Button[] { new DiscordRPC.Button() { Label = "Download Blaze!", Url = "https://devlin.gg/Blaze" } },
                 Assets = new Assets()
                 {
                     LargeImageKey = "nutural",
                     LargeImageText = "Devlin.gg/Blaze",
                 }
+                
             });
         }
 
@@ -77,6 +80,7 @@ namespace Blaze.Windows
             Functions.Blaze.Say(this, "Hello! My name is Blaze, I can help you join and host servers for your favorite Blazing Griffin games. You can even add your own Steam games and I can try working for that game too!", "Happy");
 
             await UpdateGames();
+            await Functions.Servers.GetExtIP();
         }
 
         public async Task UpdateGames()
@@ -100,6 +104,7 @@ namespace Blaze.Windows
                         Details = "Browsing Servers...",
                         State = "(" + Variables.CurrGame.Title + ")",
                         Timestamps = Functions.Discord.startTime,
+                        Buttons = new DiscordRPC.Button[] { new DiscordRPC.Button() { Label = "Download Blaze!", Url = "https://devlin.gg/Blaze" } },
                         Assets = new Assets()
                         {
                             LargeImageKey = "nutural",
@@ -157,6 +162,7 @@ namespace Blaze.Windows
                         Details = currServer.Info.name,
                         State = "Map: " + currServer.Info.map + " | Players: ",
                         Timestamps = Functions.Discord.startTime,
+                        Buttons = new DiscordRPC.Button[] { new DiscordRPC.Button(){ Label = "Download Blaze!", Url = "https://devlin.gg/Blaze"}},
                         Party = new Party()
                         {
                             ID = currServer.Info.name,
@@ -180,30 +186,10 @@ namespace Blaze.Windows
                         Process game = new Process();
                         game.StartInfo.FileName = SteamApps.AppInstallDir(currServer.Game.AppID) + "\\" + Variables.CurrGame.Filename;
                         SteamClient.Shutdown();
-                       
+
 
                         game.StartInfo.Arguments = "-connect=" + currServer.Info.addr + ":" + currServer.Info.gameport;
-                        game.Exited += Game_Exited;
-                        WindowFade.Visibility = Visibility.Visible;
                         game.Start();
-                        game.WaitForExit();
-                        WindowFade.Visibility = Visibility.Hidden;
-
-                        //Variables.CurrGame.Running = true;
-                        //Variables.CurrGame.Running = false;
-                        //Set status on Discord.
-                        Functions.Discord.discord.client.ClearPresence();
-                        Functions.Discord.discord.client.SetPresence(new RichPresence()
-                        {
-                            Details = "Browsing Servers...",
-                            State = "(" + Variables.CurrGame.Title + ")",
-                            Timestamps = Functions.Discord.startTime,
-                            Assets = new Assets()
-                            {
-                                LargeImageKey = "nutural",
-                                LargeImageText = "Devlin.gg/Blaze",
-                            }
-                        });
                     }
                     catch (Exception Ex)
                     {
@@ -211,11 +197,6 @@ namespace Blaze.Windows
                     }
                 }
             }
-        }
-
-        private void Game_Exited(object sender, EventArgs e)
-        {
-            
         }
 
         private async void CloseBtn_Click(object sender, RoutedEventArgs e) 
@@ -242,6 +223,7 @@ namespace Blaze.Windows
                 Details = "Browsing Servers...",
                 State = "(" + Variables.CurrGame.Title + ")",
                 Timestamps = Functions.Discord.startTime,
+                Buttons = new DiscordRPC.Button[] { new DiscordRPC.Button() { Label = "Download Blaze!", Url = "https://devlin.gg/Blaze" } },
                 Assets = new Assets()
                 {
                     LargeImageKey = "nutural",
@@ -305,11 +287,8 @@ namespace Blaze.Windows
 
         private void SearchBox_GotKeyboardFocus(object sender, KeyboardFocusChangedEventArgs e) { SearchBox.Text = ""; }
 
-        private async void AddServerBtn_Click(object sender, RoutedEventArgs e)
+        private void MyServersBtn_Click(object sender, RoutedEventArgs e)
         {
-            Functions.Blaze.Say(this, "Woah there, this bit is still being worked on and is closed for now. Keep your eyes out for new updates as I should release this soon!", "Happy");
-
-            /*
             WindowFade.Visibility = Visibility.Visible;
             Windows.MyServers server = new Windows.MyServers();
             server.Owner = this;
@@ -321,13 +300,13 @@ namespace Blaze.Windows
                 Details = "Browsing Servers...",
                 State = "(" + Variables.CurrGame.Title + ")",
                 Timestamps = Functions.Discord.startTime,
+                Buttons = new DiscordRPC.Button[] { new DiscordRPC.Button() { Label = "Download Blaze!", Url = "https://www.devlin.gg/Blaze" } },
                 Assets = new Assets()
                 {
                     LargeImageKey = "nutural",
                     LargeImageText = "Devlin.gg/Blaze",
                 }
             });
-            */
         }
 
         private async void BlazeCloseBtn_Click(object sender, RoutedEventArgs e)

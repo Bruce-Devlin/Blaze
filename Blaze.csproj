@@ -75,6 +75,7 @@
   <PropertyGroup />
   <PropertyGroup />
   <PropertyGroup />
+  <PropertyGroup />
   <PropertyGroup>
     <ApplicationManifest>Properties\blaze.manifest</ApplicationManifest>
   </PropertyGroup>
@@ -241,7 +242,9 @@
     <Resource Include="Assets\Sprites\Blaze.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="steam_api64.dll" />
+    <Resource Include="steam_api64.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Assets\blaze_icon.ico" />

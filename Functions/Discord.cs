@@ -63,6 +63,7 @@ namespace Blaze.Functions
 
         private static void OnJoin(object sender, JoinMessage args)
         {
+            MessageBox.Show("EARLY TESTING MESSAGE: Request to join recieved from Discord, press okay to continue. (" + args.Secret + ")");
             try
             {
                 string[] secret = args.Secret.Split(',');
@@ -71,9 +72,9 @@ namespace Blaze.Functions
                 {
                     var filteredServer = Variables.ServerList.Where(server => server.SteamID == secret[1]).ToList();
                     if (filteredServer.Any()) home.JoinServer(filteredServer.First(), true);
-                    else MessageBox.Show("Cant find server.");
+                    else MessageBox.Show("Cant find server. (Server ID: " + secret[1]);
                 }
-                else MessageBox.Show("It looks like you dont have that game :/");
+                else MessageBox.Show("It looks like you dont have that game :/ (App ID: " + secret[0]);
             }
             catch (Exception Ex)
             {
