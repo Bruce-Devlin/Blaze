@@ -1,21 +1,14 @@
 ﻿using Blaze.Functions;
 using DiscordRPC;
+using Steamworks;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
-using Steamworks;
-using System.Net;
 
 namespace Blaze.Windows
 {
@@ -33,7 +26,8 @@ namespace Blaze.Windows
             InitializeComponent();
             this.MouseLeftButtonDown += delegate { DragMove(); };
             Discord.home = this;
-            Windows.AddGame.home = this;
+            AddGame.home = this;
+            Functions.Blaze.home = this;
 
             var domain = AppDomain.CurrentDomain;
 
@@ -57,7 +51,6 @@ namespace Blaze.Windows
                     LargeImageKey = "nutural",
                     LargeImageText = "Devlin.gg/Blaze",
                 }
-                
             });
         }
 
@@ -77,24 +70,22 @@ namespace Blaze.Windows
 
         private async void Window_Loaded(object sender, RoutedEventArgs e)
         {
-            Functions.Blaze.Say(this, "Hello! My name is Blaze, I can help you join and host servers for your favorite Blazing Griffin games. You can even add your own Steam games and I can try working for that game too!", "Happy");
+            await Functions.Blaze.Say("Hello! My name is Blaze, I can help you join and host servers for your favorite Blazing Griffin games. You can even add your own Steam games and I can try working for that game too!", "Happy");
 
+            GameList.ItemsSource = Variables.GameList;
             await UpdateGames();
             await Functions.Servers.GetExtIP();
         }
 
-        public async Task UpdateGames()
-        {
-            GameList.ItemsSource = Variables.GameList;
-        }
+        public async Task UpdateGames() { GameList.Items.Refresh(); }
 
-        private void GameList_SelectedCellsChanged(object sender, SelectedCellsChangedEventArgs e)
+        private async void UpdateCurrGame()
         {
             if (!searchingForServers)
             {
                 if (!Variables.CurrGame.Running)
                 {
-                    Variables.CurrGame = Variables.GameList[GameList.SelectedIndex];
+                    Variables.CurrGame = (Game)GameList.SelectedItem;
 
                     Variables.CurrGame.Running = false;
                     //Set status on Discord.
@@ -119,10 +110,16 @@ namespace Blaze.Windows
                 }
                 else
                 {
-                    Functions.Blaze.Say(this, "It looks like you already have a game open, close it and then try switching game again.", "Really");
+                    await Functions.Blaze.Say("It looks like you already have a game open, close it and then try switching game again.", "Really");
                 }
-                
-            } else { GameList.UnselectAll(); }
+
+            }
+            else { GameList.UnselectAll(); }
+        }
+
+        private async void GameList_SelectedCellsChanged(object sender, SelectedCellsChangedEventArgs e)
+        {
+            UpdateCurrGame();
         }
 
         private void ServerList_SelectedCellsChanged(object sender, SelectedCellsChangedEventArgs e)
@@ -142,32 +139,43 @@ namespace Blaze.Windows
             StatusBox.Text = "";
         }
 
-        private void PlayBtn_Click(object sender, RoutedEventArgs e)
+        private async void PlayBtn_Click(object sender, RoutedEventArgs e)
         {
-            if (ServerList.SelectedItem != null) JoinServer(Variables.ServerList[ServerList.SelectedIndex]);
-            else Functions.Blaze.Say(this, "You have to select a server first.", "Wait");
+            if (ServerList.SelectedItem != null)
+            {
+                await Functions.Blaze.Say("I'll just wait here until you have closed the game!", "Happy");
+                JoinServer((Server)ServerList.SelectedItem);
+            }
+            else await Functions.Blaze.Say("You have to select a server first.", "Wait");
         }
 
         public async void JoinServer(Functions.Server currServer, bool joining = false)
         {
             if (joining || serverSelected && !searchingForServers)
             {
-                if (await Games.IsGameRunning()) Functions.Blaze.Say(this, "Game already running, try closing it and trying again.", "Really");
+                if (await Games.IsGameRunning()) await Functions.Blaze.Say("Game already running, try closing it and trying again.", "Really");
                 else
                 {
+                    
                     //Set status on Discord.
                     Functions.Discord.discord.client.ClearPresence();
+                    List<int> party = new List<int>() { currServer.Info.players + 1, currServer.Info.max_players }; ; 
+
+                    if (party[0] > party[1]) party[1] = 99;
+
+                    string imagekey = "nutural";
+                    if (Variables.CurrGame.BlazingGriffin) imagekey = Variables.CurrGame.AppID.ToString();
                     Functions.Discord.discord.client.SetPresence(new RichPresence()
                     {
                         Details = currServer.Info.name,
                         State = "Map: " + currServer.Info.map + " | Players: ",
                         Timestamps = Functions.Discord.startTime,
-                        Buttons = new DiscordRPC.Button[] { new DiscordRPC.Button(){ Label = "Download Blaze!", Url = "https://devlin.gg/Blaze"}},
+                        //Buttons = new DiscordRPC.Button[] { new DiscordRPC.Button(){ Label = "Download Blaze!", Url = "https://devlin.gg/Blaze"}},
                         Party = new Party()
                         {
                             ID = currServer.Info.name,
-                            Size = currServer.Info.players + 1,
-                            Max = currServer.Info.max_players,
+                            Size = party[0],
+                            Max = party[1],
                             Privacy = Party.PrivacySetting.Public
                         },
                         Secrets = new Secrets()
@@ -176,7 +184,7 @@ namespace Blaze.Windows
                         },
                         Assets = new Assets()
                         {
-                            LargeImageKey = Variables.CurrGame.AppID.ToString(),
+                            LargeImageKey = imagekey.ToString(),
                             LargeImageText = Variables.CurrGame.Title,
                         }
                     });
@@ -188,12 +196,28 @@ namespace Blaze.Windows
                         SteamClient.Shutdown();
 
 
-                        game.StartInfo.Arguments = "-connect=" + currServer.Info.addr + ":" + currServer.Info.gameport;
+                        game.StartInfo.Arguments = "-connect=" + currServer.IpandPort();
                         game.Start();
+                        game.WaitForExit();
+
+                        //Set status on Discord.
+                        Functions.Discord.discord.client.ClearPresence();
+                        Functions.Discord.discord.client.SetPresence(new RichPresence()
+                        {
+                            Details = "Browsing Servers...",
+                            State = "(" + Variables.CurrGame.Title + ")",
+                            Timestamps = Functions.Discord.startTime,
+                            Buttons = new DiscordRPC.Button[] { new DiscordRPC.Button() { Label = "Download Blaze!", Url = "https://devlin.gg/Blaze" } },
+                            Assets = new Assets()
+                            {
+                                LargeImageKey = "nutural",
+                                LargeImageText = "Devlin.gg/Blaze",
+                            }
+                        });
                     }
                     catch (Exception Ex)
                     {
-                        Functions.Blaze.Say(this, Ex.Message.ToString(), "Sleepy");
+                        await Functions.Blaze.Say(Ex.Message.ToString(), "Sleepy");
                     }
                 }
             }
@@ -234,8 +258,7 @@ namespace Blaze.Windows
 
         private async void AddGameBtn_Click(object sender, RoutedEventArgs e)
         {
-            Functions.Blaze.Say(this, "Woah there, this bit is still being worked on and is closed for now. Keep your eyes out for new updates as I should release this soon!", "Happy");
-            /*
+
             WindowFade.Visibility = Visibility.Visible;
             Windows.AddGame addGameWin = new Windows.AddGame(this);
             addGameWin.Owner = this;
@@ -254,28 +277,22 @@ namespace Blaze.Windows
                     LargeImageText = "Devlin.gg/Blaze",
                 }
             });
-            */
+            
         }
 
         private async void RemoveGameBtn_Click(object sender, RoutedEventArgs e)
         {
-            if (!Variables.GameList[GameList.SelectedIndex].BlazingGriffin)
-            {
-
-            }
+            if (Variables.CurrGame.BlazingGriffin) await Functions.Blaze.Say("Blazing Griffin games can't be removed from the launcher.", "Sad");
             else
             {
-                Functions.Blaze.Say(this, "Blazing Griffin games can't be removed from the launcher.", "Sad");
-
-            }
-            /*
-            if (!Variables.GameList[GameList.SelectedIndex].BlazingGriffin)
-            {
-                Variables.GameList.RemoveAt(GameList.SelectedIndex);
-                await Functions.Games.RemoveGames_TMP();
+                
+                Variables.GameList.Remove(Variables.GameList[GameList.SelectedIndex]);
+                await Functions.Games.SetLocalGames();
+                GameList.SelectedIndex = 0;
                 UpdateGames();
+                
+                UpdateCurrGame();
             }
-            */
         }
 
         private async void RefreshBtn_Click(object sender, RoutedEventArgs e)
@@ -287,38 +304,47 @@ namespace Blaze.Windows
 
         private void SearchBox_GotKeyboardFocus(object sender, KeyboardFocusChangedEventArgs e) { SearchBox.Text = ""; }
 
-        private void MyServersBtn_Click(object sender, RoutedEventArgs e)
+        private async void MyServersBtn_Click(object sender, RoutedEventArgs e)
         {
-            WindowFade.Visibility = Visibility.Visible;
-            Windows.MyServers server = new Windows.MyServers();
-            server.Owner = this;
-            server.ShowDialog();
-            WindowFade.Visibility = Visibility.Hidden;
-            Functions.Discord.discord.client.ClearPresence();
-            Functions.Discord.discord.client.SetPresence(new RichPresence()
+            if (Variables.CurrGame.AppID == 383790) await Functions.Blaze.Say("Sorry, I can't host The Ship Servers yet... Maybe try the Murderous Pursuits as that works; sorta?", "Sad");
+            else if (Variables.CurrGame.BlazingGriffin)
             {
-                Details = "Browsing Servers...",
-                State = "(" + Variables.CurrGame.Title + ")",
-                Timestamps = Functions.Discord.startTime,
-                Buttons = new DiscordRPC.Button[] { new DiscordRPC.Button() { Label = "Download Blaze!", Url = "https://www.devlin.gg/Blaze" } },
-                Assets = new Assets()
+                WindowFade.Visibility = Visibility.Visible;
+                Windows.MyServers server = new Windows.MyServers();
+                server.Owner = this;
+                server.ShowDialog();
+                WindowFade.Visibility = Visibility.Hidden;
+                Functions.Discord.discord.client.ClearPresence();
+                Functions.Discord.discord.client.SetPresence(new RichPresence()
                 {
-                    LargeImageKey = "nutural",
-                    LargeImageText = "Devlin.gg/Blaze",
-                }
-            });
+                    Details = "Browsing Servers...",
+                    State = "(" + Variables.CurrGame.Title + ")",
+                    Timestamps = Functions.Discord.startTime,
+                    Buttons = new DiscordRPC.Button[] { new DiscordRPC.Button() { Label = "Download Blaze!", Url = "https://www.devlin.gg/Blaze" } },
+                    Assets = new Assets()
+                    {
+                        LargeImageKey = "nutural",
+                        LargeImageText = "Devlin.gg/Blaze",
+                    }
+                });
+            }
+            else await Functions.Blaze.Say("Sorry, you cant host a server for a custom using a me; I'm advanced but just not quite \"that\" advanced.", "Sad");
         }
 
         private async void BlazeCloseBtn_Click(object sender, RoutedEventArgs e)
         {
-            Functions.Blaze.Say(this, "", "Nutural");
+            await Functions.Blaze.Say();
             BlazeCloseBtn.Visibility = Visibility.Hidden;
             BlazeTxtBox.Visibility = Visibility.Hidden;
             BlazeTxtBG.Visibility = Visibility.Hidden;
         }
 
         private void DiscordBtn_Click(object sender, RoutedEventArgs e) { System.Diagnostics.Process.Start("https://discord.com/invite/blazinggriffin"); }
-        private void Blaze_Click(object sender, RoutedEventArgs e) { System.Diagnostics.Process.Start("https://devlin.gg/blaze"); }
+        private async void Blaze_Click(object sender, RoutedEventArgs e) 
+        {
+            await Functions.Blaze.Poke();
+            await Functions.Blaze.Say();
+        }
 
         private void SearchBox_KeyDown(object sender, KeyEventArgs e)
         {

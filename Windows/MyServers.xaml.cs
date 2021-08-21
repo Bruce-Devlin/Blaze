@@ -58,6 +58,16 @@ namespace Blaze.Windows
                 ServerNameBox.Text = Variables.LocalServers[MyServerList.SelectedIndex].ServerName;
                 ServerPortBox.Text = Variables.LocalServers[MyServerList.SelectedIndex].ServerConfig.serverPort.ToString();
                 ServerPasswordBox.Text = Variables.LocalServers[MyServerList.SelectedIndex].ServerConfig.password;
+                if (Variables.LocalServers[MyServerList.SelectedIndex].ServerConfig.password == "")
+                {
+                    Passworded.IsChecked = false;
+                    ServerPasswordBox.IsEnabled = false;
+                }
+                else
+                {
+                    Passworded.IsChecked = true;
+                }
+                
             }
             
         }
@@ -117,6 +127,22 @@ namespace Blaze.Windows
                 await Functions.Servers.SetLocalServers();
             }
             
+        }
+
+        private void CheckBox_Checked(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void Passworded_Checked(object sender, RoutedEventArgs e)
+        {
+            ServerPasswordBox.IsEnabled = true;
+        }
+
+        private void Passworded_Unchecked(object sender, RoutedEventArgs e)
+        {
+            ServerPasswordBox.Text = "";
+            ServerPasswordBox.IsEnabled = false;
         }
     }
 }

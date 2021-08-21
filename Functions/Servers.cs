@@ -18,6 +18,7 @@ namespace Blaze.Functions
     {
         public string TotalPlayers { get; set; }
         public bool Mine { get; set; }
+        public string IpandPort() { return Info.addr + ":" + Info.gameport; }
         public SteamServer Info {get; set;}
 
         public Game Game { get; set; }
@@ -105,37 +106,39 @@ namespace Blaze.Functions
                 using (StreamReader reader = new StreamReader(stream))
                 {
                     result = JObject.Parse(await reader.ReadToEndAsync());
-
                 }
-                foreach (JObject server in result["data"]) 
-                { 
-                    SteamServer newSteamServer = server.ToObject<SteamServer>();
-                    var ipWithoutPort = newSteamServer.addr.Split(':');
-
-
-                    newSteamServer.addr = ipWithoutPort[0];
-
-
-                    Server newServer = new Server();
-
-                    if (newSteamServer.addr == extIP)
+                if (int.Parse(result["code"].ToString()) != 400)
+                {
+                    foreach (JObject server in result["data"])
                     {
-                        //My server
-                        newSteamServer.name = "🏠 " + newSteamServer.name;
-                        newServer.Mine = true;
-                    }
-                    else
-                    {
-                        newServer.Mine = false;
-                    }
+                        SteamServer newSteamServer = server.ToObject<SteamServer>();
+                        var ipWithoutPort = newSteamServer.addr.Split(':');
 
-                    newServer.Info = newSteamServer;
-                    newServer.Game = Variables.CurrGame;
-                    newServer.TotalPlayers = newServer.Info.players + "/" + newServer.Info.max_players;
 
-                    Variables.ServerList.Add(newServer);
-                };
+                        newSteamServer.addr = ipWithoutPort[0];
 
+
+                        Server newServer = new Server();
+
+                        if (newSteamServer.addr == extIP)
+                        {
+                            //My server
+                            newSteamServer.name = "🏠 " + newSteamServer.name;
+                            newServer.Mine = true;
+                        }
+                        else
+                        {
+                            newServer.Mine = false;
+                        }
+
+                        newServer.Info = newSteamServer;
+                        newServer.Game = Variables.CurrGame;
+                        newServer.TotalPlayers = newServer.Info.players + "/" + newServer.Info.max_players;
+
+                        Variables.ServerList.Add(newServer);
+                    };
+                }
+                else MessageBox.Show("Uh-oh!? It looks like I cant connect to steam servers... Maybe Steam is down right now? or maybe check you are connected to the internet and restart me.");
             }
             catch (Exception Ex)
             {

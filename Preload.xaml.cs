@@ -82,6 +82,11 @@ namespace Blaze
                     }
                     else
                     {
+                        StatusBox.Text = "Checking for updates...";
+                        if (await Functions.Install.CheckForUpdates())
+                        {
+                            MessageBox.Show("It looks like there is a new version of Blaze! You can download it from Devlin.gg/Blaze");
+                        }
                         StatusBox.Text = "Checking games...";
                         await Functions.Games.GetGames();
                         StatusBox.Text = "Got games!";

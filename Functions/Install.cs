@@ -27,8 +27,17 @@ namespace Blaze.Functions
 
         public static async Task<bool> CheckInstallation() { if (Directory.Exists(Variables.HomeDir) || Directory.GetCurrentDirectory().EndsWith("Debug")) { return true; } else return false; }
         
-        public static async Task<bool> CheckForUpdates(VersionNumber currVersion)
+        public static async Task<VersionNumber> GetLocalVersion()
         {
+            List<int> nums = new List<int>();
+            foreach (string num in System.Windows.Forms.Application.ProductVersion.Split('.')) nums.Add(int.Parse(num));
+            return new VersionNumber() { Major = nums[0], Minor = nums[1], Build = nums[2], Patch = nums[3] };
+        }
+
+        public static async Task<bool> CheckForUpdates()
+        {
+            VersionNumber currVersion = await GetLocalVersion();
+
             WebClient client = new WebClient();
             Stream stream = client.OpenRead("https://devlin.gg/blaze/version.txt");
             StreamReader reader = new StreamReader(stream);

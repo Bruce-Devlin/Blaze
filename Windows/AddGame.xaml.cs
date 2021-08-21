@@ -68,8 +68,8 @@ namespace Blaze.Windows
             };
 
             if ((bool) fileDialog.ShowDialog())
-            {
-                newGame.Filename = fileDialog.FileName;
+            {       
+                newGame.Filename = fileDialog.SafeFileName;
 
                 SelectFileBtn.Content = System.IO.Path.GetFileName(newGame.Filename);
             }
@@ -86,19 +86,16 @@ namespace Blaze.Windows
                     newGame.AppID = appID;
 
                     Process game = new Process();
-                    game.StartInfo.FileName = newGame.Filename;
+                    SteamClient.Init(newGame.AppID);
+                    game.StartInfo.FileName = SteamApps.AppInstallDir(newGame.AppID) + "\\" + newGame.Filename;
+                    SteamClient.Shutdown();
                     game.Start();
                     newGame.PlainName = game.ProcessName;
                     game.Kill();
 
+                    await Functions.Games.AddGame(GameTitleBox.Text, appID, newGame.Filename, newGame.PlainName);
 
-                    if (!File.Exists(Directory.GetCurrentDirectory() + "\\games.txt")) File.Create(Directory.GetCurrentDirectory() + "\\games.txt").Close();
-                    TextWriter gamesTXT = new StreamWriter(Directory.GetCurrentDirectory() + "\\games.txt", true);
-
-                    gamesTXT.WriteLine("https://devlin.gg/blaze/GI.png," + newGame.Title + "," + newGame.AppID + ",https://devlin.gg/blaze/BG.png,https://devlin.gg/blaze," + newGame.Filename + "," + newGame.PlainName);
-                    gamesTXT.Close();
-
-                    home.UpdateGames();
+                    await home.UpdateGames();
                     this.Close();
                 }
                 catch (Exception Ex)
