@@ -80,28 +80,21 @@ namespace Blaze.Windows
             if (GameTitleBox.Text != "" && AppIDBox.Text != "")
             {
                 newGame.Title = GameTitleBox.Text;
-                try 
-                {
-                    uint appID = uint.Parse(AppIDBox.Text);
-                    newGame.AppID = appID;
+                uint appID = uint.Parse(AppIDBox.Text);
+                newGame.AppID = appID;
 
-                    Process game = new Process();
-                    SteamClient.Init(newGame.AppID);
-                    game.StartInfo.FileName = SteamApps.AppInstallDir(newGame.AppID) + "\\" + newGame.Filename;
-                    SteamClient.Shutdown();
-                    game.Start();
-                    newGame.PlainName = game.ProcessName;
-                    game.Kill();
+                Process game = new Process();
+                SteamClient.Init(newGame.AppID);
+                game.StartInfo.FileName = SteamApps.AppInstallDir(newGame.AppID) + "\\" + newGame.Filename;
+                SteamClient.Shutdown();
+                game.Start();
+                newGame.PlainName = game.ProcessName;
+                game.Kill();
 
-                    await Functions.Games.AddGame(GameTitleBox.Text, appID, newGame.Filename, newGame.PlainName);
+                await Functions.Games.AddGame(GameTitleBox.Text, appID, newGame.Filename, newGame.PlainName);
 
-                    await home.UpdateGames();
-                    this.Close();
-                }
-                catch (Exception Ex)
-                {
-                    MessageBox.Show(Ex.ToString());
-                }
+                await home.UpdateGames();
+                this.Close();
             }
             else if (GameTitleBox.Text != "")
             {

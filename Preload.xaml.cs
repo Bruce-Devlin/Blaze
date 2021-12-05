@@ -82,6 +82,7 @@ namespace Blaze
                     }
                     else
                     {
+                        if (!Directory.Exists(Variables.ConfigDir)) Directory.CreateDirectory(Variables.ConfigDir);
                         StatusBox.Text = "Checking for updates...";
                         if (await Functions.Install.CheckForUpdates())
                         {

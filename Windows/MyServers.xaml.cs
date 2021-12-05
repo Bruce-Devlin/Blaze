@@ -40,8 +40,6 @@ namespace Blaze.Windows
                     LargeImageText = "Devlin.gg/Blaze",
                 }
             });
-
-            
         }
 
         private async void Window_Loaded(object sender, RoutedEventArgs e)
@@ -67,7 +65,7 @@ namespace Blaze.Windows
                 {
                     Passworded.IsChecked = true;
                 }
-                
+                serverConfigTxtBox.Text = File.ReadAllText(Variables.LocalServers[MyServerList.SelectedIndex].ServerDir + @"\" + Variables.LocalServers[MyServerList.SelectedIndex].Profile + @"\DedicatedServerConfig.json");
             }
             
         }
@@ -120,13 +118,21 @@ namespace Blaze.Windows
                 Variables.LocalServers[MyServerList.SelectedIndex].ServerConfig.serverPort = int.Parse(ServerPortBox.Text);
                 Variables.LocalServers[MyServerList.SelectedIndex].ServerConfig.password = ServerPasswordBox.Text;
 
-                await Functions.Servers.SetConfig(Variables.LocalServers[MyServerList.SelectedIndex], Variables.LocalServers[MyServerList.SelectedIndex].ServerConfig);
+                if (Variables.LocalServers[MyServerList.SelectedIndex].AppID == 383790)
+                {
+                    File.WriteAllText(Variables.LocalServers[MyServerList.SelectedIndex].ServerDir + @"\" + Variables.LocalServers[MyServerList.SelectedIndex].Profile + @"\DedicatedServerConfig.json", serverConfigTxtBox.Text);
+
+                }
+                else if (Variables.LocalServers[MyServerList.SelectedIndex].AppID == 638070)
+                {
+                    File.WriteAllText(Variables.LocalServers[MyServerList.SelectedIndex].ServerDir + @"\" + Variables.LocalServers[MyServerList.SelectedIndex].Profile + @"\DedicatedServerConfig.json", serverConfigTxtBox.Text);
+
+                }
 
                 MyServerList.ItemsSource = new List<Functions.MyServer>();
                 MyServerList.ItemsSource = Variables.LocalServers;
                 await Functions.Servers.SetLocalServers();
             }
-            
         }
 
         private void CheckBox_Checked(object sender, RoutedEventArgs e)

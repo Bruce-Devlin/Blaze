@@ -46,6 +46,18 @@ namespace Blaze.Functions
         public string gametype { get; set; }
     }
 
+
+    public class MyTSRServer
+    {
+        public string ServerName { get; set; }
+        public uint AppID { get; set; }
+        public string Filename { get; set; }
+        public string ServerDir { get; set; }
+        public string Profile { get; set; }
+
+   
+    }
+
     public class MyServer
     {
         public string ServerName { get; set; }
@@ -53,6 +65,7 @@ namespace Blaze.Functions
         public string Filename { get; set; }
         public string ServerDir { get; set; }
         public string Profile { get; set; }
+
         public MP_ServerConfig ServerConfig { get; set; }
     }
 
@@ -85,6 +98,38 @@ namespace Blaze.Functions
         public int exposedKillBonus { get; set; }
         public int abilityKillBonus { get; set; }
         public int backstabKillBonus { get; set; }
+    }
+
+    public class TSR_ServerConfig
+    {
+        public int sv_servertype { get; set; }
+        public int hostport { get; set; }
+        public string hostname { get; set; }
+        public string sv_password { get; set; }
+        public int maxplayers { get; set; }
+        public string ship_map_name { get; set; }
+        public int ship_game_mode { get; set; }
+        public int ship_game_mode_random { get; set; }
+        public bool ship_enable_bots { get; set; }
+        public int bot_hunters { get; set; }
+        public int bot_passengers { get; set; }
+        public int ship_map_time { get; set; }
+        public int ship_game_time { get; set; }
+        public int ship_round_countdown { get; set; }
+        public int ship_round_end_countdown { get;  set; } 
+        public int ship_new_map_wait { get; set; }
+        public int ship_victory_bank { get; set; }
+        public int ship_witnesses { get; set; }
+        public int ship_witnes_time_limit { get; set; }
+        public string ship_needs_player_bg_tickup { get; set; }
+        public int ship_kick_innocent_Kills { get; set; }
+        public int ship_kick_cash_warning { get; set; }
+        public int ship_kick_ban_minutes { get; set; }
+        public int ship_kick_vote_ban_minutes { get; set; }
+        public bool vote_kick_disable { get; set; }
+        public bool vote_changemap_disable { get; set; }
+        public bool vote_changemode_disable { get; set; }
+        public int ship_vote_pause_time_seconds { get; set; }
     }
 
     class Servers
@@ -223,6 +268,7 @@ namespace Blaze.Functions
         {
             try
             {
+                //TODO: NOTICE THE DIFFERENCE BETWEEN SHIP AND MP SERVERS AND CREATE THE CONFIG DYNAMICALLY.
                 MyServer server = new MyServer();
 
                 server.ServerName = ServerName;

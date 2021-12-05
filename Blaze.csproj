@@ -77,7 +77,7 @@
   <PropertyGroup />
   <PropertyGroup />
   <PropertyGroup>
-    <SignManifests>true</SignManifests>
+    <SignManifests>false</SignManifests>
   </PropertyGroup>
   <PropertyGroup>
     <SignAssembly>false</SignAssembly>
@@ -166,6 +166,7 @@
     <Compile Include="Functions\Install.cs" />
     <Compile Include="Functions\Servers.cs" />
     <None Include="Properties\blaze.manifest" />
+    <Compile Include="Functions\Update.cs" />
     <Compile Include="Variables.cs" />
     <Compile Include="Welcome\HostWindow.xaml.cs">
       <DependentUpon>HostWindow.xaml</DependentUpon>

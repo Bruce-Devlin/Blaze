@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -156,69 +157,10 @@ namespace Blaze.Windows
                 if (await Games.IsGameRunning()) await Functions.Blaze.Say("Game already running, try closing it and trying again.", "Really");
                 else
                 {
-                    
-                    //Set status on Discord.
-                    Functions.Discord.discord.client.ClearPresence();
-                    List<int> party = new List<int>() { currServer.Info.players + 1, currServer.Info.max_players }; ; 
+                    await Functions.Blaze.Say("Launching the game now...", "Happy");
 
-                    if (party[0] > party[1]) party[1] = 99;
-
-                    string imagekey = "nutural";
-                    if (Variables.CurrGame.BlazingGriffin) imagekey = Variables.CurrGame.AppID.ToString();
-                    Functions.Discord.discord.client.SetPresence(new RichPresence()
-                    {
-                        Details = currServer.Info.name,
-                        State = "Map: " + currServer.Info.map + " | Players: ",
-                        Timestamps = Functions.Discord.startTime,
-                        //Buttons = new DiscordRPC.Button[] { new DiscordRPC.Button(){ Label = "Download Blaze!", Url = "https://devlin.gg/Blaze"}},
-                        Party = new Party()
-                        {
-                            ID = currServer.Info.name,
-                            Size = party[0],
-                            Max = party[1],
-                            Privacy = Party.PrivacySetting.Public
-                        },
-                        Secrets = new Secrets()
-                        {
-                            JoinSecret = currServer.Game.AppID + "," + currServer.SteamID
-                        },
-                        Assets = new Assets()
-                        {
-                            LargeImageKey = imagekey.ToString(),
-                            LargeImageText = Variables.CurrGame.Title,
-                        }
-                    });
-                    try
-                    {
-                        SteamClient.Init(Variables.CurrGame.AppID);
-                        Process game = new Process();
-                        game.StartInfo.FileName = SteamApps.AppInstallDir(currServer.Game.AppID) + "\\" + Variables.CurrGame.Filename;
-                        SteamClient.Shutdown();
-
-
-                        game.StartInfo.Arguments = "-connect=" + currServer.IpandPort();
-                        game.Start();
-                        game.WaitForExit();
-
-                        //Set status on Discord.
-                        Functions.Discord.discord.client.ClearPresence();
-                        Functions.Discord.discord.client.SetPresence(new RichPresence()
-                        {
-                            Details = "Browsing Servers...",
-                            State = "(" + Variables.CurrGame.Title + ")",
-                            Timestamps = Functions.Discord.startTime,
-                            Buttons = new DiscordRPC.Button[] { new DiscordRPC.Button() { Label = "Download Blaze!", Url = "https://devlin.gg/Blaze" } },
-                            Assets = new Assets()
-                            {
-                                LargeImageKey = "nutural",
-                                LargeImageText = "Devlin.gg/Blaze",
-                            }
-                        });
-                    }
-                    catch (Exception Ex)
-                    {
-                        await Functions.Blaze.Say(Ex.Message.ToString(), "Sleepy");
-                    }
+                    new Thread(delegate () { Functions.Games.JoinGame(currServer); }).Start();
+                    await Functions.Blaze.Say("The game has been launched!", "Happy");
                 }
             }
         }
@@ -306,8 +248,7 @@ namespace Blaze.Windows
 
         private async void MyServersBtn_Click(object sender, RoutedEventArgs e)
         {
-            if (Variables.CurrGame.AppID == 383790) await Functions.Blaze.Say("Sorry, I can't host The Ship Servers yet... Maybe try the Murderous Pursuits as that works; sorta?", "Sad");
-            else if (Variables.CurrGame.BlazingGriffin)
+            if (Variables.CurrGame.BlazingGriffin)
             {
                 WindowFade.Visibility = Visibility.Visible;
                 Windows.MyServers server = new Windows.MyServers();
@@ -320,7 +261,7 @@ namespace Blaze.Windows
                     Details = "Browsing Servers...",
                     State = "(" + Variables.CurrGame.Title + ")",
                     Timestamps = Functions.Discord.startTime,
-                    Buttons = new DiscordRPC.Button[] { new DiscordRPC.Button() { Label = "Download Blaze!", Url = "https://www.devlin.gg/Blaze" } },
+                    Buttons = new DiscordRPC.Button[] { new DiscordRPC.Button() { Label = "Download Blaze!",  Url = "https://www.devlin.gg/blaze" } },
                     Assets = new Assets()
                     {
                         LargeImageKey = "nutural",

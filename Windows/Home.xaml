@@ -22,7 +22,7 @@
             </Button.Background>
         </Button>
 
-        <DataGrid x:Name="ServerList" SelectedCellsChanged="ServerList_SelectedCellsChanged" FontFamily="/Blaze;component/Assets/#Berlin Sans FB" BorderThickness="3" Margin="322.041,65,0,0" BorderBrush="#FFEB3225" Foreground="White" HorizontalAlignment="Left" Height="295" VerticalAlignment="Top" Width="567.015" CanUserReorderColumns="False" CanUserSortColumns="True" ScrollViewer.CanContentScroll="True" RowHeight="30" ColumnHeaderHeight="30" Background="#B5DB4123" AutoGenerateColumns="False" IsReadOnly="True" GridLinesVisibility="None" CanUserResizeRows="False" EnableRowVirtualization="False" HorizontalGridLinesBrush="{x:Null}" VerticalGridLinesBrush="{x:Null}" SelectionMode="Single" RowDetailsVisibilityMode="Collapsed" FontSize="20" MinColumnWidth="148">
+        <DataGrid x:Name="ServerList" SelectedCellsChanged="ServerList_SelectedCellsChanged" FontFamily="/Blaze;component/Assets/#Berlin Sans FB" BorderThickness="3" Margin="322.041,65,0,0" BorderBrush="#FFEB3225" Foreground="White" HorizontalAlignment="Left" Height="295" VerticalAlignment="Top" Width="567.015" CanUserReorderColumns="False" CanUserSortColumns="True" ScrollViewer.CanContentScroll="True" RowHeight="30" ColumnHeaderHeight="30" Background="#B5DB4123" AutoGenerateColumns="False" IsReadOnly="True" GridLinesVisibility="None" CanUserResizeRows="False" EnableRowVirtualization="False" HorizontalGridLinesBrush="{x:Null}" VerticalGridLinesBrush="{x:Null}" SelectionMode="Single" RowDetailsVisibilityMode="Collapsed" FontSize="20" MinColumnWidth="148" HorizontalScrollBarVisibility="Disabled">
             <DataGrid.Resources>
                 <Style TargetType="{x:Type DataGridColumnHeader}">
                     <Setter Property="Background" Value="Transparent"/>
@@ -165,6 +165,7 @@
         <Button x:Name="RemoveGameBtn" Click="RemoveGameBtn_Click" Content="REMOVE" HorizontalAlignment="Left" Height="25" Margin="149.333,272.671,0,0" VerticalAlignment="Top" Width="87.5" BorderThickness="3" BorderBrush="#FFEB3225" Foreground="White" Background="#B5DB4123" FontFamily="/Blaze;component/Assets/#Berlin Sans FB" Style="{DynamicResource BtnSyle}" Cursor="Hand" ToolTip="Remove selected game."/>
         <TextBlock Height="20.398" TextWrapping="Wrap" Text="BLAZE" VerticalAlignment="Top" Foreground="White" FontFamily="/Blaze;component/Assets/#Berlin Sans FB Demi" FontSize="20" FontWeight="Bold" Margin="3.792,3.3,830.556,0"/>
         <Button x:Name="MyServersBtn" Click="MyServersBtn_Click" Content="MY SERVERS" HorizontalAlignment="Left" Height="18.955" Margin="816.069,30.389,0,0" VerticalAlignment="Top" Width="75.525" BorderThickness="0" BorderBrush="{x:Null}" Style="{DynamicResource BtnSyle}" Cursor="Hand" Background="{x:Null}" Foreground="White" FontFamily="/Blaze;component/Assets/#Berlin Sans FB" ToolTip="View your servers."/>
+        <Rectangle x:Name="WindowFade" Fill="#91000000" HorizontalAlignment="Left" Height="518.417" Margin="0,0,0,-3.417" VerticalAlignment="Top" Width="915.556" Visibility="Hidden"/>
         <Button x:Name="Blaze" Click="Blaze_Click" Content="" HorizontalAlignment="Left" Height="100" Margin="0,410,0,0" VerticalAlignment="Top" Width="100" Style="{DynamicResource BtnSyle}" Cursor="Hand" BorderBrush="{x:Null}" BorderThickness="0" ToolTip="Blaze">
             <Button.Background>
                 <ImageBrush ImageSource="/Blaze;component/Assets/Blaze/Small/Nutural-small.png" Stretch="UniformToFill"/>
@@ -178,8 +179,5 @@
                 <ImageBrush ImageSource="/Blaze;component/Assets/Sprites/Discord.png"/>
             </Button.Background>
         </Button>
-        <Rectangle x:Name="WindowFade" Fill="#91000000" HorizontalAlignment="Left" Height="518.417" Margin="0,0,0,-3.417" VerticalAlignment="Top" Width="915.556" Visibility="Hidden"/>
-
-
     </Grid>
 </Window>

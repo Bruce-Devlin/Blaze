@@ -1,4 +1,6 @@
-﻿using Newtonsoft.Json;
+﻿using DiscordRPC;
+using Newtonsoft.Json;
+using Steamworks;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -7,6 +9,7 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Media;
@@ -114,9 +117,87 @@ namespace Blaze.Functions
             return ImgBrush;
         }
 
+        public static async Task JoinGame(Functions.Server currServer)
+        {
+            Variables.GameRunning = true;
+            try
+            {
+
+                SteamClient.Init(Variables.CurrGame.AppID);
+                Process game = new Process();
+
+                game.StartInfo.FileName = SteamApps.AppInstallDir(currServer.Game.AppID) + "\\" + Variables.CurrGame.Filename;
+                game.StartInfo.Arguments = "-connect=" + currServer.IpandPort();
+
+                string ipAndPort = "";
+
+                if (currServer.Mine) ipAndPort = "192.168.0.1";
+                else ipAndPort = currServer.IpandPort();
+
+                game.Start();
+                game.WaitForExit();
+
+                //Set status on Discord.
+                Functions.Discord.discord.client.ClearPresence();
+                List<int> party = new List<int>() { currServer.Info.players + 1, currServer.Info.max_players }; ;
+
+                if (party[0] > party[1]) party[1] = 99;
+
+                string imagekey = "nutural";
+                if (Variables.CurrGame.BlazingGriffin) imagekey = Variables.CurrGame.AppID.ToString();
+                Functions.Discord.discord.client.SetPresence(new RichPresence()
+                {
+                    Details = currServer.Info.name,
+                    State = "Map: " + currServer.Info.map + " | Players: ",
+                    Timestamps = Functions.Discord.startTime,
+                    //Buttons = new DiscordRPC.Button[] { new DiscordRPC.Button(){ Label = "Download Blaze!", Url = "https://devlin.gg/Blaze"}},
+                    Party = new Party()
+                    {
+                        ID = currServer.Info.name,
+                        Size = party[0],
+                        Max = party[1],
+                        Privacy = Party.PrivacySetting.Public
+                    },
+                    Secrets = new Secrets()
+                    {
+                        JoinSecret = currServer.Game.AppID + "," + currServer.SteamID
+                    },
+                    Assets = new Assets()
+                    {
+                        LargeImageKey = imagekey.ToString(),
+                        LargeImageText = Variables.CurrGame.Title,
+                    }
+                });
+                game.WaitForExit();
+                SteamClient.Shutdown();
+
+
+
+                //Set status on Discord.
+                Functions.Discord.discord.client.ClearPresence();
+                Functions.Discord.discord.client.SetPresence(new RichPresence()
+                {
+                    Details = "Browsing Servers...",
+                    State = "(" + Variables.CurrGame.Title + ")",
+                    Timestamps = Functions.Discord.startTime,
+                    Buttons = new DiscordRPC.Button[] { new DiscordRPC.Button() { Label = "Download Blaze!", Url = "https://devlin.gg/Blaze" } },
+                    Assets = new Assets()
+                    {
+                        LargeImageKey = "nutural",
+                        LargeImageText = "Devlin.gg/Blaze",
+                    }
+                });
+            }
+            catch (Exception Ex)
+            {
+                MessageBox.Show(Ex.Message.ToString());
+            }
+        }
+
         public static async Task<bool> IsGameRunning()
         {
-            if (Process.GetProcessesByName(Variables.CurrGame.PlainName).Length > 0) return true;
+            Process[] processes = Process.GetProcessesByName(Variables.CurrGame.PlainName);
+            if (processes.Length > 0) return true;
             else return false;
         }
 
